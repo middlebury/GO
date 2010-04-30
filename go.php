@@ -10,6 +10,7 @@ $connection = new PDO(
   "mysql:dbname=" . GO_DATABASE_NAME . ";host=" . GO_DATABASE_HOST . ";",
   GO_DATABASE_USER, GO_DATABASE_PASS);
 $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 
 /**
  * Handle Authentication and attribute lookups.
