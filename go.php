@@ -189,21 +189,26 @@ class GoAuthCas extends GoAuth {
       return $_SESSION["phpCAS"]["user"];
     }
     
-    phpCAS::servericeWeb(
-      "https://" . GO_AUTH_HOST . "/directory/?action=search_user_by_attributes&" . GO_ATTR_NAME . "=" . $username,
-      $err_code, $output
-    );
-    
-    $xml = simplexml_load_string($output);
-    $id = $xml->xpath("/cas:results/cas:entry/cas:user");
-    
-    if (isset($err_code) && $err_code != 0) {
-      throw new Exception($err_code);
-    } else  if (!isset($id[0]) || $id[0] == "") {
-      throw new Exception("User " . $_SESSION["phpCAS"]["user"] . " not found.");
-    } else {
-      return $id[0];
+    if (!Go::cache_get('user_id-'.$username)) {
+      
+      phpCAS::servericeWeb(
+        "https://" . GO_AUTH_HOST . "/directory/?action=search_user_by_attributes&" . GO_ATTR_NAME . "=" . $username,
+        $err_code, $output
+      );
+      
+      $xml = simplexml_load_string($output);
+      $id = $xml->xpath("/cas:results/cas:entry/cas:user");
+      
+      if (isset($err_code) && $err_code != 0) {
+        throw new Exception($err_code);
+      } else  if (!isset($id[0]) || $id[0] == "") {
+        throw new Exception("User " . $_SESSION["phpCAS"]["user"] . " not found.");
+      } else {
+        Go::cache_set('user_id-'.$username, (string)$id[0]);
+      }
     }
+    
+    return Go::cache_get('user_id-'.$username);
   }
   
   public function getName($id = null) {
@@ -211,19 +216,23 @@ class GoAuthCas extends GoAuth {
       $id = $_SESSION["phpCAS"]["user"];
     }
     
-    phpCAS::serviceWeb(
-      "https://" . GO_AUTH_HOST . "/directory/?action=get_user&id=" . $id,
-      $err_code, $output
-    );
-    
-    $xml = simplexml_load_string($output);
-    $user = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_ATTR_NAME . "']");
-    
-    if (isset($err_code) && $err_code != 0) {
-      throw new Exception($err_code);
-    } else {
-      return $user[0]["value"];
+    if (!Go::cache_get('user_name-'.$id)) {
+      phpCAS::serviceWeb(
+        "https://" . GO_AUTH_HOST . "/directory/?action=get_user&id=" . $id,
+        $err_code, $output
+      );
+      
+      $xml = simplexml_load_string($output);
+      $user = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_ATTR_NAME . "']");
+      
+      if (isset($err_code) && $err_code != 0) {
+        throw new Exception($err_code);
+      } else {
+        Go::cache_set('user_name-'.$id, (string)$user[0]["value"]);
+      }
     }
+    
+    return Go::cache_get('user_name-'.$id);
   }
   
   public function getEmail($id = null) {
@@ -231,19 +240,23 @@ class GoAuthCas extends GoAuth {
       $id = $_SESSION["phpCAS"]["user"];
     }
     
-    phpCAS::serviceWeb(
-      "https://" . GO_AUTH_HOST . "/directory/?action=get_user&id=" . $id,
-      $err_code, $output
-    );
-    
-    $xml = simplexml_load_string($output);
-    $email = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_ATTR_EMAIL . "']");
-    
-    if (isset($err_code) && $err_code != 0) {
-      throw new Exception($err_code);
-    } else {
-      return $email[0]["value"];
+    if (!Go::cache_get('user_email-'.$id)) {
+      phpCAS::serviceWeb(
+        "https://" . GO_AUTH_HOST . "/directory/?action=get_user&id=" . $id,
+        $err_code, $output
+      );
+      
+      $xml = simplexml_load_string($output);
+      $email = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_ATTR_EMAIL . "']");
+      
+      if (isset($err_code) && $err_code != 0) {
+        throw new Exception($err_code);
+      } else {
+        Go::cache_set('user_email-'.$id, (string)$email[0]["value"]);
+      }
     }
+    
+    return Go::cache_get('user_email-'.$id);
   }
 
 }
@@ -383,6 +396,69 @@ class Go {
     return $response;
   }
   
+ 
+  /**
+   * Store a variable in cache.
+   * 
+   * @param string $key
+   * @param mixed $value
+   * @return boolean true on success, false on failure
+   * @access public
+   * @since 4/30/10
+   */
+  public static function cache_set ($key, $value) {
+    // Use APC if available
+    if (function_exists('apc_store')) {
+      return apc_store('go_cache_'.$key, $value, 86400); // TTL = 1 day
+    }
+    // Fall back to caching in the session
+    else {
+      $_SESSION['go_cache_'.$key] = $value;
+      return true;
+    }
+  }
+  
+  /**
+   * Retrieve a variable from cache.
+   * 
+   * @param string $key
+   * @return mixed The value or FALSE if not set
+   * @access public
+   * @since 4/30/10
+   */
+  public static function cache_get ($key) {
+    // Use APC if available
+    if (function_exists('apc_fetch')) {
+      return apc_fetch('go_cache_'.$key);
+    }
+    // Fall back to caching in the session
+    else {
+      if (isset($_SESSION['go_cache_'.$key]))
+        return $_SESSION['go_cache_'.$key];
+      else
+        return FALSE;
+    }
+  }
+  
+  /**
+   * Clear a value from the cache.
+   * 
+   * @param string $key
+   * @return boolean true on success, false on failure
+   * @access public
+   * @since 4/30/10
+   */
+  public static function cache_delete ($key) {
+    // Use APC if available
+    if (function_exists('apc_delete')) {
+      return apc_delete('go_cache_'.$key);
+    }
+    // Fall back to caching in the session
+    else {
+      unset($_SESSION['go_cache_'.$key]);
+      return TRUE;
+    }
+  }
 }
 
 ?>
