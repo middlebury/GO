@@ -1,0 +1,682 @@
+<?php
+
+require_once "go.php";
+
+/**
+ * Code Class for GO Application.
+ * 
+ * A "code" in go is defined as the part of the GO shortcut url following the hostname. This is the "path" construct in a traditional URL. GO shortcut code are more tightly structured than normal URL paths and may contain only alphanumic characters and the two separator characters defined for the GO service: the question mark (?) and the forward slash (/).
+ *
+ * @author Ian McBride <imcbride@middlebury.edu>
+ * @category GO
+ * @copyright 2009 The President and Fellows of Middlebury College
+ * @license This code is not available under license.
+ * @package GO
+ * @version 02-25-2009
+ * @link http://go.middlebury.edu/
+ */
+class Code {
+	
+	/**
+	 * Regular expression pattern to match allowed characters.
+	 *
+	 * @since 02-25-2009
+	 */
+	const ALLOWED_CHARACTERS = "/[^A-Za-z0-9-_\?\/\.~\+%]/";
+	
+	/**
+	 * The "name" of the code is the full path string.
+	 *
+	 * @access protected
+	 * @since 02-25-2009
+	 * @var string The full path string of the code.
+	 */
+	protected $name;
+	
+	/**
+	 * The institution or "host" related to this code.
+	 * 
+	 * @access protected
+	 * @since 04-03-2009
+	 * @var string The institution or "host" related to this code.
+	 */
+	protected $institution;
+	
+	/**
+	 * The user who first created the code.
+	 * 
+	 * @access protected
+	 * @since 02-26-2009
+	 * @var int The user who first created the code.
+	 */
+	protected $creator;
+	
+	/**
+	 * The URL of the code.
+	 * 
+	 * @access protected
+	 * @since 02-26-2009
+	 * @var string The URL of the code.
+	 */
+	protected $url;
+	
+	/**
+	 * A description of the code.
+	 * 
+	 * @access protected
+	 * @since 02-27-2009
+	 * @var string A description of the code.
+	 */
+	protected $description;
+	
+	/**
+	 * Whether or not the code appears on the GOtionary.
+	 * 
+	 * @access protected
+	 * @since 04-06-2009
+	 * @var bool Whether or not the code appears on the GOtionary.
+	 */
+	protected $public;
+	
+	/**
+	 * An array of {@link User}s that have access to this code.
+	 * 
+	 * @access protected
+	 * @since 02-26-2009
+	 * @var array An array of {@link User}s that have access to this code.
+	 */
+	protected $users = array();
+	
+	/**
+	 * An array of {@link Alias}es that are associated with this code.
+	 * 
+	 * @access protected
+	 * @since 04-03-2009
+	 * @var array An array of {@link Alias}es that are associated with this code.
+	 */
+	protected $aliases = array();
+	
+	/**
+	 * Class constructor for {@link Code}.
+	 *
+	 * @access public
+	 * @param string $name The full path string of the code.
+	 * @since 02-25-2009
+	 * @throws Exception from {@link Code::setName()}
+	 * @throws Exception from {@link Code::setInstitution()}
+	 * @throws Exception from {@link Code::setCreator()}
+	 * @throws Exception from {@link Code::setUrl()}
+	 * @throws Exception from {@link Code::setDescription()}
+	 * @throws Exception from PDO functions.
+	 */
+	public function __construct($name, $institution = "middlebury.edu") {
+		global $connection;
+		
+		try {
+			$select = $connection->prepare("SELECT name, institution, creator, url, description, public FROM code WHERE name = :name AND institution = :institution");
+			$select->bindValue(":name", $name);
+			$select->bindValue(":institution", $institution);
+			$select->execute();
+			
+			if ($select->rowCount() == 0) {
+				$this->setName($name);
+				$this->setInstitution($institution);
+				
+				try {
+					$insert = $connection->prepare("INSERT INTO code (name, institution) VALUES (:name, :institution)");
+					$insert->bindValue(":name", $name);
+					$insert->bindValue(":institution", $institution);
+					$insert->execute();
+				} catch(Exception $e) {
+					throw $e;
+				}
+			} else {
+				$row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT);
+				$this->setName($row->name);
+				$this->setInstitution($row->institution);
+				$this->setCreator($row->creator);
+				$this->setUrl((!is_null($row->url) ? $row->url : ""));
+				$this->setDescription((!is_null($row->description) ? $row->description : ""));
+				$this->setPublic(($row->public == "1"));
+			}
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	/**
+	 * Get the full path string for this code.
+	 *
+	 * @access public
+	 * @return string The full path string for this code.
+	 * @since 02-25-2009
+	 */
+	public function getName() {
+		return $this->name;
+	}
+	
+	/**
+	 * Get the institution or "host" for this code.
+	 * 
+	 * @access public
+	 * @return string The institution or "host" for this code.
+	 * @since 04-03-2009
+	 */
+	public function getInstitution() {
+		return $this->institution;
+	}
+	
+	/**
+	 * Get the user who created this code.
+	 * 
+	 * @access public
+	 * @return int The user who created this code.
+	 * @since 02-26-2009 
+	 */
+	public function getCreator() {
+		return $this->creator;
+	}
+	
+	/**
+	 * Get the URL for this code.
+	 * 
+	 * @access public
+	 * @return string The URL for this code.
+	 * @since 02-26-2009
+	 */
+	public function getUrl() {
+		return $this->url;
+	}
+	
+	/**
+	 * Get the description for this code.
+	 * 
+	 * @access public
+	 * @return string The description for this code.
+	 * @since 02-27-2009
+	 */
+	public function getDescription() {
+		return $this->description;
+	}
+	
+	/**
+	 * Get whether the code is displayed on the GOtionary.
+	 * 
+	 * @access public
+	 * @return bool Whether the code is displayed on the GOtionary
+	 * @since 04-06-2009
+	 */
+	public function getPublic() {
+		return $this->public;
+	}
+	
+	/**
+	 * Get a single {@link User} which the user has access to.
+	 *
+	 * @access public
+	 * @param string $user The name of the {@link User}
+	 * @return {@link User} A {@link User} who has access to the code.
+	 * @since 02-25-2009
+	 * @throws Exception if parameter $user is not an int.
+	 * @throws Exception if $user does not have access to this code.
+	 * @throws Exception from PDO functions.
+	 */
+	public function getUser($user) {		
+		if (isset($this->users[$user])) {
+			return $this->users[$user];
+		}
+		
+		global $connection;
+		
+		try {
+			$select = $connection->prepare("SELECT user FROM user_to_code WHERE user = :user AND code = :code AND institution = :institution");
+			$select->bindValue(":user", $user);
+			$select->bindValue(":code", $this->name);
+			$select->bindValue(":institution", $this->institution);
+			$select->execute();
+			
+			if ($select->rowCount() > 0) {
+				$this->users[$user] = new User($user);
+				return $this->users[$user];
+			} else {
+				throw new Exception("The user {$user} does not have access to code {$this->name}");
+			}
+		} catch(Exception $e) {
+			throw $e;
+		}
+	}
+	
+	/**
+	 * Get the array of {@link User}s that have access to the code.
+	 * 
+	 * @access public
+	 * @return array The array of {@link User}s that have access to the code.
+	 * @since 02-25-2009
+	 * @throws Exception from PDO functions.
+	 */
+	public function getUsers() {
+		$this->users = array();
+		global $connection;
+		
+		try {
+			$select = $connection->prepare("SELECT user FROM user_to_code WHERE code = :code AND institution = :institution");
+			$select->bindValue(":code", $this->name);
+			$select->bindValue(":institution", $this->institution);
+			$select->execute();
+			
+			while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
+				$this->users[$row->user] = new User($row->user);
+			}
+			
+			$select->closeCursor();
+		} catch(Exception $e) {
+			throw $e;
+		}
+		
+		return $this->users;
+	}
+	
+	/**
+	 * Set the full path string for this code.
+	 * 
+	 * This function will throw an exception if the path is not a string type in PHP or if it contains characters other than the allowed character set for GO shortcuts.
+	 * 
+	 * Allowed characters:
+	 * <ul>
+	 * 	<li>Alphabetical characters A-Z and a-z</li>
+	 *  <li>Numeric characters 0-9</li>
+	 * 	<li>The Question Mark ?</li>
+	 *  <li>The Forward Slash /</li>
+	 *  <li>The Hyphen -</li>
+	 *  <li>The Underscore _</li>
+	 * </ul>
+	 * 
+	 * The question mark and forward slash are control characters used to separate sections of the GO shortcut.
+	 *
+	 * @access public
+	 * @param string $name The full path string for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 02-25-2009
+	 * @throws Exception if parameter $name is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception if parameter $name contains characters other than A-Z, a-z, 0-9, ?, /, -, and _.
+	 * @throws Exception if parameter $name begins with a / or ? character or 'go/'.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setName($name, $save = false) {
+		if (!is_string($name)) {
+			throw new Exception(__METHOD__ . " expects parameter name to be a string; given " . $name);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+
+		if (preg_match(Code::ALLOWED_CHARACTERS, $name) > 0) {
+			throw new Exception(__METHOD__ . " expects parameter name to contain only A-Z, a-z, 0-9, ?, -, _, and / characters; given " . $name);
+		}
+		
+		if ($name[0] == "/" || $name[0] == "?") {
+			throw new Exception("Code names cannot begin with a / or ? character.");
+		}
+		
+/*
+		if (substr($name, strlen($name) - 1, 1) == "/") {
+		    throw new Exception("Code names cannot end with a / character.");
+		}
+*/		
+		if (substr($name, 0, 3) == "go/") {
+			throw new Exception("Code names cannot begin with 'go/'");
+		}
+		
+		if($save) {
+			global $connection;
+			
+			try {
+				$update = $connection->prepare("UPDATE code SET name = :name WHERE name = :oldname AND institution = :institution");
+				$update->bindValue(":name", $name);
+				$update->bindValue(":oldname", $this->name);
+				$update->bindValue(":institution", $this->institution);
+				$update->execute();
+			} catch(Exception $e) {
+				throw $e;
+			}
+		}
+		
+		$this->name = $name;
+	}
+	
+	/**
+	 * Set the institution or "host" for this code.
+	 *
+	 * @access public
+	 * @param string $institution The institution or "host" for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 04-03-2009
+	 * @throws Exception if parameter $institution is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setInstitution($institution, $save = false) {
+		if (!is_string($institution)) {
+			throw new Exception(__METHOD__ . " expects parameter institution to be a string; given " . $institution);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if ($this->institution != null && $institution != $this->institution) {
+			global $connection;
+			
+			try {
+				$select = $connection->prepare("SELECT name FROM code WHERE name = :name AND institution = :institution");
+				$select->bindValue(":name", $this->name);
+				$select->bindValue(":institution", $institution);
+				$select->execute();
+				
+				if ($select->rowCount() > 0) {
+					throw new Exception("The code " . $this->name . " already exists.");
+				}
+			} catch (Exception $e) {
+				throw $e;
+			}
+		}
+		
+		if($save) {
+			global $connection;
+			
+			try {
+				$update = $connection->prepare("UPDATE code SET institution = :institution WHERE name = :name AND institution = :oldinstitution");
+				$update->bindValue(":institution", $institution);
+				$update->bindValue(":name", $this->name);
+				$update->bindValue(":oldinstitution", $this->institution);
+				$update->execute();
+			} catch (Exception $e) {
+				throw $e;
+			}
+		}
+		
+		$this->institution = $institution;
+	}
+	
+	/**
+	 * Set the name of the user who created this code.
+	 * 
+	 * @access public
+	 * @param string $creator The email of the user who created this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 02-26-2009
+	 * @throws Exception if parameter $creator is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setCreator($creator, $save = false) {		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if($save) {
+			global $connection;
+			
+			try {
+				$update = $connection->prepare("UPDATE code SET creator = :creator WHERE name = :name AND institution = :institution");
+				$update->bindValue(":creator", $creator);
+				$update->bindValue(":name", $this->name);
+				$update->bindValue(":institution", $this->institution);
+				$update->execute();
+			} catch(Exception $e) {
+				throw $e;
+			}
+		}
+		
+		$this->creator = $creator;
+	}
+	
+	/**
+	 * Set the URL for this code.
+	 * 
+	 * @access public
+	 * @param string $url The URL for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 02-26-2009
+	 * @throws Exception if parameter $url is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setUrl($url, $save = false) {
+		if (!is_string($url)) {
+			throw new Exception(__METHOD__ . " expects parameter url to be a string; given " . $url);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if($save) {
+			global $connection;
+			
+			try {
+				$update = $connection->prepare("UPDATE code SET url = :url WHERE name = :name AND institution = :institution");
+				$update->bindValue(":url", $url);
+				$update->bindValue(":name", $this->name);
+				$update->bindValue(":institution", $this->institution);
+				$update->execute();
+			} catch(Exception $e) {
+				throw $e;
+			}
+		}
+		
+		$this->url = $url;
+	}
+	
+	/**
+	 * Set the description for this code.
+	 *
+	 * @access public
+	 * @param string $description The description for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @throws Exception if parameter $description is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setDescription($description, $save = false) {
+		if (!is_string($description)) {
+			throw new Exception(__METHOD__ . " expects parameter description to be a string; given " . $description);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if($save) {
+			global $connection;
+			
+			try {
+				$update = $connection->prepare("UPDATE code SET description = :description WHERE name = :name AND institution = :institution");
+				$update->bindValue(":description", $description);
+				$update->bindValue(":name", $this->name);
+				$update->bindValue(":institution", $this->institution);
+				$update->execute();
+			} catch(Exception $e) {
+				throw $e;
+			}
+		}
+		
+		$this->description = $description;
+	}
+	
+	/**
+	 * Set whether this code is displayed on the GOtionary.
+	 *
+	 * @access public
+	 * @param bool $public Whether this code is displayed on the GOtionary.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 04-06-2009
+	 * @throws Exception if parameter $public is not a boolean.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setPublic($public, $save = false) {
+		if (!is_bool($public)) {
+			throw new Exception(__METHOD__ . " expects parameter public to be a bool; given " . $public);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if ($save) {
+			global $connection;
+			
+			try {
+				$update = $connection->prepare("UPDATE code SET public = :public WHERE name = :name AND institution = :institution");
+				$update->bindValue(":public", ($public ? "1" : "0"));
+				$update->bindValue(":name", $this->name);
+				$update->bindValue(":institution", $this->institution);
+				$update->execute();
+			} catch(Exception $e) {
+				throw $e;
+			}
+		}
+		
+		$this->public = $public;
+	}
+	
+	/**
+	 * Delete this code from the database.
+	 *
+	 * @access public
+	 * @since 04-03-2009
+	 * @throws Exception from PDO functions.
+	 */
+	public function delete() {
+		global $connection;
+		
+		try {
+			$users = $connection->prepare("DELETE FROM user_to_code WHERE code = :code AND institution = :institution");
+			$users->bindValue(":code", $this->name);
+			$users->bindValue(":institution", $this->institution);
+			$users->execute();
+			
+			$alias = $connection->prepare("DELETE FROM alias WHERE code = :code AND institution = :institution");
+			$alias->bindValue(":code", $this->name);
+			$alias->bindValue(":institution", $this->institution);
+			$alias->execute();
+			
+			$code = $connection->prepare("DELETE FROM code WHERE name = :name AND institution = :institution");
+			$code->bindValue(":name", $this->name);
+			$code->bindValue(":institution", $this->institution);
+			$code->execute();
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	
+	/**
+	 * Grant a {$link User} access to this code's administration.
+	 *
+	 * @access public
+	 * @param int $name The name of the {@link User}
+	 * @since 04-03-2009
+	 * @throws Exception if parameter $user is not an integer.
+	 * @throws Exception if the user already has access to this code.
+	 * @throws Exception from PDO functions.
+	 */
+	public function addUser($name) {		
+		global $connection;
+		
+		try {
+			$user = new User($name);
+			$code = $user->getCode($this->name, $this->institution);
+			
+			if (isset($code)) {
+				throw new Exception("User {$name} already has access to {$this->name}");
+			}
+		} catch(Exception $e) {
+			throw $e;
+		}
+			
+		try {
+			$insert = $connection->prepare("INSERT INTO user_to_code (user, code, institution) VALUES (:user, :code, :institution)");
+			$insert->bindValue(":user", $name);
+			$insert->bindValue(":code", $this->name);
+			$insert->bindValue(":institution", $this->institution);
+			$insert->execute();
+		} catch(Exception $e) {
+			throw $e;
+		}
+	}
+
+	/**
+	 * Revoke a {$link User} access to this code's administration.
+	 *
+	 * @access public
+	 * @param int $name The name of the {@link User}
+	 * @since 04-03-2009
+	 * @throws Exception if parameter $user is not an integer.
+	 * @throws Exception if the user does not have access to this code.
+	 * @throws Exception from PDO functions.
+	 */
+	public function delUser($name) {
+		if (!is_numeric($name) || !is_int($name)) {
+			throw new Exception(__METHOD__ . " expected parameter email to be an integer; given " . $name);
+		}
+		
+		global $connection;
+		
+		try {
+			$user = new User($name);
+			$code = $user->getCode($this->name, $this->institution);
+			
+			if (!isset($code)) {
+				throw new Exception("User {$name} does not have access to {$this->name}");
+			} 
+		} catch(Exception $e) {
+			throw $e;
+		}
+			
+		try {
+			$delete = $connection->prepare("DELETE FROM user_to_code WHERE user = :user AND code = :code AND institution = :institution");
+			$delete->bindValue(":user", $name);
+			$delete->bindValue(":code", $this->name);
+			$delete->bindValue(":institution", $this->institution);
+			$delete->execute();
+		} catch(Exception $e) {
+			throw $e;
+		}
+	}
+	
+	/**
+	 * Get an array of {@link Alias}es associated with this {$link Code}.
+	 *
+	 * @access public
+	 * @return array An array of {@link Alias}es associated with this {@link Code}.
+	 * @since 04-03-2009
+	 * @throws Exception from PDO functions.
+	 */
+	public function getAliases() {
+		$this->aliases = array();
+		global $connection;
+		
+		try {
+			$select = $connection->prepare("SELECT name, code, institution FROM alias WHERE code = :code AND institution = :institution");
+			$select->bindValue(":code", $this->name);
+			$select->bindValue(":institution", $this->institution);
+			$select->execute();
+			
+			while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
+				$this->aliases[$row->name] = new Alias($row->name, $row->code, $row->institution);
+			}
+			
+			$select->closeCursor();
+		} catch(Exception $e) {
+			throw $e;
+		}
+		
+		return $this->aliases;
+	}
+	
+}
+
+?>

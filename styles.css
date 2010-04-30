@@ -1,0 +1,8 @@
+@import url("https://web.middlebury.edu/development/tools/2d/Stylesheets/2d.css");
+@import url("https://web.middlebury.edu/development/tools/2d/Stylesheets/Menu.css");
+@import url("https://web.middlebury.edu/development/tools/2d/Stylesheets/MenuStyle.css");
+
+td {
+	text-align: left;
+	vertical-align: top;
+}
