@@ -44,14 +44,9 @@ define("GO_ATTR_EMAIL", "mail");
 
 /* CAS AUTHENTICATION */
 /*
-// Filesystem path to phpCAS script
-define("GO_AUTH_PHPCAS", "CAS.php");
 
 // Filesystem path to a logging file
 define("GO_AUTH_LOG", "cas.log");
-
-// CAS version
-define("GO_AUTH_VERSION", CAS_VERSION_2_0);
 
 // Host of CAS server
 define("GO_AUTH_HOST", "login.example.com");

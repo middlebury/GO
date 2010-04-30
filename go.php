@@ -168,7 +168,7 @@ class GoAuthCas extends GoAuth {
 
     session_name($name);
     
-    require_once GO_AUTH_PHPCAS;
+    require_once('CAS.php');
     
     phpCAS::setDebug(GO_AUTH_LOG);
     
@@ -178,7 +178,7 @@ class GoAuthCas extends GoAuth {
     
     phpCAS::setNoCasServerValidation();
     
-    phpCAS::setPGTStorageFile('xml', GO_AUTH_PGTSTORE);
+    phpCAS::setPGTStorageFile('plain', GO_AUTH_PGTSTORE);
     
     phpCAS::forceAuthentication();
   }
