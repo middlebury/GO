@@ -1,8 +1,15 @@
 <?php
 
-// A list of the domains in the form domain.tld
+// A list of the domains in the form domain.tld => GO base URl:
+// Ex: 	array(
+//			'example.edu' 	=> 'http://go.example.edu/',
+//			'example2.edu' 	=> 'http://web.example2.edu/go/',
+//		);
 global $institutions;
-$institutions = array("example.com", "example.org");
+$institutions = array(
+	'example.edu' 	=> 'http://go.example.edu/',
+	'example2.edu' 	=> 'http://web.example2.edu/go/',
+);
 
 /* DATABASE */
 // Database Name

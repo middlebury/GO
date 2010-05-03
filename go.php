@@ -459,6 +459,20 @@ class Go {
       return TRUE;
     }
   }
+  
+  /**
+   * Answer the fully-qualified GO URL for a code and institution
+   * 
+   * @param string $code
+   * @param optional string $institution
+   * @return string
+   * @access public
+   * @since 5/3/10
+   */
+  public static function getShortcutUrl ($code, $institution = 'middlebury.edu') {
+  	global $institutions;
+    return $institutions[$institution].$code; 
+  }
 }
 
 ?>

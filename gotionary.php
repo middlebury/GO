@@ -9,7 +9,8 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 }
 
 global $institutions;
-$institution = $institutions[0];
+reset($institutions);
+$institution = key($institutions);
 
 if (isset($_GET["institution"])) {
 	$institution = $_GET["institution"];
@@ -31,7 +32,7 @@ if (isset($_GET["institution"])) {
 				<div class="headerWelcome">
 					Welcome &#160; | &#160;
 					<?php
-					  foreach($institutions as $inst) {
+					  foreach($institutions as $inst => $applicationPath) {
 					    print "<a href=\"gotionary.php?institution=" . $inst . "\">" . $inst . "</a> &#160; | &#160;";
 					  }
 					?>
@@ -158,7 +159,7 @@ $select->execute();
 $lines = array();
 
 while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
-	$line = "<p><a href=\"http://go.{$institution}/{$row->name}\">go/{$row->name}</a>";
+	$line = "<p><a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
 
 	if($row->description != "") {
 		$line .= " - {$row->description}";
@@ -174,7 +175,7 @@ $alias->bindValue(":institution", $institution);
 $alias->execute();
 
 while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
-	$line = "<p><a href=\"http://go.{$institution}/{$row->name}\">go/{$row->name}</a>";
+	$line = "<p><a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
 
 	if($row->description != "") {
 		$line .= " - {$row->description}";

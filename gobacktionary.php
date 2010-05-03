@@ -9,7 +9,8 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 }
 
 global $institutions;
-$institution = $institutions[0];
+reset($institutions);
+$institution = key($institutions);
 
 if (isset($_GET["institution"])) {
 	$institution = $_GET["institution"];
@@ -31,7 +32,7 @@ if (isset($_GET["institution"])) {
 				<div class="headerWelcome">
 					Welcome &#160; | &#160;
 					<?php
-					  foreach($institutions as $inst) {
+					  foreach($institutions as $inst => $applicationPath) {
 					    print "<a href=\"gobacktionary.php?institution=" . $inst . "\">" . $inst . "</a> &#160; | &#160;";
 					  }
 					?>
@@ -164,11 +165,11 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
   if ($current_url != $row->url) {
     print "</p><p>$row->description";
     
-    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"http://go.{$institution}/{$row->name}\">go/{$row->name}</a>";
+    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
   }
   
   if ($row->alias) {
-    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"http://go.{$institution}/{$row->name}\">go/" . $row->alias . "</a>";
+    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/" . $row->alias . "</a>";
   }
 
   $current_url = $row->url;

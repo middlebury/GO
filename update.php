@@ -71,11 +71,13 @@ foreach($code->getUsers() as $cUser) {
 				</p>
 				<p>
 				<?php
-				  for($i = 0; $i < count($institutions); $i++) {
+				  $i = 0;
+				  foreach (array_keys($institutions) as $domain) {
 				?>
-					<input id="inst_<?php echo $i . "_" . $codename; ?>" name="inst_<?php echo $codename; ?>" value="<?php echo $institutions[$i]; ?>" type="radio" <?php if($code->getInstitution() == $institutions[$i]) echo "checked=\"checked\""; ?> disabled="disabled" />
-					<label for="inst_<?php echo $i . "_" . $codename; ?>"><?php echo $institutions[$i]; ?></label>
+					<input id="inst_<?php echo $i . "_" . $codename; ?>" name="inst_<?php echo $codename; ?>" value="<?php echo $domain; ?>" type="radio" <?php if($code->getInstitution() == $domain) echo "checked=\"checked\""; ?> disabled="disabled" />
+					<label for="inst_<?php echo $i . "_" . $codename; ?>"><?php echo $domain; ?></label>
 				<?php
+				    $i++;
 				  }
 				?>
 				</p>
