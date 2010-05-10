@@ -176,7 +176,7 @@ class GoAuthCas extends GoAuth {
 
     session_name($name);
     
-    require_once('phpcas/source/CAS.php');
+    require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
     
     phpCAS::setDebug(GO_AUTH_LOG);
     
