@@ -163,13 +163,20 @@ class GoAuthLdap extends GoAuth {
 }
 
 class GoAuthCas extends GoAuth {
-  
-  public function __construct() {
-    $name = preg_replace('/[^a-z0-9_-]/i', '', dirname($_SERVER['SCRIPT_NAME']));
+  /**
+   * Configure phpCAS
+   * 
+   * @return void
+   * @access public
+   * @since 5/10/10
+   * @static
+   */
+  public static function configurePhpCas () {
+  	$name = preg_replace('/[^a-z0-9_-]/i', '', dirname($_SERVER['SCRIPT_NAME']));
 
     session_name($name);
     
-    require_once('CAS.php');
+    require_once('phpcas/source/CAS.php');
     
     phpCAS::setDebug(GO_AUTH_LOG);
     
@@ -180,6 +187,10 @@ class GoAuthCas extends GoAuth {
     phpCAS::setNoCasServerValidation();
     
     phpCAS::setPGTStorageFile('plain', GO_AUTH_PGTSTORE);
+  }
+  
+  public function __construct() {
+    self::configurePhpCas();
     
     phpCAS::forceAuthentication();
   }
