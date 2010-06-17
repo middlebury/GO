@@ -172,9 +172,7 @@ class GoAuthCas extends GoAuth {
    * @static
    */
   public static function configurePhpCas () {
-  	$name = preg_replace('/[^a-z0-9_-]/i', '', dirname($_SERVER['SCRIPT_NAME']));
-
-    session_name($name);
+    session_name('GOSID');
     
     require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
     
