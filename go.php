@@ -12,6 +12,20 @@ $connection = new PDO(
 $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 
+// Match the institution by URL.
+global $institutions;
+foreach ($institutions as $inst => $base) {
+	if (strpos('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $base) !== FALSE) {
+		$institution = $inst;
+		break;
+	}
+}
+// Set the first institution as the default if we haven't matched by URL.
+if (!isset($institution)) {
+	reset($institutions);
+	$institution = key($institutions);
+}
+
 /**
  * Handle Authentication and attribute lookups.
  *

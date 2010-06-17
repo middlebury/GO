@@ -3,7 +3,7 @@
 require_once "go.php";
 require_once "code.php";
 
-if (!isset($_GET["code"]) || !isset($_GET["institution"])) {
+if (!isset($_GET["code"])) {
 	header("Location: gotionary.php");
 	exit;
 }
@@ -11,7 +11,6 @@ if (!isset($_GET["code"]) || !isset($_GET["institution"])) {
 global $connection;
 
 $name = str_replace(" ", "+", $_GET["code"]);
-$institution = $_GET["institution"];
 
 if (substr($name, strlen($name) - 1, 1) == "/") {
   $name = substr($name, 0, strlen($name) - 1);
