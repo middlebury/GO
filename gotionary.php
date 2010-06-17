@@ -141,7 +141,7 @@ if (isset($_GET["institution"])) {
 				<div class="clear">&#160;</div>
 			</div>
 			<div class="content">
-				<p><b>GO needs your help!</b> Find out how you can help by logging in to our <a href="index.php">new self-service shortcut creation interface</a>!</p>
+				<p><b>GO needs your help!</b> Find out how you can help by logging in to our <a href="admin.php">new self-service shortcut creation interface</a>!</p>
 				<p>You can also <a href="gobacktionary.php">view this list, sorted by the destination</a>.</p>
 <?php
 

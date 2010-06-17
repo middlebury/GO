@@ -32,7 +32,7 @@ if (isset($_SESSION["AUTH"])) {
 					<img class="headerLogo" src="https://web.middlebury.edu/development/tools/2d/Images/mclogo.gif" alt="Click here to return to Middlebury College home page" />
 				</a>
 				<div class="headerSite">
-					<h1><a href="index.php">The GOtrol Panel</a></h1>
+					<h1><a href="admin.php">The GOtrol Panel</a></h1>
 				</div>
 				<div class="clear">
 					&#160;

@@ -4,7 +4,8 @@ require_once "go.php";
 require_once "code.php";
 
 if (!isset($_GET["code"]) || !isset($_GET["institution"])) {
-	header("Location: index.php");
+	header("Location: gotionary.php");
+	exit;
 }
 
 global $connection;
