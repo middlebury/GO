@@ -27,7 +27,7 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 					  foreach($institutions as $inst => $applicationPath) {
 					  	if ($inst == $institution)
 					  		print "<strong>";
-					    print "<a href=\"".$applicationPath."gotionary.php\">" . $inst . "</a> &#160; | &#160;";
+					    print "<a href=\"".equivalentUrl($inst)."\">" . $inst . "</a> &#160; | &#160;";
 					    if ($inst == $institution)
 					  		print "</strong>";
 					  }

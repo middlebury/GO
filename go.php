@@ -27,6 +27,25 @@ if (!isset($institution)) {
 }
 
 /**
+ * Answer a URL equivalent to the current one, but for another institution.
+ * 
+ * @param string $institution
+ * @return string
+ * @since 6/18/10
+ */
+function equivalentUrl ($institution) {
+	global $institutions;
+	if (!isset($institutions[$institution]))
+		throw new Exception ("$institution was not found in the configured list.");
+	
+	$url = $institutions[$institution];
+	$url .= basename($_SERVER['SCRIPT_NAME']);
+	if (strlen($_SERVER['QUERY_STRING']))
+		$url .= '?'.$_SERVER['QUERY_STRING'];
+	return $url;
+}
+
+/**
  * Handle Authentication and attribute lookups.
  *
  * @author Ian McBride <imcbride@middlebury.edu>
