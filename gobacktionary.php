@@ -26,7 +26,11 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 					Welcome &#160; | &#160;
 					<?php
 					  foreach($institutions as $inst => $applicationPath) {
+					  	if ($inst == $institution)
+					  		print "<strong>";
 					    print "<a href=\"".$applicationPath."gotionary.php\">" . $inst . "</a> &#160; | &#160;";
+					    if ($inst == $institution)
+					  		print "</strong>";
 					  }
 					?>
 					<a href="#" onclick="setActiveStyleSheet('fixed'); return false;">Fixed</a> or
