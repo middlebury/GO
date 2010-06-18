@@ -62,6 +62,9 @@ if (isset($_SESSION["AUTH"])) {
 							<li class="AspNet-Menu-Leaf">
 								<a href="notify.php">Notify</a>
 							</li>
+							<li class="AspNet-Menu-Leaf">
+								<a href="gotionary.php">GOtionary</a>
+							</li>
 						</ul>
 					</div>
 				</div>
