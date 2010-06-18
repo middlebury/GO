@@ -24,6 +24,15 @@ if (isset($_SESSION["AUTH"])) {
 			<div class="header">
 				<div class="headerWelcome">
 					Welcome <?php echo $name; ?>&#160; | &#160;
+					<?php
+					  foreach($institutions as $inst => $applicationPath) {
+					    if ($inst == $institution)
+					  		print "<strong>";
+					    print "<a href=\"".$applicationPath."gotionary.php\">" . $inst . "</a> &#160; | &#160;";
+					    if ($inst == $institution)
+					  		print "</strong>";
+					  }
+					?>
 					<a href="#" onclick="setActiveStyleSheet('fixed'); return false;">Fixed</a> or
 					<a href="#" onclick="setActiveStyleSheet('flex'); return false;">Flex</a>
 				</div>
