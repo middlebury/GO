@@ -23,7 +23,6 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 		<div class="main">
 			<div class="header">
 				<div class="headerWelcome">
-					Welcome &#160; | &#160;
 					<?php
 					  foreach($institutions as $inst => $applicationPath) {
 					  	if ($inst == $institution)
