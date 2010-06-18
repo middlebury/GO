@@ -23,8 +23,10 @@ if (isset($_SESSION["AUTH"])) {
 		<div class="main">
 			<div class="header">
 				<div class="headerWelcome">
-					Welcome <?php echo $name; ?>&#160; | &#160;
 					<?php
+					  if ($name) {
+					    print "Welcome ".htmlentities($name)." &#160; | &#160; ";
+					  }
 					  foreach($institutions as $inst => $applicationPath) {
 					    if ($inst == $institution)
 					  		print "<strong>";
