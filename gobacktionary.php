@@ -148,9 +148,11 @@ if ($letter == "[0-9]") {
 	$where = "description LIKE '0%' OR description LIKE '1%' OR description LIKE '2%' OR description LIKE '3%' OR description LIKE '4%' OR description LIKE '5%' OR description LIKE '6%' OR description LIKE '7%' OR description LIKE '8%' OR description LIKE '9%'";
 }
 
-$select = $connection->prepare("SELECT code.name AS name, code.description AS description, code.url AS url, alias.name AS alias FROM code LEFT JOIN alias ON (code.name = alias.code AND alias.institution = :institution) WHERE {$where} AND code.institution = :institution AND public = 1 ORDER BY code.description, code.url, code.name, alias.name");
-$select->bindValue(":institution", $institution);
+$select = $connection->prepare("SELECT code.name AS name, code.description AS description, code.url AS url, alias.name AS alias FROM code LEFT JOIN alias ON (code.name = alias.code AND alias.institution = :inst1) WHERE {$where} AND code.institution = :inst2 AND public = 1 ORDER BY code.description, code.url, code.name, alias.name");
+$select->bindValue(":inst1", $institution);
+$select->bindValue(":inst2", $institution);
 $select->execute();
+
 
 $lines = array();
 $current_url = "";
