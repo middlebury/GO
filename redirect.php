@@ -32,7 +32,7 @@ $code->bindValue(":institution", $institution);
 $code->execute();
 
 if ($code->rowCount() == 0) {
-	header("Location: gotionary.php?institution=" . $institution . "&letter=" . substr($name, 0, 1));
+	header("Location: gotionary.php?letter=" . substr($name, 0, 1));
 } else {
 	$row = $code->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT);
 	$url = $row->url;

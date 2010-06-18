@@ -34,9 +34,9 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{QUERY_STRING} !^$
-RewriteRule ^(.*)/? redirect.php?code=$1?%{QUERY_STRING} [R,L]
+RewriteRule ^(.*)/? redirect.php?code=$1?%{QUERY_STRING} [L]
 
 # Case where there IS NOT a query string
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)/? redirect.php?code=$1 [R,L]
+RewriteRule ^(.*)/? redirect.php?code=$1 [L]

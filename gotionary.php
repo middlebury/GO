@@ -26,7 +26,7 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 					Welcome &#160; | &#160;
 					<?php
 					  foreach($institutions as $inst => $applicationPath) {
-					    print "<a href=\"gotionary.php?institution=" . $inst . "\">" . $inst . "</a> &#160; | &#160;";
+					    print "<a href=\"".$applicationPath."gotionary.php\">" . $inst . "</a> &#160; | &#160;";
 					  }
 					?>
 					<a href="#" onclick="setActiveStyleSheet('fixed'); return false;">Fixed</a> or
@@ -48,85 +48,85 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 					<div class="AspNet-Menu-Horizontal">
 						<ul class="AspNet-Menu">
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=[0-9]&institution=<?php echo $institution; ?>">#</a>
+								<a href="gotionary.php?letter=[0-9]">#</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=a&institution=<?php echo $institution; ?>">A</a>
+								<a href="gotionary.php?letter=a">A</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=b&institution=<?php echo $institution; ?>">B</a>
+								<a href="gotionary.php?letter=b">B</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=c&institution=<?php echo $institution; ?>">C</a>
+								<a href="gotionary.php?letter=c">C</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=d&institution=<?php echo $institution; ?>">D</a>
+								<a href="gotionary.php?letter=d">D</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=e&institution=<?php echo $institution; ?>">E</a>
+								<a href="gotionary.php?letter=e">E</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=f&institution=<?php echo $institution; ?>">F</a>
+								<a href="gotionary.php?letter=f">F</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=g&institution=<?php echo $institution; ?>">G</a>
+								<a href="gotionary.php?letter=g">G</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=h&institution=<?php echo $institution; ?>">H</a>
+								<a href="gotionary.php?letter=h">H</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=i&institution=<?php echo $institution; ?>">I</a>
+								<a href="gotionary.php?letter=i">I</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=j&institution=<?php echo $institution; ?>">J</a>
+								<a href="gotionary.php?letter=j">J</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=k&institution=<?php echo $institution; ?>">K</a>
+								<a href="gotionary.php?letter=k">K</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=l&institution=<?php echo $institution; ?>">L</a>
+								<a href="gotionary.php?letter=l">L</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=m&institution=<?php echo $institution; ?>">M</a>
+								<a href="gotionary.php?letter=m">M</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=n&institution=<?php echo $institution; ?>">N</a>
+								<a href="gotionary.php?letter=n">N</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=o&institution=<?php echo $institution; ?>">O</a>
+								<a href="gotionary.php?letter=o">O</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=p&institution=<?php echo $institution; ?>">P</a>
+								<a href="gotionary.php?letter=p">P</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=q&institution=<?php echo $institution; ?>">Q</a>
+								<a href="gotionary.php?letter=q">Q</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=r&institution=<?php echo $institution; ?>">R</a>
+								<a href="gotionary.php?letter=r">R</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=s&institution=<?php echo $institution; ?>">S</a>
+								<a href="gotionary.php?letter=s">S</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=t&institution=<?php echo $institution; ?>">T</a>
+								<a href="gotionary.php?letter=t">T</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=u&institution=<?php echo $institution; ?>">U</a>
+								<a href="gotionary.php?letter=u">U</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=v&institution=<?php echo $institution; ?>">V</a>
+								<a href="gotionary.php?letter=v">V</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=w&institution=<?php echo $institution; ?>">W</a>
+								<a href="gotionary.php?letter=w">W</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=x&institution=<?php echo $institution; ?>">X</a>
+								<a href="gotionary.php?letter=x">X</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=y&institution=<?php echo $institution; ?>">Y</a>
+								<a href="gotionary.php?letter=y">Y</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php?letter=z&institution=<?php echo $institution; ?>">Z</a>
+								<a href="gotionary.php?letter=z">Z</a>
 							</li>
 						</ul>
 					</div>
