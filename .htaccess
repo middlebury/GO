@@ -26,8 +26,6 @@ RewriteBase /
 # different handling if the path includes a query string so as to not include a
 # bogus '?' in the code if no query is present, and to include it if there is a 
 # query present.
-#
-# If needed change 'middlebury.edu' to your default domain.
 ##
 
 # Case where there IS a query string
