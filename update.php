@@ -99,7 +99,7 @@ foreach($code->getUsers() as $cUser) {
 		</tr>
 		<tr>
 			<td>
-				<ul>
+				<ul id="aliaslist_<?php echo $codename; ?>">
 <?php
 	foreach($code->getAliases() as $name => $alias) {
 ?>
@@ -113,6 +113,10 @@ foreach($code->getUsers() as $cUser) {
 	}
 ?>
 				</ul>
+				<form action='alias.php' method='post' onsubmit="addAlias('<?php echo $code->getName(); ?>', '<?php echo $code->getInstitution(); ?>'); return false;">
+					<input type="text" name="alias" id="addalias_<?php echo $codename; ?>"/>
+					<input type="submit" value="Add Alias"/>
+				</form>
 			</td>
 		</tr>
 <?php

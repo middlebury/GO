@@ -75,6 +75,37 @@ function createAlias() {
 			"institution=" + institution);
 }
 
+function addAlias(code, institution) {
+	var codename = institution + "/" + code;
+	var input = document.getElementById("addalias_" + codename);
+	var alias = input.value.replace(/\s/, '+');
+	
+	if (!alias.match(/[a-z0-9]+/)) {
+		alert('No new alias specified.');
+		return;
+	}
+
+	doAction("alias",
+			"name=" + alias + ";" +
+			"code=" + code + ";" +
+			"institution=" + institution);
+	
+	// Update the alias list
+	var ul = document.getElementById("aliaslist_" + codename);
+	var li = ul.appendChild(document.createElement('li'));
+	li.id = codename + "_" + alias;
+	li.appendChild(document.createTextNode(alias + ' '));
+	
+	var del = document.createElement('input');
+	del.type = 'button';
+	del.value = 'Delete';
+	del.onclick = function () { deleteAlias(alias, institution, code); };
+	li.appendChild(del);
+	
+	// Clear out the form
+	input.value = '';
+}
+
 function deleteAlias(alias, institution, code) {
 	doAction("delalias", 
 		"alias=" + alias + ";" +
