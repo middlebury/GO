@@ -9,9 +9,15 @@ global $institutions;
 $institutions = array(
 	'example.edu' 	=>	array(
 		'base_uri'	=>	'http://go.example.edu/',
+		'logo_html'	=> '<a href="http://www.example.edu">
+					<img class="headerLogo" src="http://www.example.edu/logo.gif" alt="Click here to return to Example College home page" />
+				</a>',
 	),
 	'example2.edu' 	=>	array(
 		'base_uri'	=>	'http://web.example2.edu/go/',
+		'logo_html'	=> '<a href="http://www.example2.edu">
+					<img class="headerLogo" src="http://www.example2.edu/logo.gif" alt="Click here to return to Example2 College home page" />
+				</a>',
 	),
 );
 

@@ -36,9 +36,7 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 					<a href="#" onclick="setActiveStyleSheet('flex'); return false;">Flex</a>
 				</div>
 				<div class="clear">&#160;</div>
-				<a href="http://www.middlebury.edu">
-					<img class="headerLogo" src="https://web.middlebury.edu/development/tools/2d/Images/mclogo.gif" alt="Click here to return to Middlebury College home page" />
-				</a>
+				<?php print $institutions[$institution]['logo_html']; ?>
 				<div class="headerSite">
 					<h1>The GOtionary</h1>
 				</div>
