@@ -24,7 +24,7 @@ global $institutions;
 				  $i = 0;
 				  foreach (array_keys($institutions) as $domain) {
 				?>
-					<input id="create_inst_<?php echo $i; ?>" name="create_inst" value="<?php echo $domain; ?>" type="radio" <?php if($i == 0) { echo "checked=\"checked\""; } ?> />
+					<input id="create_inst_<?php echo $i; ?>" name="create_inst" value="<?php echo $domain; ?>" type="radio" <?php if($domain == $institution) { echo "checked=\"checked\""; } ?> />
 					<label for="create_inst_<?php echo $i; ?>"><?php echo $domain; ?></label>
 				<?php
 				    $i++;
@@ -62,7 +62,7 @@ global $institutions;
 				  $i = 0;
 				  foreach (array_keys($institutions) as $domain) {
 				?>
-					<input id="alias_inst_<?php echo $i; ?>" name="alias_inst" value="<?php echo $domain; ?>" type="radio" <?php if($i == 0) { echo "checked=\"checked\""; } ?> />
+					<input id="alias_inst_<?php echo $i; ?>" name="alias_inst" value="<?php echo $domain; ?>" type="radio" <?php if($domain == $institution) { echo "checked=\"checked\""; } ?> />
 					<label for="alias_inst_<?php echo $i; ?>"><?php echo $domain; ?></label>
 				<?php
 				    $i++;
