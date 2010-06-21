@@ -50,11 +50,11 @@ global $institutions;
 				<h3>Alias</h3>
 				<p>Aliases allow you to provide a different path to your GO shortcuts. For example, 'bw' is an alias for 'bannerweb' so you can type go/bw to get to BannerWeb.</p>
 				<p>
-					<label for="alias_code">Existing GO code:</label>
+					<label for="alias_code">Existing Shortcut:</label>
 					<input id="alias_code" name="alias_code" type="text" />
 				</p>
 				<p>
-					<label for="alias_name">New Alias code to add:</label>
+					<label for="alias_name">New Alias to add:</label>
 					<input id="alias_name" name="alias_name" type="text" />
 				</p>
 				<p>
