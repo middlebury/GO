@@ -47,7 +47,7 @@ function doAlias($args) {
 
 function doDelete($args) {
 	try {
-		$code = new Code($args["code"], $args["institution"]);
+		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
 		$code->delete();
 		return "Deleted shortcut " . $args["code"];
 	} catch (Exception $e) {
@@ -57,10 +57,10 @@ function doDelete($args) {
 
 function doDeleteAlias($args) {
 	try {
-		$code = new Code($args["code"], $args["institution"]);
+		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
 		
 		if (in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers()))) {
-			$alias = new Alias($args["alias"], $args["code"], $args["institution"]);
+			$alias = new Alias(str_replace(" ", "+", $args["alias"]), str_replace(" ", "+", $args["code"]), $args["institution"]);
 			$alias->delete();
 		} else {
 			throw new Exception("You do not have access to the shortcut " . $args["code"]);
@@ -74,7 +74,7 @@ function doDeleteAlias($args) {
 
 function doAddUser($args) {
 	try {
-		$code = new Code($args["code"], $args["institution"]);
+		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
 		
 		$code->addUser($_SESSION["AUTH"]->getId($args["user"]));
 		
@@ -86,7 +86,7 @@ function doAddUser($args) {
 
 function doDeleteUser($args) {
 	try {
-		$code = new Code($args["code"], $args["institution"]);
+		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
 		
 		$code->delUser($_SESSION["AUTH"]->getId($args["user"]));
 		
@@ -98,7 +98,7 @@ function doDeleteUser($args) {
 
 function doUpdate($args) {
 	try {
-		$code = new Code($args["code"], $args["oldinst"]);
+		$code = new Code(str_replace(" ", "+", $args["code"]), $args["oldinst"]);
 		
 		$code->setUrl(urldecode($args["url"]), true);
 		$code->setInstitution($args["newinst"], true);
