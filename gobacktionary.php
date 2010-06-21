@@ -24,7 +24,7 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 			<div class="header">
 				<div class="headerWelcome">
 					<?php
-					  foreach($institutions as $inst => $applicationPath) {
+					  foreach(array_keys($institutions) as $inst) {
 					  	if ($inst == $institution)
 					  		print "<strong>";
 					    print "<a href=\"".equivalentUrl($inst)."\">" . $inst . "</a> &#160; | &#160;";

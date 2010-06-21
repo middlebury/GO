@@ -27,7 +27,7 @@ if (isset($_SESSION["AUTH"])) {
 					  if ($name) {
 					    print "Welcome ".htmlentities($name)." &#160; | &#160; ";
 					  }
-					  foreach($institutions as $inst => $applicationPath) {
+					  foreach(array_keys($institutions) as $inst) {
 					    if ($inst == $institution)
 					  		print "<strong>";
 					    print "<a href=\"".equivalentUrl($inst)."\">" . $inst . "</a> &#160; | &#160;";

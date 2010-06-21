@@ -7,8 +7,12 @@
 //		);
 global $institutions;
 $institutions = array(
-	'example.edu' 	=> 'http://go.example.edu/',
-	'example2.edu' 	=> 'http://web.example2.edu/go/',
+	'example.edu' 	=>	array(
+		'base_uri'	=>	'http://go.example.edu/',
+	),
+	'example2.edu' 	=>	array(
+		'base_uri'	=>	'http://web.example2.edu/go/',
+	),
 );
 
 /* DATABASE */

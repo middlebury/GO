@@ -14,8 +14,8 @@ $connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 
 // Match the institution by URL.
 global $institutions;
-foreach ($institutions as $inst => $base) {
-	if (strpos('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $base) !== FALSE) {
+foreach ($institutions as $inst => $opts) {
+	if (strpos('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $opts['base_uri']) !== FALSE) {
 		$institution = $inst;
 		break;
 	}
@@ -38,7 +38,7 @@ function equivalentUrl ($institution) {
 	if (!isset($institutions[$institution]))
 		throw new Exception ("$institution was not found in the configured list.");
 	
-	$url = $institutions[$institution];
+	$url = $institutions[$institution]['base_uri'];
 	$url .= basename($_SERVER['SCRIPT_NAME']);
 	if (strlen($_SERVER['QUERY_STRING']))
 		$url .= '?'.$_SERVER['QUERY_STRING'];
@@ -513,7 +513,7 @@ class Go {
    */
   public static function getShortcutUrl ($code, $institution = 'middlebury.edu') {
   	global $institutions;
-    return $institutions[$institution].$code; 
+    return $institutions[$institution]['base_uri'].$code; 
   }
 }
 
