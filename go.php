@@ -264,6 +264,9 @@ class GoAuthCas extends GoAuth {
         "https://" . GO_AUTH_HOST . "/directory/?action=get_user&id=" . $id,
         $err_code, $output
       );
+      if ($err_code || !$output)
+      	throw new Exception("A web-service error $err_code occured: $output", $err_code);
+      
       
       $xml = simplexml_load_string($output);
       $user = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_ATTR_NAME . "']");
