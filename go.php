@@ -51,7 +51,7 @@ function equivalentUrl ($institution) {
  * @author Ian McBride <imcbride@middlebury.edu>
  * @category GO
  * @copyright 2009 The President and Fellows of Middlebury College
- * @license This code is not available under license.
+ * @license GNU General Public License (GPL) version 3 or later
  * @package GO
  * @version 06-08-2009
  * @link http://go.middlebury.edu/

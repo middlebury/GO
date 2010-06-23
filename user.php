@@ -8,7 +8,7 @@ require_once "go.php";
  * @author Ian McBride <imcbride@middlebury.edu>
  * @category GO
  * @copyright 2009 The President and Fellows of Middlebury College
- * @license This code is not available under license.
+ * @license GNU General Public License (GPL) version 3 or later
  * @package GO
  * @version 02-25-2009
  * @link http://go.middlebury.edu/

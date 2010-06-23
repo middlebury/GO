@@ -11,7 +11,7 @@ require_once "user.php";
  * @author imcbride
  * @category GO
  * @copyright 2009 The President and Fellows of Middlebury College
- * @license This code is not available under license.
+ * @license GNU General Public License (GPL) version 3 or later
  * @package GO
  * @version 03-26-2009
  * @link http://go.middlebury.edu
