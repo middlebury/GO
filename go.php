@@ -209,7 +209,7 @@ class GoAuthCas extends GoAuth {
     
     require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
     
-    if (defined(GO_AUTH_LOG))
+    if (defined('GO_AUTH_LOG'))
 	    phpCAS::setDebug(GO_AUTH_LOG);
     
     phpCAS::proxy(CAS_VERSION_2_0, GO_AUTH_HOST, GO_AUTH_PORT, GO_AUTH_PATH);
