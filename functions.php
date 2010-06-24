@@ -50,9 +50,16 @@ function doAlias($args) {
 
 function doDelete($args) {
 	try {
-		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
+		$codeString = str_replace(" ", "+", $args["code"]);
+		if (!Code::exists($codeString, $args["institution"]))
+			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
+		$code = new Code($codeString, $args["institution"]);
+		
+		if ($code->getCreator() != $_SESSION["AUTH"]->getId())
+			throw new Exception("You are not the creator of the code. Cannot delete.");
+			
 		$code->delete();
-		return "Deleted shortcut " . $args["code"];
+		return "Deleted shortcut " . $codeString;
 	} catch (Exception $e) {
 		throw $e;
 	}
@@ -60,14 +67,17 @@ function doDelete($args) {
 
 function doDeleteAlias($args) {
 	try {
-		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
+		$codeString = str_replace(" ", "+", $args["code"]);
+		if (!Code::exists($codeString, $args["institution"]))
+			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
+		$code = new Code($codeString, $args["institution"]);
 		
-		if (in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers()))) {
-			$alias = new Alias(str_replace(" ", "+", $args["alias"]), str_replace(" ", "+", $args["code"]), $args["institution"]);
-			$alias->delete();
-		} else {
-			throw new Exception("You do not have access to the shortcut " . $args["code"]);
-		}
+		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+			throw new Exception("You do not have access to the shortcut " . $codeString);
+		
+		
+		$alias = new Alias(str_replace(" ", "+", $args["alias"]), $codeString, $args["institution"]);
+		$alias->delete();
 		
 		return "Deleted alias " . $args["alias"];
 	} catch (Exception $e) {
@@ -77,11 +87,18 @@ function doDeleteAlias($args) {
 
 function doAddUser($args) {
 	try {
-		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
+		$codeString = str_replace(" ", "+", $args["code"]);
+		if (!Code::exists($codeString, $args["institution"]))
+			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
+		$code = new Code($codeString, $args["institution"]);
+		
+		
+		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+			throw new Exception("You do not have access to the shortcut " . $codeString);
 		
 		$code->addUser($_SESSION["AUTH"]->getId($args["user"]));
 		
-		return "Added " . $args["user"] . " as a user for " . $args["code"];
+		return "Added " . $args["user"] . " as a user for " . $codeString;
 	} catch (Exception $e) {
 		throw $e;
 	}
@@ -89,7 +106,13 @@ function doAddUser($args) {
 
 function doDeleteUser($args) {
 	try {
-		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
+		$codeString = str_replace(" ", "+", $args["code"]);
+		if (!Code::exists($codeString, $args["institution"]))
+			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
+		$code = new Code($codeString, $args["institution"]);
+		
+		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+			throw new Exception("You do not have access to the shortcut " . $codeString);
 		
 		$code->delUser($_SESSION["AUTH"]->getId($args["user"]));
 		
@@ -101,8 +124,14 @@ function doDeleteUser($args) {
 
 function doUpdate($args) {
 	try {
-		$code = new Code(str_replace(" ", "+", $args["code"]), $args["oldinst"]);
+		$codeString = str_replace(" ", "+", $args["code"]);
+		if (!Code::exists($codeString, $args["oldinst"]))
+			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
+		$code = new Code($codeString, $args["oldinst"]);
 		
+		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+			throw new Exception("You do not have access to the shortcut " . $codeString);
+				
 		$code->setUrl(urldecode($args["url"]), true);
 		$code->setInstitution($args["newinst"], true);
 		$code->setDescription($args["description"], true);
