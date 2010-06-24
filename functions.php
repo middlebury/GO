@@ -29,6 +29,9 @@ function doCreate($args) {
 
 function doAlias($args) {
 	try {
+		if (!Code::exists(str_replace(" ", "+", $args["code"]), $args["institution"]))
+			throw new Exception('Code '.htmlentities(str_replace(" ", "+", $args["code"]))." doesn't exist.");
+			
 		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
 		
 /*	Allow anyone to create aliases.	

@@ -16,6 +16,26 @@ require_once "go.php";
  * @link http://go.middlebury.edu/
  */
 class Code {
+
+	/**
+	 * Class constructor for {@link Code}.
+	 *
+	 * @access public
+	 * @param string $name The full path string of the code.
+	 * @throws Exception from PDO functions.
+	 */
+	public static function exists($name, $institution = "middlebury.edu") {
+		global $connection;
+		
+		$select = $connection->prepare("SELECT COUNT(*) AS num FROM code WHERE name = :name AND institution = :institution");
+		$select->bindValue(":name", $name);
+		$select->bindValue(":institution", $institution);
+		$select->execute();
+		if ($select->fetchColumn(0) >= 1)
+			return true;
+		else
+			return false;
+	}
 	
 	/**
 	 * Regular expression pattern to match allowed characters.
