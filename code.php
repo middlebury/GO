@@ -127,6 +127,8 @@ class Code {
 					$insert->bindValue(":name", $name);
 					$insert->bindValue(":institution", $institution);
 					$insert->execute();
+					
+					Go::log("Created code $name via Code::__construct().", $name, $institution);
 				} catch(Exception $e) {
 					throw $e;
 				}
@@ -338,6 +340,9 @@ class Code {
 				$update->bindValue(":oldname", $this->name);
 				$update->bindValue(":institution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated code name from '".$this->name."' to '$name' via Code::setName(). 1 of 2.", $this->name, $this->institution);
+				Go::log("Updated code name from '".$this->name."' to '$name' via Code::setName(). 2 of 2.", $name, $this->institution);
 			} catch(Exception $e) {
 				throw $e;
 			}
@@ -392,6 +397,9 @@ class Code {
 				$update->bindValue(":name", $this->name);
 				$update->bindValue(":oldinstitution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated code institution from '".$this->institution."' to '$institution' via Code::setInstitution(). 1 of 2.", $this->name, $this->institution);
+				Go::log("Updated code institution from '".$this->institution."' to '$institution' via Code::setName(). 2 of 2.", $this->name, $institution);
 			} catch (Exception $e) {
 				throw $e;
 			}
@@ -425,6 +433,8 @@ class Code {
 				$update->bindValue(":name", $this->name);
 				$update->bindValue(":institution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated code creator to '$creator' via Code::setCreator().", $this->name, $this->institution);
 			} catch(Exception $e) {
 				throw $e;
 			}
@@ -462,6 +472,8 @@ class Code {
 				$update->bindValue(":name", $this->name);
 				$update->bindValue(":institution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated code url to '$url' via Code::setUrl().", $this->name, $this->institution);
 			} catch(Exception $e) {
 				throw $e;
 			}
@@ -498,6 +510,9 @@ class Code {
 				$update->bindValue(":name", $this->name);
 				$update->bindValue(":institution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated code description to '$description' via Code::setDescription().", $this->name, $this->institution);
+
 			} catch(Exception $e) {
 				throw $e;
 			}
@@ -535,6 +550,8 @@ class Code {
 				$update->bindValue(":name", $this->name);
 				$update->bindValue(":institution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated code publicity to '".($public ? "1" : "0")."' via Code::setPublic().", $this->name, $this->institution);
 			} catch(Exception $e) {
 				throw $e;
 			}
@@ -554,6 +571,8 @@ class Code {
 		global $connection;
 		
 		try {
+			$aliases = $this->getAliases();
+						
 			$users = $connection->prepare("DELETE FROM user_to_code WHERE code = :code AND institution = :institution");
 			$users->bindValue(":code", $this->name);
 			$users->bindValue(":institution", $this->institution);
@@ -564,10 +583,16 @@ class Code {
 			$alias->bindValue(":institution", $this->institution);
 			$alias->execute();
 			
+			foreach ($aliases as $alias) {
+				Go::log("Deleted alias via Code::delete().", $alias->getCode(), $alias->getInstitution(), $alias->getName());
+			}
+			
 			$code = $connection->prepare("DELETE FROM code WHERE name = :name AND institution = :institution");
 			$code->bindValue(":name", $this->name);
 			$code->bindValue(":institution", $this->institution);
 			$code->execute();
+			
+			Go::log("Deleted code via Code::delete().", $this->name, $this->institution);
 		} catch (Exception $e) {
 			throw $e;
 		}
@@ -603,6 +628,8 @@ class Code {
 			$insert->bindValue(":code", $this->name);
 			$insert->bindValue(":institution", $this->institution);
 			$insert->execute();
+			
+			Go::log("Added user '".$name."' to code via Code::addUser().", $this->name, $this->institution);
 		} catch(Exception $e) {
 			throw $e;
 		}
@@ -642,6 +669,9 @@ class Code {
 			$delete->bindValue(":code", $this->name);
 			$delete->bindValue(":institution", $this->institution);
 			$delete->execute();
+			
+			Go::log("Removed user '".$name."' from code via Code::addUser().", $this->name, $this->institution);
+
 		} catch(Exception $e) {
 			throw $e;
 		}

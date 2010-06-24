@@ -82,6 +82,8 @@ class Alias {
 					$insert->bindValue(":code", $code);
 					$insert->bindValue(":institution", $institution);
 					$insert->execute();
+					
+					Go::log("Created alias via Alias::__construct().", $code, $institution, $name);
 				} catch(Exception $e) {
 					throw $e;
 				}
@@ -183,6 +185,9 @@ class Alias {
 				$update->bindValue(":oldname", $this->name);
 				$update->bindValue(":institution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated alias name from '".$this->name."' to '$name' via Alias::setName(). 1 of 2.", $this->code, $this->institution, $this->name);
+				Go::log("Updated alias name from '".$this->name."' to '$name' via Alias::setName(). 2 of 2.", $this->code, $this->institution, $name);
 			} catch(Exception $e) {
 				throw $e;
 			}
@@ -234,6 +239,9 @@ class Alias {
 				$update->bindValue(":name", $this->name);
 				$update->bindValue(":institution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated alias code from '".$this->code."' to '$code' via Alias::setCode(). 1 of 2.", $this->code, $this->institution, $this->name);
+				Go::log("Updated alias code from '".$this->code."' to '$code' via Alias::setCode(). 2 of 2.", $code, $this->institution, $this->name);
 			} catch(Exception $e) {
 				throw $e;
 			}
@@ -272,6 +280,9 @@ class Alias {
 				$update->bindValue(":institution", $institution);
 				$update->bindValue(":oldinstitution", $this->institution);
 				$update->execute();
+				
+				Go::log("Updated alias institution from '".$this->institution."' to '$institution' via Alias::setInstitution(). 1 of 2.", $this->code, $this->institution, $this->name);
+				Go::log("Updated alias institution from '".$this->institution."' to '$institution' via Alias::setInstitution(). 2 of 2.", $this->code, $institution, $this->name);
 			} catch (Exception $e) {
 				throw $e;
 			}
@@ -295,6 +306,8 @@ class Alias {
 			$alias->bindValue(":alias", $this->name);
 			$alias->bindValue(":institution", $this->institution);
 			$alias->execute();
+			
+			Go::log("Deleted alias via Alias::delete(). 1 of 2.", $this->code, $this->institution, $this->name);
 		} catch (Exception $e) {
 			throw $e;
 		}

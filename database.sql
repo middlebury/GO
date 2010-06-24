@@ -41,6 +41,26 @@ CREATE TABLE IF NOT EXISTS `code` (
   PRIMARY KEY  (`name`,`institution`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `tstamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `code` varchar(255) NOT NULL,
+  `alias` varchar(255) default NULL,
+  `institution` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `user_display_name` varchar(255) NOT NULL,
+  `request` text,
+  KEY `tstamp` (`tstamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- --------------------------------------------------------
 
 --

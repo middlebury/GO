@@ -519,6 +519,41 @@ class Go {
   	global $institutions;
     return $institutions[$institution]['base_uri'].$code; 
   }
+  
+  /**
+   * Log an event
+   * 
+   * @param string $description
+   * @param string $code
+   * @param optional string $institution
+   * @param optional string $alias
+   * @return void
+   * @access public
+   * @since 6/24/10
+   */
+  public static function log ($description, $code, $institution = 'middlebury.edu', $alias = '') {
+	global $connection;
+  	
+  	if (isset($_SESSION["AUTH"])) {
+  		$user_id = $_SESSION["AUTH"]->getId();
+  		$user_display_name = $_SESSION["AUTH"]->getName();
+  	} else {
+  		$user_id = '0';
+  		$user_display_name = 'anonymous';
+  	}
+  	
+  	
+	$insert = $connection->prepare("INSERT INTO log (code, alias, institution, description, user_id, user_display_name, request) VALUES (:code, :alias, :institution, :description, :user_id, :user_display_name, :request)");
+	$insert->bindValue(":code", $code);
+	$insert->bindValue(":alias", $alias);
+	$insert->bindValue(":institution", $institution);
+	$insert->bindValue(":description", $description);
+	$insert->bindValue(":user_id", $user_id);
+	$insert->bindValue(":user_display_name", $user_display_name);
+	$insert->bindValue(":request", $_SERVER["REQUEST_URI"]);
+	$insert->execute();
+
+  }
 }
 
 ?>
