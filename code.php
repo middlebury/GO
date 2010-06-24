@@ -666,8 +666,8 @@ class Code {
 	 * @throws Exception from PDO functions.
 	 */
 	public function delUser($name) {
-		if (!is_numeric($name) || !is_int($name)) {
-			throw new Exception(__METHOD__ . " expected parameter email to be an integer; given " . $name);
+		if (!preg_match('/^[A-Z0-9]+$/i', $name)) {
+			throw new Exception(__METHOD__ . " expected parameter name to be [A-Z0-9]+; given " . $name);
 		}
 		
 		global $connection;

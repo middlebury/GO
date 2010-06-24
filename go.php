@@ -234,11 +234,12 @@ class GoAuthCas extends GoAuth {
     
     if (!Go::cache_get('user_id-'.$username)) {
       
-      phpCAS::servericeWeb(
-        "https://" . GO_AUTH_HOST . "/directory/?action=search_user_by_attributes&" . GO_ATTR_NAME . "=" . $username,
+      @phpCAS::serviceWeb(
+        "https://" . GO_AUTH_HOST . "/directory/?action=search_users_by_attributes&" . GO_ATTR_NAME . "=" . $username,
         $err_code, $output
       );
-      
+      if ($err_code || !$output)
+      	throw new Exception("A web-service error $err_code occured: $output", $err_code);
       $xml = simplexml_load_string($output);
       $id = $xml->xpath("/cas:results/cas:entry/cas:user");
       
