@@ -18,7 +18,7 @@ require_once "go.php";
 class Code {
 
 	/**
-	 * Class constructor for {@link Code}.
+	 * Answer true if the code exists, false otherwise.
 	 *
 	 * @access public
 	 * @param string $name The full path string of the code.

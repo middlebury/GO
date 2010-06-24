@@ -6,7 +6,14 @@ header("Content-type:text/xml");
 
 function doCreate($args) {
 	try {
-		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
+		$codeString = str_replace(" ", "+", $args["code"]);
+		
+		if (Alias::exists($codeString, $args["institution"])) {
+			$alias = new Alias($codeString, null, $args["institution"]);
+			throw new Exception('An alias for "'.$alias->getCode().'" already exists with name "'.htmlentities($codeString).'". You can\'t create a shortcut with the same name.');
+		}
+		
+		$code = new Code($codeString, $args["institution"]);
 		
 		if ($code->getCreator() == $_SESSION["AUTH"]->getId()) {
 			throw new Exception("You've already created this code. Did you want to update the URL?");
@@ -29,10 +36,11 @@ function doCreate($args) {
 
 function doAlias($args) {
 	try {
-		if (!Code::exists(str_replace(" ", "+", $args["code"]), $args["institution"]))
-			throw new Exception('Code '.htmlentities(str_replace(" ", "+", $args["code"]))." doesn't exist.");
+		$codeString = str_replace(" ", "+", $args["code"]);
+		if (!Code::exists($codeString, $args["institution"]))
+			throw new Exception('Code '.htmlentities($codeString)." doesn't exist.");
 			
-		$code = new Code(str_replace(" ", "+", $args["code"]), $args["institution"]);
+		$code = new Code($codeString, $args["institution"]);
 		
 /*	Allow anyone to create aliases.	
 		if (in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers()))) {
@@ -41,7 +49,15 @@ function doAlias($args) {
 			throw new Exception("You do not have access to the shortcut " . $args["code"]);
 		}
 */
-		$alias = new Alias(str_replace(" ", "+", $args["name"]), str_replace(" ", "+", $args["code"]), $args["institution"]);
+		$aliasString = str_replace(" ", "+", $args["name"]);
+		if (Alias::exists($aliasString, $args["institution"])) {
+			$alias = new Alias($aliasString, null, $args["institution"]);
+			throw new Exception('An alias for "'.$alias->getCode().'" already exists with name "'.htmlentities($aliasString).'". Can\'t create another alias with the same name.');
+		}
+		if (Code::exists($aliasString, $args["institution"]))
+			throw new Exception('A code named "'.htmlentities($aliasString)."\" already exists, can't create an alias with the same name.");
+		
+		$alias = new Alias($aliasString, $codeString, $args["institution"]);
 		return "Added new alias for " . $code->getName() . " called " . $alias->getName();
 	} catch (Exception $e) {
 		throw $e;

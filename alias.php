@@ -17,6 +17,26 @@ require_once "user.php";
  * @link http://go.middlebury.edu
  */
 class Alias {
+
+	/**
+	 * Answer true if the alias exists, false otherwise.
+	 *
+	 * @access public
+	 * @param string $name The full path string of the code.
+	 * @throws Exception from PDO functions.
+	 */
+	public static function exists($name, $institution = "middlebury.edu") {
+		global $connection;
+		
+		$select = $connection->prepare("SELECT COUNT(*) AS num FROM alias WHERE name = :name AND institution = :institution");
+		$select->bindValue(":name", $name);
+		$select->bindValue(":institution", $institution);
+		$select->execute();
+		if ($select->fetchColumn(0) >= 1)
+			return true;
+		else
+			return false;
+	}
 	
 	/**
 	 * The "name" of the alias is the full path string.
