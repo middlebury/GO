@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `code` (
 -- Table structure for table `log`
 --
 
-CREATE TABLE `log` (
+CREATE TABLE IF NOT EXISTS `log` (
   `tstamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `code` varchar(255) NOT NULL,
   `alias` varchar(255) default NULL,
@@ -57,8 +57,13 @@ CREATE TABLE `log` (
   `user_id` varchar(255) NOT NULL,
   `user_display_name` varchar(255) NOT NULL,
   `request` text,
-  KEY `tstamp` (`tstamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `tstamp` (`tstamp`),
+  KEY `code` (`code`),
+  KEY `alias` (`alias`),
+  KEY `institution` (`institution`),
+  KEY `user_id` (`user_id`),
+  KEY `user_display_name` (`user_display_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 -- --------------------------------------------------------
