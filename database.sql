@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `code` (
 --
 
 CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(11) NOT NULL auto_increment,
   `tstamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `code` varchar(255) NOT NULL,
   `alias` varchar(255) default NULL,
@@ -57,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `user_id` varchar(255) NOT NULL,
   `user_display_name` varchar(255) NOT NULL,
   `request` text,
+  PRIMARY KEY  (`id`),
   KEY `tstamp` (`tstamp`),
   KEY `code` (`code`),
   KEY `alias` (`alias`),
