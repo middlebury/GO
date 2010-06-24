@@ -351,7 +351,7 @@ class Code {
 			throw new Exception("Code names cannot begin with 'go/'");
 		}
 		
-		if($save) {
+		if($save && $name != $this->name) {
 			global $connection;
 			
 			try {
@@ -408,7 +408,7 @@ class Code {
 			}
 		}
 		
-		if($save) {
+		if($save && $institution != $this->institution) {
 			global $connection;
 			
 			try {
@@ -444,7 +444,7 @@ class Code {
 			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
 		}
 		
-		if($save) {
+		if($save && $creator != $this->creator) {
 			global $connection;
 			
 			try {
@@ -483,7 +483,7 @@ class Code {
 			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
 		}
 		
-		if($save) {
+		if($save && $url != $this->url) {
 			global $connection;
 			
 			try {
@@ -521,7 +521,7 @@ class Code {
 			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
 		}
 		
-		if($save) {
+		if($save && $description != $this->description) {
 			global $connection;
 			
 			try {
@@ -561,7 +561,7 @@ class Code {
 			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
 		}
 		
-		if ($save) {
+		if ($save && $public != $this->public) {
 			global $connection;
 			
 			try {

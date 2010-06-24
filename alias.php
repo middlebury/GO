@@ -167,7 +167,7 @@ class Alias {
 			throw new Exception("Alias names cannot begin with 'go/'");
 		}
 		
-		if ($save) {
+		if ($save && $name != $this->name) {
 			global $connection;
 			
 			try {
@@ -232,7 +232,7 @@ class Alias {
 			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
 		}
 		
-		if ($save) {			
+		if ($save && $code != $this->code) {			
 			try {
 				$update = $connection->prepare("UPDATE alias SET code = :code WHERE name = :name AND institution = :institution");
 				$update->bindValue(":code", $code);
@@ -273,7 +273,7 @@ class Alias {
 			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
 		}
 		
-		if ($save) {
+		if ($save && $institution != $this->institution) {
 			try {
 				$update = $connection->prepare("UPDATE alias SET institution = :institution WHERE name = :name AND institution = :oldinstitution");
 				$update->bindValue(":name", $this->name);
