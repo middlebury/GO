@@ -307,7 +307,7 @@ class Alias {
 			$alias->bindValue(":institution", $this->institution);
 			$alias->execute();
 			
-			Go::log("Deleted alias via Alias::delete(). 1 of 2.", $this->code, $this->institution, $this->name);
+			Go::log("Deleted alias via Alias::delete().", $this->code, $this->institution, $this->name);
 		} catch (Exception $e) {
 			throw $e;
 		}
