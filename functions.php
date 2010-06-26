@@ -83,16 +83,17 @@ function doDelete($args) {
 
 function doDeleteAlias($args) {
 	try {
-		$codeString = str_replace(" ", "+", $args["code"]);
-		if (!Code::exists($codeString, $args["institution"]))
-			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
-		$code = new Code($codeString, $args["institution"]);
-		
+		$aliasString = str_replace(" ", "+", $args["alias"]);
+		if (!Alias::exists($aliasString, $args["institution"]))
+			throw new Exception("Alias ".htmlentities($aliasString)." doesn't exist.");
+		$alias = new Alias($aliasString, $args["institution"]);
+
+		// Get the Code from the Alias rather than relying on the request data.
+		$code = new Code($alias->getCode(), $alias->getInstitution());
+
 		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
-			throw new Exception("You do not have access to the shortcut " . $codeString);
-		
-		
-		$alias = new Alias(str_replace(" ", "+", $args["alias"]), $codeString, $args["institution"]);
+			throw new Exception("You do not have access to the shortcut " . $code->getName());
+
 		$alias->delete();
 		
 		return "Deleted alias " . $args["alias"];
