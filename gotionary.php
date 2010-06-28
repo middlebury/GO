@@ -153,14 +153,14 @@ $select->execute();
 $lines = array();
 
 while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
-	$line = "<p><a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
+	$line = "<p>";
+	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'><img src='icons/info.png'/></a> &nbsp; &nbsp; ";
+	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
 
 	if($row->description != "") {
 		$line .= " - {$row->description}";
 	}
-	
-	$line .= " - <a href=\"info.php?code=".$row->name."\">shortcut info</a>";
-	
+		
 	$line .= "</p>";
 	$lines[$row->name] = $line;
 }
@@ -171,13 +171,13 @@ $alias->bindValue(":institution", $institution);
 $alias->execute();
 
 while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
-	$line = "<p><a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
+	$line = "<p>";
+	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'><img src='icons/info.png'/></a> &nbsp; &nbsp; ";
+	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
 
 	if($row->description != "") {
 		$line .= " - {$row->description}";
 	}
-	
-	$line .= " - <a href=\"info.php?code=".$row->name."\">shortcut info</a>";
 
 	$line .= "</p>";
 	$lines[$row->name] = $line;

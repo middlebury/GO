@@ -10,3 +10,20 @@ td {
 dt {
 	font-weight: bold;
 }
+
+a.info_link img {
+	border: none;
+	vertical-align: middle;
+	width: 20px;
+}
+
+p.gobacktionary_info {
+	float: left;
+	clear: left;
+	margin-top: 0px;
+}
+
+p.gobacktionary_shortcut {
+	display: block;
+	margin-left: 40px;
+}
