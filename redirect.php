@@ -35,7 +35,14 @@ if ($code->rowCount() == 0) {
 	header("Location: gotionary.php?letter=" . substr($name, 0, 1));
 } else {
 	$row = $code->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT);
-	$url = $row->url;
-	header("Location: " . $url);
+	
+	$url = Code::filterUrl($row->url);
+	
+	// For codes that don't have URLs, send them to the info page.
+	if (!Code::isUrlValid($url)) {
+		header("Location: info.php?code=" . $name);
+	} else {
+		header("Location: " . $url);
+	}
 }
 ?>
