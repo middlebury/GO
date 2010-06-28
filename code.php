@@ -207,7 +207,7 @@ class Code {
 	 * @since 02-26-2009
 	 */
 	public function getUrl() {
-		return $this->url;
+		return self::filterUrl($this->url);
 	}
 	
 	/**
@@ -218,7 +218,7 @@ class Code {
 	 * @since 02-27-2009
 	 */
 	public function getDescription() {
-		return $this->description;
+		return htmlentities($this->description);
 	}
 	
 	/**
@@ -500,6 +500,44 @@ class Code {
 		}
 		
 		$this->url = $url;
+	}
+	
+	/**
+	 * Verify a URL to ensure that it is valid and safe.
+	 * 
+	 * @param string $url
+	 * @return boolean
+	 * @access public
+	 * @since 6/28/10
+	 */
+	public static function isUrlValid ($url) {
+		if (!filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED))
+			return false;
+		if (preg_match('/["\'<>]/i', $url))
+			return false;
+		if (!preg_match('#^(http|https|ftp|ftps)://.+#', $url))
+			return false;
+		
+		return true;
+	}
+	
+	/**
+	 * Filter a URL to ensure that it is valid and safe.
+	 * 
+	 * @param string $url
+	 * @return string
+	 * @access public
+	 * @since 6/28/10
+	 */
+	public static function filterUrl ($url) {
+		$url = filter_var($url, FILTER_SANITIZE_URL, FILTER_FLAG_SCHEME_REQUIRED);
+		$url = preg_replace('/["\'<>]/i', '', $url);
+		
+		// if it still isn't valid, give up.
+		if (!self::isUrlValid($url))
+			return '';
+		
+		return $url;
 	}
 	
 	/**

@@ -8,6 +8,10 @@ function doCreate($args) {
 	try {
 		$codeString = str_replace(" ", "+", $args["code"]);
 		
+		$args['url'] = urldecode($args['url']);
+		if (!Code::isUrlValid($args['url']))
+			throw new Exception('URL is not valid.');
+		
 		if (Alias::exists($codeString, $args["institution"])) {
 			$alias = new Alias($codeString, null, $args["institution"]);
 			throw new Exception('An alias for "'.$alias->getCode().'" already exists with name "'.htmlentities($codeString).'". You can\'t create a shortcut with the same name.');
@@ -24,7 +28,7 @@ function doCreate($args) {
 		}
 		
 		$code->setCreator($_SESSION["AUTH"]->getId(), true);
-		$code->setUrl(urldecode($args["url"]), true);
+		$code->setUrl($args['url'], true);
 		$code->setDescription($args["description"], true);
 		$code->setPublic(($args["public"] == "1"), true);
 		$code->addUser($_SESSION["AUTH"]->getId());
@@ -148,8 +152,12 @@ function doUpdate($args) {
 		
 		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
 			throw new Exception("You do not have access to the shortcut " . $codeString);
-				
-		$code->setUrl(urldecode($args["url"]), true);
+		
+		$url = urldecode($args['url']);
+		if (!Code::isUrlValid($url))
+			throw new Exception('URL is not valid.');
+		
+		$code->setUrl($url, true);
 		$code->setInstitution($args["newinst"], true);
 		$code->setDescription($args["description"], true);
 		$code->setPublic(($args["public"] == "1"), true);

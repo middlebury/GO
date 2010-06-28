@@ -165,9 +165,9 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
     
     print "</p>\n<p class='gobacktionary_shortcut'>";
 
-    print $row->description;
+    print htmlentities($row->description);
     
-    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
+    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
   }
   
   if ($row->alias) {
