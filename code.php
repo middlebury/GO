@@ -511,11 +511,15 @@ class Code {
 	 * @since 6/28/10
 	 */
 	public static function isUrlValid ($url) {
+		$url = trim($url);
+		// Encode any spaces;
+		$url = str_replace(' ', '%20', $url);
+		
 		if (!filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED))
 			return false;
 		if (preg_match('/["\'<>]/i', $url))
 			return false;
-		if (!preg_match('#^(http|https|ftp|ftps)://.+#', $url))
+		if (!preg_match('#^(http|https|ftp|ftps)://.+#i', $url))
 			return false;
 		
 		return true;
@@ -530,12 +534,16 @@ class Code {
 	 * @since 6/28/10
 	 */
 	public static function filterUrl ($url) {
+		$url = trim($url);
+		// Encode any spaces;
+		$url = str_replace(' ', '%20', $url);
+		
 		$url = filter_var($url, FILTER_SANITIZE_URL, FILTER_FLAG_SCHEME_REQUIRED);
 		$url = preg_replace('/["\'<>]/i', '', $url);
 		
 		// if it still isn't valid, give up.
 		if (!self::isUrlValid($url))
-			return '';
+			return htmlentities($url);
 		
 		return $url;
 	}
