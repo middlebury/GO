@@ -27,3 +27,7 @@ p.gobacktionary_shortcut {
 	display: block;
 	margin-left: 40px;
 }
+
+.error {
+	color: red;
+}

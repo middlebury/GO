@@ -73,10 +73,12 @@ try {
 					<dd><?php print htmlentities($code->getName()); ?></dd>
 					<dt>Destination</dt>
 					<dd><?php
-						if (strlen($code->getUrl()))
+						if (strlen($code->getUrl())) {
 							print '<a href="'.$code->getUrl().'">'.htmlentities($code->getUrl()).'</a>';
-						else 
-							print 'Error: No destination is set for this code.';
+							if (!Code::isUrlValid($code->getUrl()))
+								print '<br/><span class="error">Error: This URL is not valid.</span>';
+						} else 
+							print '<span class="error">Error: No destination is set for this code.</span>';
 					?></dd>
 					<?php
 					$aliases = $code->getAliases();
