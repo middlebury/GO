@@ -146,7 +146,7 @@ if ($letter == "[0-9]") {
 	$where = "name LIKE '0%' OR name LIKE '1%' OR name LIKE '2%' OR name LIKE '3%' OR name LIKE '4%' OR name LIKE '5%' OR name LIKE '6%' OR name LIKE '7%' OR name LIKE '8%' OR name LIKE '9%'";
 }
 
-$select = $connection->prepare("SELECT name, description FROM code WHERE {$where} AND institution = :institution AND public = 1 ORDER BY name");
+$select = $connection->prepare("SELECT name, description, url FROM code WHERE {$where} AND institution = :institution AND public = 1 ORDER BY name");
 $select->bindValue(":institution", $institution);
 $select->execute();
 
@@ -154,7 +154,12 @@ $lines = array();
 
 while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
-	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'><img src='icons/info.png'/></a> &nbsp; &nbsp; ";
+	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
+	if (Code::isUrlValid($row->url))
+		$line .= "<img src='icons/info.png'/>";	
+	else
+		$line .= "<img src='icons/alert.png'/>";	
+	$line .= "</a> &nbsp; &nbsp; ";	
 	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
 
 	if($row->description != "") {
@@ -166,13 +171,18 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 }
 
 $where = str_replace("name", "alias.name", $where);
-$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description FROM alias JOIN code ON (alias.code = code.name) WHERE {$where} AND alias.institution = :institution AND code.public = 1 ORDER BY alias.name");
+$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name) WHERE {$where} AND alias.institution = :institution AND code.public = 1 ORDER BY alias.name");
 $alias->bindValue(":institution", $institution);
 $alias->execute();
 
 while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
-	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'><img src='icons/info.png'/></a> &nbsp; &nbsp; ";
+	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
+	if (Code::isUrlValid($row->url))
+		$line .= "<img src='icons/info.png'/>";	
+	else
+		$line .= "<img src='icons/alert.png'/>";	
+	$line .= "</a> &nbsp; &nbsp; ";
 	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
 
 	if($row->description != "") {
