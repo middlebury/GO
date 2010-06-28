@@ -59,6 +59,11 @@ define("GO_ATTR_NAME", "samaccountname");
 // LDAP attribute you will use for the email
 define("GO_ATTR_EMAIL", "mail");
 
+define('GET_USER_DISPLAY_NAME_CALLBACK', 'my_lookup_displayname');
+function my_lookup_displayname($id) {
+	return $id;
+}
+
 /* CAS AUTHENTICATION */
 /*
 

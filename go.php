@@ -555,6 +555,42 @@ class Go {
 	$insert->execute();
 
   }
+  
+  /**
+   * Answer a display-name that matches an id. Allows lookup even when not authenticated.
+   * 
+   * @param string $id
+   * @return string
+   * @access public
+   * @since 6/28/10
+   */
+  public static function getUserDisplayName($id) {
+    if (is_null($id)) {
+      throw new Exception('No user id specified.');
+    }
+    
+    if (!Go::cache_get('user_displayname-'.$id)) {
+      if (!defined('GET_USER_DISPLAY_NAME_CALLBACK'))
+        throw new Exception('You must configure GO with a GET_USER_DISPLAY_NAME_CALLBACK function to fetch user names for user-ids.');
+        
+      try {
+	    $displayName = call_user_func(GET_USER_DISPLAY_NAME_CALLBACK, $id);
+	  } catch (Exception $e) {
+	    // Log the problem, but fall back to the id.
+	  	error_log($e->getMessage());
+	  	return $id;
+	  }
+      
+      // Fall back to the id if we get no results, but don't cache it.
+      if (!$displayName)
+        return $id;
+      
+      Go::cache_set('user_displayname-'.$id, (string)$displayName);
+    }
+    
+    return Go::cache_get('user_displayname-'.$id);
+  }
+  
 }
 
 ?>

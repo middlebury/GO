@@ -6,3 +6,7 @@ td {
 	text-align: left;
 	vertical-align: top;
 }
+
+dt {
+	font-weight: bold;
+}

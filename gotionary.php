@@ -159,6 +159,8 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 		$line .= " - {$row->description}";
 	}
 	
+	$line .= " - <a href=\"info.php?code=".$row->name."\">shortcut info</a>";
+	
 	$line .= "</p>";
 	$lines[$row->name] = $line;
 }
@@ -175,6 +177,8 @@ while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 		$line .= " - {$row->description}";
 	}
 	
+	$line .= " - <a href=\"info.php?code=".$row->name."\">shortcut info</a>";
+
 	$line .= "</p>";
 	$lines[$row->name] = $line;
 }

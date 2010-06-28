@@ -160,6 +160,7 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
   
   if ($current_url != $row->url) {
     print "</p><p>$row->description";
+   	print " - <a href=\"info.php?code=".$row->name."\">shortcut info</a>";
     
     print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/{$row->name}</a>";
   }
