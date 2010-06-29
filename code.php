@@ -21,7 +21,8 @@ class Code {
 	 * Answer true if the code exists, false otherwise.
 	 *
 	 * @access public
-	 * @param string $name The full path string of the code.
+1	 * @param string $name The full path string of the code.
+	 * @param optional string $institution The institution for the code.
 	 * @throws Exception from PDO functions.
 	 */
 	public static function exists($name, $institution = "middlebury.edu") {
@@ -35,6 +36,42 @@ class Code {
 			return true;
 		else
 			return false;
+	}
+	
+	/**
+	 * Answer a Code object for the name and institution if one exists, throw an
+	 * Exception otherwise.
+	 * 
+	 * @param string $name The full name of the Code
+	 * @param optional string $institution The institution for the code.
+	 * @return object Code
+	 * @access public
+	 * @since 6/29/10
+	 */
+	public static function get ($name, $institution = "middlebury.edu") {
+		$name = str_replace(" ", "+", $_GET["code"]);
+		
+		// Try searching with the name as given.
+		if (self::exists($name, $institution)) {
+			$code = new Code($name, $institution);
+		} else if (Alias::exists($name, $institution)) {
+			$alias = new Alias($name, null, $institution);
+			$code = new Code($alias->getCode(), $alias->getInstitution());
+		} else {
+		
+			// Try searching with the trailing slash stripped.
+			$name = trim($name, '/');
+			if (Code::exists($name, $institution)) {
+				$code = new Code($name, $institution);
+			} else if (Alias::exists($name, $institution)) {
+				$alias = new Alias($name, null, $institution);
+				$code = new Code($alias->getCode(), $alias->getInstitution());
+			} else {
+				throw new Exception('Unknown Code "'.$name.'".');
+			}
+		}
+		
+		return $code;
 	}
 	
 	/**

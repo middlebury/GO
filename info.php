@@ -2,10 +2,6 @@
 require_once "config.php";
 require_once "go.php";
 
-
-$name = str_replace(" ", "+", $_GET["code"]);
-$name = trim($name, '/');
-
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -59,14 +55,9 @@ $name = trim($name, '/');
 <?php
 
 try {
-	if (Code::exists($name, $institution)) {
-		$code = new Code($name, $institution);
-	} else if (Alias::exists($name, $institution)) {
-		$alias = new Alias($name, null, $institution);
-		$code = new Code($alias->getCode(), $alias->getInstitution());
-	} else {
-		throw new Exception('Unknown Code "'.$name.'".');
-	}
+	$name = str_replace(" ", "+", $_GET["code"]);
+	
+	$code = Code::get($name, $institution);
 ?>
 				<dl>
 					<dt>Code</dt>

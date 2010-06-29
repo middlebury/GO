@@ -8,41 +8,30 @@ if (!isset($_GET["code"])) {
 	exit;
 }
 
-global $connection;
-
 $name = str_replace(" ", "+", $_GET["code"]);
 
-if (substr($name, strlen($name) - 1, 1) == "/") {
-  $name = substr($name, 0, strlen($name) - 1);
-}
-
-$alias = $connection->prepare("SELECT code FROM alias WHERE name = :name AND institution = :institution");
-$alias->bindValue(":name", $name);
-$alias->bindValue(":institution", $institution);
-$alias->execute();
-
-if ($alias->rowCount() > 0) {
-	$row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT);
-	$name = $row->code;
-}
-
-$code = $connection->prepare("SELECT url FROM code WHERE name = :name AND institution = :institution");
-$code->bindValue(":name", $name);
-$code->bindValue(":institution", $institution);
-$code->execute();
-
-if ($code->rowCount() == 0) {
-	header("Location: gotionary.php?letter=" . substr($name, 0, 1));
-} else {
-	$row = $code->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT);
+try {
 	
-	$url = Code::filterUrl($row->url);
+	try {
+		$code = Code::get($name, $institution);
+	} catch (Exception $e) {
+		// If not found, send to the gotionary.
+		header("Location: gotionary.php?letter=" . substr($name, 0, 1));
+		exit;
+	}
 	
 	// For codes that don't have URLs, send them to the info page.
-	if (!Code::isUrlValid($url)) {
+	if (!Code::isUrlValid($code->getUrl())) {
 		header("Location: info.php?code=" . $name);
+		exit;
 	} else {
-		header("Location: " . $url);
+		header("Location: " . $code->getUrl());
+		exit;
 	}
+	
+} catch (Exception $e) {
+	header("Location: info.php?code=" . $name);
+	exit;
 }
+
 ?>
