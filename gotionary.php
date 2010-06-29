@@ -143,7 +143,7 @@ global $connection;
 
 $where = "name LIKE '{$letter}%'";
 if ($letter == "[0-9]") {
-	$where = "name LIKE '0%' OR name LIKE '1%' OR name LIKE '2%' OR name LIKE '3%' OR name LIKE '4%' OR name LIKE '5%' OR name LIKE '6%' OR name LIKE '7%' OR name LIKE '8%' OR name LIKE '9%'";
+	$where = "(name LIKE '0%' OR name LIKE '1%' OR name LIKE '2%' OR name LIKE '3%' OR name LIKE '4%' OR name LIKE '5%' OR name LIKE '6%' OR name LIKE '7%' OR name LIKE '8%' OR name LIKE '9%')";
 }
 
 $select = $connection->prepare("SELECT name, description, url FROM code WHERE {$where} AND institution = :institution AND public = 1 ORDER BY name");
