@@ -193,7 +193,15 @@ while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$lines[$row->name] = $line;
 }
 
-ksort($lines);
+// Sort the lines using case-insensitive sorting.
+$sortKeys = array();
+$tempLines = array();
+foreach ($lines as $name => $line) {
+	$tempLines[] = $line;
+	$sortKeys[] = strtolower($name);
+}
+array_multisort($sortKeys, SORT_ASC, SORT_STRING, $tempLines);
+$lines = $tempLines;
 
 ?>
 				<table border="0" width="100%">
