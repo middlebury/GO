@@ -544,7 +544,7 @@ class Go {
   	}
   	
   	
-	$insert = $connection->prepare("INSERT INTO log (code, alias, institution, description, user_id, user_display_name, request) VALUES (:code, :alias, :institution, :description, :user_id, :user_display_name, :request)");
+	$insert = $connection->prepare("INSERT INTO log (code, alias, institution, description, user_id, user_display_name, request, referer) VALUES (:code, :alias, :institution, :description, :user_id, :user_display_name, :request, :referer)");
 	$insert->bindValue(":code", $code);
 	$insert->bindValue(":alias", $alias);
 	$insert->bindValue(":institution", $institution);
@@ -552,6 +552,10 @@ class Go {
 	$insert->bindValue(":user_id", $user_id);
 	$insert->bindValue(":user_display_name", $user_display_name);
 	$insert->bindValue(":request", $_SERVER["REQUEST_URI"]);
+	if (isset($_SERVER["HTTP_REFERER"])) 
+	 	$insert->bindValue(":referer", $_SERVER["HTTP_REFERER"]);
+	else
+		$insert->bindValue(":referer", '');
 	$insert->execute();
 
   }

@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `user_id` varchar(255) NOT NULL,
   `user_display_name` varchar(255) NOT NULL,
   `request` text,
+  `referer` text,
   PRIMARY KEY  (`id`),
   KEY `tstamp` (`tstamp`),
   KEY `code` (`code`),
