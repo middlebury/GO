@@ -203,6 +203,13 @@ if (isset($_GET["name"]) && isset($_GET["args"])) {
 	try {		
 		$message = "<response id=\"response\" color=\"green\">ALRIGHT! B) ";
 		$parsed = parseArgs($_GET["args"]);
+		
+		if ((!isset($_GET['xsrfkey']) || $_GET['xsrfkey'] != $_SESSION['xsrfkey'])
+			&& (!isset($_POST['xsrfkey']) || $_POST['xsrfkey'] != $_SESSION['xsrfkey']))
+		{
+			throw new Exception('Cannot complete the requested action. This request might have been forged.');
+		}
+		
 		switch($_GET["name"]) {
 			case "create":
 				$message .= doCreate($parsed);

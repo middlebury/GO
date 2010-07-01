@@ -4,6 +4,7 @@ require_once "header.php";
 global $connection;
 $user = new User($_SESSION["AUTH"]->getId());
 ?>
+<input type='hidden' id='xsrfkey' value='<?php echo $_SESSION['xsrfkey']; ?>'/>
 <div id="notify">
 	<h2>Notification</h2>
 	<p>We check all of our GO shortcuts every night to see whether there are problems. If you want, we can send you an email letting you know if we receive any errors trying to access the sites for which you've created GO shortcuts.</p>

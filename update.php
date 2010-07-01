@@ -8,6 +8,7 @@ global $institutions;
 
 $codes = $user->getCodes();
 ?>
+<input type='hidden' id='xsrfkey' value='<?php echo $_SESSION['xsrfkey']; ?>'/>
 <div id="update">
 	<h2>Update</h2>
 	<table id="codes" width="100%" border="1">

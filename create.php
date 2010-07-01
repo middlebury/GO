@@ -2,6 +2,7 @@
 require_once "header.php";
 global $institutions;
 ?>
+<input type='hidden' id='xsrfkey' value='<?php echo $_SESSION['xsrfkey']; ?>'/>
 <div id="create">
 	<h2>Create</h2>
 	<table width="100%">

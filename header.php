@@ -18,6 +18,11 @@ if (isset($_SESSION["AUTH"])) {
     }
   }
 }
+
+if (!isset($_SESSION['xsrfkey'])) {
+	$_SESSION['xsrfkey'] = uniqid('', true);
+}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">

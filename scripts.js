@@ -8,8 +8,15 @@ function doAction(name, args) {
 		XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
+	if (document.getElementById("xsrfkey").value) {
+		var xsrf_param = '&xsrfkey=' + document.getElementById("xsrfkey").value;
+	} else {
+		alert ('This page does not have an valid XSRF key, please refresh the page and try again.');
+		throw ('This page does not have an valid XSRF key, please refresh the page and try again.');
+	}
+	
 	if (XMLHttpRequestObject) {
-		XMLHttpRequestObject.open("GET", "functions.php?name=" + name + "&args=" + escape(args));
+		XMLHttpRequestObject.open("GET", "functions.php?name=" + name + "&args=" + escape(args) + xsrf_param);
 		XMLHttpRequestObject.onreadystatechange = function()
 		{
 			if (XMLHttpRequestObject.readyState == 4 &&
