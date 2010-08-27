@@ -15,6 +15,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 if (in_array($current_page, $session_pages)) {
 	session_name('GOSID');
 	session_start();
+	
+	//set up a x-site forgery key
+	if (!isset($_SESSION['xsrfkey'])) {
+		$_SESSION['xsrfkey'] = uniqid('', true);
+	}
 }
 
 // Force authentication on admin pages
@@ -25,7 +30,9 @@ if (in_array($current_page, $admin_pages)) {
   		exit();
 		}
 	} else if (AUTH_METHOD == 'cas') {
+		
 		$_SESSION["AUTH"] = new GoAuthCas();
+		
 	} else {
 		throw new Exception('Unknown Auth Method');
 	}

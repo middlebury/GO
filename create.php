@@ -1,4 +1,5 @@
 <?php
+require_once "go.php";
 require_once "header.php";
 require_once "admin_nav.php";
 global $institutions;
