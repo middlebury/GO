@@ -29,92 +29,68 @@ define("GO_DATABASE_NAME", "go");
 define("GO_DATABASE_HOST", "database.example.com");
 
 // Username with SELECT, INSERT, UPDATE, and DELETE on the Database
-define("GO_DATABASE_USER", "go");
+define("GO_DATABASE_USER", "testuser");
 
 // Password for the Database user
-define("GO_DATABASE_PASS", "go");
+define("GO_DATABASE_PASS", "testpassword");
+
+// Authentication method
+define("AUTH_METHOD", "cas");
 
 /* LDAP AUTHENTICATION */
 // CN of a user to do the initial bind
-define("GO_AUTH_USER", "User, Dummy");
+define("GO_AUTH_LDAP_USER", "User, Dummy");
 
 // Password for the LDAP bind user
-define("GO_AUTH_PASS", "password");
+define("GO_AUTH_LDAP_PASS", "password");
 
 // Host of the LDAP server
-define("GO_AUTH_HOST", "example.com");
+define("GO_AUTH_LDAP_HOST", "example.com");
 
 // Port of the LDAP server
-define("GO_AUTH_PORT", "389");
+define("GO_AUTH_LDAP_PORT", "389");
 
 // LDAP Path in which to search for users
-define("GO_AUTH_PATH", "DC=example,DC=com");
+define("GO_AUTH_LDAP_PATH", "DC=example,DC=com");
 
 // LDAP attribute you will use for the internal user ID
-define("GO_ATTR_ID", "cn");
+define("GO_AUTH_LDAP_ATTR_ID", "cn");
 
 // LDAP attribute you will use for the username
-define("GO_ATTR_NAME", "samaccountname");
+define("GO_AUTH_LDAP_ATTR_NAME", "samaccountname");
 
 // LDAP attribute you will use for the email
-define("GO_ATTR_EMAIL", "mail");
+define("GO_AUTH_LDAP_ATTR_EMAIL", "mail");
+
+/* CAS AUTHENTICATION */
+// Filesystem path to a logging file
+define("GO_AUTH_CAS_LOG", "/tmp/go-cas.log");
+
+// Host of CAS server
+define("GO_AUTH_CAS_HOST", "login.example.com");
+
+// Port of CAS server
+define("GO_AUTH_CAS_PORT", 443);
+
+// Path to CAS login script
+define("GO_AUTH_CAS_PATH", "/cas");
+
+// Path to proxy granting ticket script
+define("GO_AUTH_CAS_PGT", "https://go.example.com/storePGT.php");
+
+// Filesystem path to proxy granting ticket store
+define("GO_AUTH_CAS_PGTSTORE", "/var/store");
+
+// CAS attribute you will use for the internal user ID
+define("GO_AUTH_CAS_ATTR_ID", "Id");
+
+// CAS attribute you will use for the username
+define("GO_AUTH_CAS_ATTR_NAME", "Login");
+
+// CAS attribute you will use for the email
+define("GO_AUTH_CAS_ATTR_EMAIL", "EMail");
 
 define('GET_USER_DISPLAY_NAME_CALLBACK', 'my_lookup_displayname');
 function my_lookup_displayname($id) {
 	return $id;
 }
-
-/* CAS AUTHENTICATION */
-/*
-
-// Filesystem path to a logging file
-define("GO_AUTH_LOG", "cas.log");
-
-// Host of CAS server
-define("GO_AUTH_HOST", "login.example.com");
-
-// Port of CAS server
-define("GO_AUTH_PORT", 443);
-
-// Path to CAS login script
-define("GO_AUTH_PATH", "/cas");
-
-// Path to proxy granting ticket script
-define("GO_AUTH_PGT", "storePGT.php");
-
-// Filesystem path to proxy granting ticket store
-define("GO_AUTH_PGTSTORE", "/var/store");
-
-// CAS attribute you will use for the internal user ID
-define("GO_ATTR_ID", "Id");
-
-// CAS attribute you will use for the username
-define("GO_ATTR_NAME", "Login");
-
-// CAS attribute you will use for the email
-define("GO_ATTR_EMAIL", "EMail");
-*/
-
-/* Do LDAP authentication */
-session_start();
-
-$name = preg_replace('/[^a-z0-9_-]/i', '', dirname($_SERVER['SCRIPT_NAME']));
-
-session_name($name);
-
-if (!isset($_SESSION["AUTH"]) && strpos($_SERVER["PHP_SELF"], "login.php") === false) {
-  header("Location: login.php?r=" . $_SERVER["PHP_SELF"]);
-  exit();
-}
-
-/* Do CAS authentication */
-/*
-$admin_pages = array("index.php", "create.php", "update.php", "notify.php", "functions.php");
-foreach($admin_pages as $page) {
-  if (substr($_SERVER['PHP_SELF'], strlen($_SERVER['PHP_SELF']) - strlen($page)) == $page) {
-    $_SESSION["AUTH"] = new GoAuthCas();
-  }
-}
-
-*/
-?>
