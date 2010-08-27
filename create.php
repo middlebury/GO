@@ -1,7 +1,12 @@
 <?php
 require_once "header.php";
+require_once "admin_nav.php";
 global $institutions;
 ?>
+
+<div class="content">
+	<div id="response"></div>
+	
 <input type='hidden' id='xsrfkey' value='<?php echo $_SESSION['xsrfkey']; ?>'/>
 <div id="create">
 	<h2>Create</h2>

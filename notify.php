@@ -1,6 +1,12 @@
 <?php
 require_once "header.php";
+require_once "admin_nav.php";
+?>
 
+<div class="content">
+	<div id="response"></div>
+	
+<?php
 global $connection;
 $user = new User($_SESSION["AUTH"]->getId());
 ?>

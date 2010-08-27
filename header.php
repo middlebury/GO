@@ -67,26 +67,5 @@ if (!isset($_SESSION['xsrfkey'])) {
 					&#160;
 				</div>
 			</div>
-			<div class="headerNavigation">
-				<div class="CssMenu">
-					<div class="AspNet-Menu-Horizontal">
-						<ul class="AspNet-Menu">
-							<li class="AspNet-Menu-Leaf">
-								<a href="create.php">Create</a>
-							</li>
-							<li class="AspNet-Menu-Leaf">
-								<a href="update.php">View / Update</a>
-							</li>
-							<li class="AspNet-Menu-Leaf">
-								<a href="notify.php">Notify</a>
-							</li>
-							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php">GOtionary</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear">&#160;</div>
-			</div>
-			<div class="content">
-				<div id="response"></div>
+
+			

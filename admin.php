@@ -1,6 +1,9 @@
 <?php
 require_once "header.php";
+require_once "admin_nav.php";
 ?>
+<div class="content">
+	<div id="response"></div>
 <h1>Welcome to GO!</h1>
 <p>Click one of the options above to get started.</p>
 <ul>
