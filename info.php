@@ -1,5 +1,5 @@
 <?php
-require_once "config.php";
+//require_once "config.php";
 require_once "go.php";
 require_once "header.php";
 ?>
@@ -60,12 +60,19 @@ try {
 					<dd><?php print ($code->getPublic()? "yes":"no"); ?></dd>
 
 				</dl>
-<?php
-} catch (Exception $e) {
-	print "<div class='error'>Error: ".htmlentities($e->getMessage())."</div>";
-}
-?>
-			</div>
-		</div>
-	</body>
-</html>
+
+				<!-- Matt: Form for submitting flag as inappropriate -->
+				<form name="flag_inappropriate_form" action="flag.php" method="post">
+					<?php //session_start();
+					//echo session_name();
+					//echo session_id();
+					?>
+					<input type="hidden" name="sdyersytr" value="<?php echo $_SESSION["AUTH"]->getId(); ?>" />
+					<input type="hidden" name="xsrfkey" value="<?php echo $_SESSION['xsrfkey']; ?>" />
+					<!--<input type="hidden" name="code" value="<?php var_dump($code); ?>" />-->
+					<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />
+				</form>
+
+				<?php } catch (Exception $e) { print "<div
+				class='error'>Error: ".htmlentities($e->getMessage())."</div>"; } ?>
+				</div> </div> </body> </html>
