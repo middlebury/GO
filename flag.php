@@ -18,7 +18,30 @@ function getRealIpAddr() {
     return $ip;
 }
 
-$flag_connection = mysql_connect(GO_DATABASE_HOST, GO_DATABASE_USER, GO_DATABASE_PASS);
+//try to do this and catch the error if there is an issue
+try {
+	//get the statement object for this insert statement
+  $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress) VALUES (?, ?, ?)");
+  
+  //bind the values represented by the "?" in the statement
+  $insert->bindValue(1, $_POST["code"]);
+  if (isset($_SESSION["AUTH"])) {
+  	$insert->bindValue(2, $_SESSION["AUTH"]->getId());
+  } else {
+  	$insert->bindValue(2, '');
+  }
+  $insert->bindValue(3, getRealIpAddr());
+  
+  //finally execute the statement
+  $insert->execute();
+
+//now catch any exceptions
+} catch (Exception $e) {
+	throw $e;
+}
+
+		
+/*$flag_connection = mysql_connect(GO_DATABASE_HOST, GO_DATABASE_USER, GO_DATABASE_PASS);
 if (!$flag_connection) {
 	die ('Could not conenct to DB '.mysql_error().'<br />');
 } else {
@@ -56,7 +79,7 @@ if ($closed == true) {
 	print "flag_connection closed successfully.";
 } else {
 	print "Doh!";
-}
+}*/
 
 if ($_POST['xsrfkey'] == $_SESSION['xsrfkey']) {
 	print "<p>All Good</p>";
