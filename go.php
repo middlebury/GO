@@ -7,8 +7,8 @@ require_once "alias.php";
 
 // Define admin pages and non-admin pages that need session
 $admin_pages = array("admin.php", "create.php", "update.php", "notify.php", "functions.php");
-$session_pages = $admin_pages;
-$session_pages[] = 'info.php';
+$session_pages = array("info.php", "flag.php");
+$session_pages = array_merge($session_pages, $admin_pages);
 $current_page = basename($_SERVER['PHP_SELF']);
 
 // Initialize session on all but the redirect

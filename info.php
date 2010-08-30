@@ -67,9 +67,8 @@ try {
 					//echo session_name();
 					//echo session_id();
 					?>
-					<input type="hidden" name="sdyersytr" value="<?php echo $_SESSION["AUTH"]->getId(); ?>" />
 					<input type="hidden" name="xsrfkey" value="<?php echo $_SESSION['xsrfkey']; ?>" />
-					<!--<input type="hidden" name="code" value="<?php var_dump($code); ?>" />-->
+					<input type="hidden" name="code" value="<?php print htmlentities($code->getName()) ?>" />
 					<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />
 				</form>
 
