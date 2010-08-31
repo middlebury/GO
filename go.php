@@ -6,7 +6,7 @@ require_once "code.php";
 require_once "alias.php";
 
 // Define admin pages and non-admin pages that need session
-$admin_pages = array("admin.php", "create.php", "update.php", "notify.php", "functions.php");
+$admin_pages = array("admin.php", "create.php", "update.php", "notify.php", "functions.php, flag_admin.php");
 $session_pages = array("info.php", "flag.php");
 $session_pages = array_merge($session_pages, $admin_pages);
 $current_page = basename($_SERVER['PHP_SELF']);
@@ -19,6 +19,12 @@ if (in_array($current_page, $session_pages)) {
 	//set up a x-site forgery key
 	if (!isset($_SESSION['xsrfkey'])) {
 		$_SESSION['xsrfkey'] = uniqid('', true);
+	}
+	
+	//also set up an array to hold what codes
+	//the authenticated user has flagged this session
+	if (!isset($_SESSION['flagged'])) {
+		$_SESSION['flagged'] = array();
 	}
 }
 

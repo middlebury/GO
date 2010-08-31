@@ -1,10 +1,13 @@
 <?php
 require_once "header.php";
 require_once "config.php";
-//var_dump($_POST);
-//print $_POST["code"];
+print '<p>';
+var_dump($_POST);
+print '</p>';
+print $_POST["code"];
+print '<p>';
 var_dump($_SESSION);
-
+print '</p>';
 //function to get IP address via client ip or x
 //forwarded first before falling back on remote addr
 function getRealIpAddr() {
@@ -27,6 +30,12 @@ try {
   $insert->bindValue(1, $_POST["code"]);
   if (isset($_SESSION["AUTH"])) {
   	$insert->bindValue(2, $_SESSION["AUTH"]->getId());
+  	//we want to add the current code to the session array
+  	//"flagged" so we know the user has flagged this code
+  	$_SESSION['flagged'][$_POST["code"]] = $_POST["code"];
+  	print '<p>';
+		var_dump($_SESSION);
+		print '</p>';
   } else {
   	$insert->bindValue(2, '');
   }

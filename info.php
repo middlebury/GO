@@ -61,15 +61,31 @@ try {
 
 				</dl>
 
-				<!-- Matt: Form for submitting flag as inappropriate -->
+				<!-- form for submitting flag as inappropriate -->
 				<form name="flag_inappropriate_form" action="flag.php" method="post">
-					<?php //session_start();
-					//echo session_name();
-					//echo session_id();
+					<?php
+					//check to see if ANY codes have been flagged by this user
+					if ($_SESSION['flagged'] != '') {
+						//we assume the current code has not been flagged
+						$current_code_flagged = false;
+						//now check to see if the current code has been flagged by this user 
+						foreach ($_SESSION['flagged'] as $current_code) {
+							if (htmlentities($code->getName()) == $current_code) {
+								$current_code_flagged = true;
+							}
+						}
+						//if so, don't let them flag it again this session
+						if ($current_code_flagged == true) {
+							print '<p>You have flagged this link as inappropriate.</p>';
+						//if not then display the flag as inappropriate button
+						} else {
+							print '<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
+							print '<input type="hidden" name="code" value="'. htmlentities($code->getName()) .'" />';
+							print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />';
+						}
+					}
 					?>
-					<input type="hidden" name="xsrfkey" value="<?php echo $_SESSION['xsrfkey']; ?>" />
-					<input type="hidden" name="code" value="<?php print htmlentities($code->getName()) ?>" />
-					<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />
+					
 				</form>
 
 				<?php } catch (Exception $e) { print "<div
