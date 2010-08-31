@@ -249,4 +249,17 @@ if (isset($_GET["name"]) && isset($_GET["args"])) {
 	print $response;
 }
 
+//function to get IP address via client ip or x
+//forwarded first before falling back on remote addr
+function getRealIpAddr() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  //to check ip is pass from proxy
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
 ?>

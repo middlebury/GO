@@ -76,9 +76,10 @@ try {
 						}
 						//if so, don't let them flag it again this session
 						if ($current_code_flagged == true) {
-							print '<p>You have flagged this link as inappropriate.</p>';
-						//if not then display the flag as inappropriate button
+							print '<p>You\'ve flagged this link as inappropriate. An administrator will review the quality of this link at a later time. Thank you for your assistance in moderating our go links.</p>';
+						//if not, then display the flag as inappropriate button
 						} else {
+							//pass the xsrfkey and code to the processor
 							print '<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
 							print '<input type="hidden" name="code" value="'. htmlentities($code->getName()) .'" />';
 							print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />';
