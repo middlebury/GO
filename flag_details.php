@@ -2,11 +2,17 @@
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
 require_once "go.php";
+//functions.php gives us access to the isSuperAdmin function 
+require_once "functions.php";
 require_once "header.php";
 
 //COLLECT AND PROCESS THE DATA
 
 try {
+	//check if user should see this page
+	if (!isSuperAdmin()) {
+		die("You do not have permission to view this page");
+	}
 	//set array to hold results
 	$result = array();
 	//get the statement object for this select statement
