@@ -82,7 +82,7 @@ try {
 			//of flags column
   		array_multisort($no_of_flags, SORT_DESC, $output_array);
   	}
-  }
+  } //end if ($no_of_codes != '') {
   ?>
   
   <!-- GENERATE THE OUTPUT -->
@@ -123,12 +123,14 @@ try {
   			}
   			//this is where we make the last column of Actions
   			print "\n<td class='action_cells'>";
-  			//this form submits a delete request for the current flag
-  			print "\n<form>";
-  			print "\n<input type='button' value='Delete' />";
-  			print "\n</form>";
   			//this link takes you to additional details about the flags set for this code
-  			print "\n<a href='flag_details.php?code=".$code[$i]."'><input type='button' value='Details' /></a>";
+  			print "\n<a href='flag_details.php?code=".$code[$i]."' target='details_window'><input type='button' value='Info' /></a>";
+  			//this form submits a delete request for the current flag
+  			print "\n<form name='clear_flags' action='flag_clear.php' method='post'>";
+  			print '<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
+  			print "\n<input type='hidden' value='".$code[$i]."' name='code' />";
+  			print "\n<input type='submit' value='Clear Flags' />";
+  			print "\n</form>";
   			print "\n</td>";
   			print "\n</tr>";
   			$i++;
@@ -142,3 +144,5 @@ try {
 } catch (Exception $e) {
 	throw $e;
 }
+
+require_once "footer.php";
