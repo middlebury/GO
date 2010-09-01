@@ -11,7 +11,7 @@ try {
 	$result = array();
 	//get the statement object for this select statement
 	$select = $connection->prepare("SELECT * FROM flag WHERE code = ?");
-  $select->bindValue(1, htmlentities($_GET['code']));
+  $select->bindValue(1, str_replace(" ", "+", $_GET["code"]));
 	$select->execute();
   //place the results of the select into results
   if ($select != '') {

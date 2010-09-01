@@ -124,7 +124,7 @@ try {
   			//this is where we make the last column of Actions
   			print "\n<td class='action_cells'>";
   			//this link takes you to additional details about the flags set for this code
-  			print "\n<a href='flag_details.php?code=".$code[$i]."' target='details_window'><input type='button' value='Info' /></a>";
+  			print "\n<a href='flag_details.php?code=".$code[$i]."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Info' /></a>";
   			//this form submits a delete request for the current flag
   			print "\n<form name='clear_flags' action='flag_clear.php' method='post'>";
   			print '<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
