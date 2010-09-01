@@ -4,6 +4,8 @@
 require_once "go.php";
 //functions.phh gives us access to getRealIpAddr() function
 require_once "functions.php";
+//Mail.php is the PEAR script that includes the mail class for sending mail
+require_once "Mail.php";
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -33,7 +35,17 @@ try {
   
   //finally execute the statement
   $insert->execute();
+  
+  //send mail indicating that this code has been flagged
+  $to = 'lafrance@middlebury.edu';
+  $headers['From'] = 'go@middlebury.edu';
+  $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
+  $body = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged as linking to inappropriate content. Please administer this flag via the admin interface.
 
+- The GO application';
+  $message = Mail::factory('mail');
+  $message->send($to, $headers, $body);
+  
 //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;
