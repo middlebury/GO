@@ -13,9 +13,9 @@ try {
 	$result = array();
 	//get the statement object for this select statement
 	$delete = $connection->prepare("DELETE FROM flag WHERE code = ?");
-  $delete->bindValue(1, htmlentities($_POST['code']));
+  $delete->bindValue(1, $_POST['code']);
 	$delete->execute();
-	print 'Stuff happened (I think)';
+	Go::log("Flag as inappropriate flag was cleared", $_POST['code']);
 //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;
