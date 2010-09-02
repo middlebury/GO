@@ -11,6 +11,13 @@
 							<li class="AspNet-Menu-Leaf">
 								<a href="notify.php">Notify</a>
 							</li>
+							<?php
+								if (isSuperAdmin()) {
+									print"\n<li class=\"AspNet-Menu-Leaf\">";
+									print"\n<a href=\"flag_admin.php\">Flags</a>";
+									print"\n</li>";
+								}
+							?>
 							<li class="AspNet-Menu-Leaf">
 								<a href="gotionary.php">GOtionary</a>
 							</li>

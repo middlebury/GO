@@ -39,8 +39,8 @@ try {
   <!-- GENERATE THE OUTPUT -->
   
   <!-- this is our table of flags -->
-  <h2>Flags for this Code</h2>
-  <table id="flag_admin_table">
+  <h2 class="flag_detail_header">Flags for this Code</h2>
+  <table class="flag_admin_table">
   	<tr>
   		<th>Code</th>
   		<th>User</th>
@@ -90,8 +90,8 @@ try {
   <!-- GENERATE THE OUTPUT -->
   	
   <!-- this is our table of logs -->
-  <h2>Logs for this Code</h2>
-  <table id="flag_admin_table">
+  <h2 class="flag_detail_header">Logs for this Code</h2>
+  <table class="flag_admin_table">
   	<tr>
   		<th>Timestamp</th>
   		<th>Alias</th>
@@ -100,7 +100,7 @@ try {
   		<th>Display Name</th>
   	</tr>
   	<?php
-  	if ($output_array != '') {
+  	if ($output_array != array()) {
   		//this is where we print out the cells of the table row
   		foreach ($output_array as $value) {
   			print "\n<tr>";
@@ -109,6 +109,10 @@ try {
   				}
   			print "\n</tr>";
   			}
+  		} else {
+  			print "\n<tr>";
+  			print "\n<td colspan=5 class='center'>No results</td>";
+  			print "\n</tr>";
   		}
   	?>
   	</table>

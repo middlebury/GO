@@ -77,7 +77,10 @@ try {
 						//if so, don't let them flag it again this session
 						if ($current_code_flagged == true) {
 							print '<p>You\'ve flagged this link as inappropriate. An administrator will review the quality of this link at a later time. Thank you for your assistance in moderating our go links.</p>';
-						//if not, then display the flag as inappropriate button
+						//if anon flagging is turned of and the user is not authenticated	
+						} elseif (ANON_FLAGGING == false && !isset($_SESSION["AUTH"])) {
+							//don't display the flag as inappropriate button
+						//otherwise, display the flag as inappropriate button
 						} else {
 							//pass the xsrfkey and code to the processor
 							print '<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';

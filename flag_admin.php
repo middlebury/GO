@@ -6,6 +6,7 @@ require_once "functions.php";
 require_once "go.php";
 //header.php looks pretty
 require_once "header.php";
+require_once "admin_nav.php";
 
 //COLLECT AND PROCESS THE DATA
 
@@ -95,7 +96,7 @@ try {
   <!-- GENERATE THE OUTPUT -->
   
   <!-- this is our table of results -->
-  <table id="flag_admin_table">
+  <table class="flag_admin_table">
   	<tr>
   		<th>Code</th>
   		<th># of Flags</th>

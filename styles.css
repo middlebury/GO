@@ -34,24 +34,28 @@ p.gobacktionary_shortcut {
 
 /* Sytles for the Flag as Inappropriate feature */
 
-#flag_admin_table {
+.flag_admin_table {
 border: 1px solid #000;
-margin: 0px 10px 0px 10px;
+margin: 10px 10px 0px 10px;
 padding: 0px;
 width: 98%;
 border-collapse: collapse;
 }
 
-#flag_admin_table th {
+.flag_admin_table th {
 background-color: #000;
 color: #fff;
 padding: 2px;
 }
 
-#flag_admin_table td {
+.flag_admin_table td {
 padding: 2px;
 border-right: 1px solid #000;
 border-bottom: 1px solid #000;
+}
+
+.flag_detail_header {
+margin-left: 10px;
 }
 
 /* make sure the anchor surrounding
@@ -69,3 +73,6 @@ width: 138px;
 float: left;
 }
 
+.center {
+text-align: center;
+}

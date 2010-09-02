@@ -17,15 +17,16 @@ try {
 	//get the statement object for this insert statement
   $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress) VALUES (?, ?, ?)");
   
+  //we want to add the current code to the session array
+  //"flagged" so we know the user has flagged this code
+  $_SESSION['flagged'][$_POST["code"]] = $_POST["code"];
+  
   //bind the values represented by the "?" in the statement
   //first bind code
   $insert->bindValue(1, $_POST["code"]);
   if (isset($_SESSION["AUTH"])) {
   	//bind the logged in user
   	$insert->bindValue(2, $_SESSION["AUTH"]->getId());
-  	//we want to add the current code to the session array
-  	//"flagged" so we know the user has flagged this code
-  	$_SESSION['flagged'][$_POST["code"]] = $_POST["code"];
   } else {
   	//otherwise just leave the user field blank
   	$insert->bindValue(2, '');
@@ -36,16 +37,22 @@ try {
   //finally execute the statement
   $insert->execute();
   
-  //send mail indicating that this code has been flagged
-  $to = 'lafrance@middlebury.edu';
+  //send mail to each go admin indicating that this 
+  //code has been flagged using the goAdmin array
+  //from config.php to get the emails of each admin
+  //foreach ($goAdmin as $current_admin) {
+  	$to = 'lafrance@middlebury.edu';
+  	//$to[] = GoAuthCas::getEmail($current_admin);
+  //}
   $headers['From'] = 'go@middlebury.edu';
   $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
   $body = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged as linking to inappropriate content. Please administer this flag via the admin interface.
 
 - The GO application';
   $message = Mail::factory('mail');
-  $message->send($to, $headers, $body);
-  
+  foreach ($to as $current_address) {
+  	$message->send($current_address, $headers, $body);
+  }
 //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;
