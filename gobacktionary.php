@@ -166,9 +166,9 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
     print "\n<p class='gobacktionary_info'>";
     print "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		print "<img src='icons/info.png'/>";	
+		print "<img src='icons/info.png' alt='info'/>";	
 	else
-		print "<img src='icons/alert.png'/>";	
+		print "<img src='icons/alert.png' alt='alert'/>";	
 	print "</a> &nbsp; ";    
     print "</p>\n<p class='gobacktionary_shortcut'>";
 

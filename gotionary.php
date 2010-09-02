@@ -159,9 +159,9 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
 	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		$line .= "<img src='icons/info.png'/>";	
+		$line .= "<img src='icons/info.png' alt='info'/>";	
 	else
-		$line .= "<img src='icons/alert.png'/>";	
+		$line .= "<img src='icons/alert.png' alt='alert'/>";	
 	$line .= "</a> &nbsp; &nbsp; ";	
 	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
 
@@ -182,9 +182,9 @@ while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
 	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		$line .= "<img src='icons/info.png'/>";	
+		$line .= "<img src='icons/info.png' alt='info'/>";	
 	else
-		$line .= "<img src='icons/alert.png'/>";	
+		$line .= "<img src='icons/alert.png' alt='alert'/>";	
 	$line .= "</a> &nbsp; &nbsp; ";
 	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
 
