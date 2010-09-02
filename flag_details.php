@@ -5,7 +5,12 @@ require_once "go.php";
 //functions.php gives us access to the isSuperAdmin function 
 require_once "functions.php";
 require_once "header.php";
+?>
 
+<div class="content">
+	<div id="response"></div>
+
+<?php
 //COLLECT AND PROCESS THE DATA FOR FLAGS
 
 try {

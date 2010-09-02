@@ -62,7 +62,7 @@ try {
 				</dl>
 
 				<!-- form for submitting flag as inappropriate -->
-				<form name="flag_inappropriate_form" action="flag.php" method="post">
+				<form action="flag.php" method="post">
 					<?php
 					//check to see if ANY codes have been flagged by this user
 					if ($_SESSION['flagged'] != '') {
@@ -83,9 +83,9 @@ try {
 						//otherwise, display the flag as inappropriate button
 						} else {
 							//pass the xsrfkey and code to the processor
-							print '<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
+							print '<div><input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
 							print '<input type="hidden" name="code" value="'. htmlentities($code->getName()) .'" />';
-							print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />';
+							print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" /></div>';
 						}
 					}
 					?>

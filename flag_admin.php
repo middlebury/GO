@@ -7,7 +7,12 @@ require_once "go.php";
 //header.php looks pretty
 require_once "header.php";
 require_once "admin_nav.php";
+?>
 
+<div class="content">
+	<div id="response"></div>
+
+<?php
 //COLLECT AND PROCESS THE DATA
 
 try {
@@ -132,13 +137,13 @@ try {
   			//this is where we make the last column of Actions
   			print "\n<td class='action_cells'>";
   			//this link takes you to additional details about the flags set for this code
-  			print "\n<a href='flag_details.php?code=".$code[$i]."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Info' /></a>";
+  			print "\n<a href='flag_details.php?code=".$code[$i]."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><button>Info</button></a>";
   			//this form submits a delete request for the current flag
-  			print "\n<form name='clear_flags' action='flag_clear.php' method='post'>";
-  			print '<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
+  			print "\n<form action='flag_clear.php' method='post'>";
+  			print '<div><input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
   			print "\n<input type='hidden' value='".$code[$i]."' name='code' />";
   			print "\n<input type='submit' value='Clear Flags' />";
-  			print "\n</form>";
+  			print "\n</div></form>";
   			print "\n</td>";
   			print "\n</tr>";
   			$i++;
