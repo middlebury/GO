@@ -184,6 +184,7 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
   $current_url = $row->url;
 }
 ?>
+				</p>
 			</div>
 		</div>
 	</body>
