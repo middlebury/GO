@@ -28,6 +28,10 @@ if (in_array($current_page, $session_pages)) {
 	}
 }
 
+if (AUTH_METHOD == 'cas') {
+	require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
+}
+
 // Force authentication on admin pages
 if (in_array($current_page, $admin_pages)) {
 	if (AUTH_METHOD == 'ldap') {
@@ -245,8 +249,6 @@ class GoAuthCas extends GoAuth {
    * @static
    */
   public static function configurePhpCas () {
-    
-    require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
     
     if (defined('GO_AUTH_CAS_LOG'))
 	    phpCAS::setDebug(GO_AUTH_CAS_LOG);

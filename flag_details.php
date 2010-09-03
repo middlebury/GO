@@ -36,7 +36,7 @@ try {
   	if ($result != '') {
   		foreach ($result as $row) {  		
   		//finally we can add a row of items to output array
-  		$output_array[] = array($row['code'], $row['user'], $row['ipaddress'], $row['timestamp']);
+  		$output_array[] = array($row['code'], GoAuthCas::getName($row['user']), $row['ipaddress'], $row['timestamp']);
   	}
   }
   ?>

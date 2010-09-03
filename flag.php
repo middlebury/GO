@@ -41,10 +41,10 @@ try {
   //send mail to each go admin indicating that this 
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
-  //foreach ($goAdmin as $current_admin) {
-  $to = array('lafrance@middlebury.edu');
-  //$to[] = GoAuthCas::getEmail($current_admin);
-  //}
+  foreach ($goAdmin as $current_admin) {
+  //$to = array('lafrance@middlebury.edu');
+  $to[] = GoAuthCas::getEmail($current_admin);
+  }
   $headers['From'] = 'go@middlebury.edu';
   $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
   if (isset($_SESSION["AUTH"])) {
