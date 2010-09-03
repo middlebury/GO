@@ -81,15 +81,15 @@ try {
   					$select->bindValue(2, $_SESSION["AUTH"]->getId());
   					$select->execute();
   					//place the results into count
-  					foreach ($select as $row) {
-  						$count = $row[0];
+  					if (intval($select->fetchColumn()) > 0) {
+  						$current_code_flagged = true;
   					}
   				}
 					
 					//if the current code has been flagged this session or
 					//the count is greater than 0 (has been flagged by this
 					//user in a previous session) display this message
-					if ($current_code_flagged == true || $count > 0) {
+					if ($current_code_flagged == true) {
 						print '<p id="already_flagged_message">You\'ve flagged this link as inappropriate. An administrator has been notified and will review the quality of this link at a later time. Thank you for your assistance in moderating our go links.</p>';
 					//if anon flagging is turned of and the user is not authenticated	
 					} elseif (ANON_FLAGGING == false && !isset($_SESSION["AUTH"])) {
