@@ -272,23 +272,10 @@ class GoAuthCas extends GoAuth {
     }
     
     if (!Go::cache_get('user_id-'.$username)) {
-      
-      @phpCAS::serviceWeb(
-        "https://" . GO_AUTH_CAS_HOST . "/directory/?action=search_users_by_attributes&" . GO_AUTH_CAS_ATTR_NAME . "=" . $username,
-        $err_code, $output
-      );
-      if ($err_code || !$output)
-      	throw new Exception("A web-service error $err_code occured: $output", $err_code);
-      $xml = simplexml_load_string($output);
-      $id = $xml->xpath("/cas:results/cas:entry/cas:user");
-      
-      if (isset($err_code) && $err_code != 0) {
-        throw new Exception($err_code);
-      } else  if (!isset($id[0]) || $id[0] == "") {
-        throw new Exception("User " . $_SESSION["phpCAS"]["user"] . " not found.");
-      } else {
-        Go::cache_set('user_id-'.$username, (string)$id[0]);
-      }
+      $xml = self::directoryFetch('search_users_by_attributes', GO_AUTH_CAS_ATTR_NAME, $username);
+      $elements = $xml->xpath("/cas:results/cas:entry/cas:user");
+      $id = (string)$elements[0];
+      Go::cache_set('user_id-'.$username, $id);
     }
     
     return Go::cache_get('user_id-'.$username);
@@ -300,22 +287,8 @@ class GoAuthCas extends GoAuth {
     }
     
     if (!Go::cache_get('user_name-'.$id)) {
-      phpCAS::serviceWeb(
-        "https://" . GO_AUTH_CAS_HOST . "/directory/?action=get_user&id=" . $id,
-        $err_code, $output
-      );
-      if ($err_code || !$output)
-      	throw new Exception("A web-service error $err_code occured: $output", $err_code);
-      
-      
-      $xml = simplexml_load_string($output);
-      $user = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_AUTH_CAS_ATTR_NAME . "']");
-      
-      if (isset($err_code) && $err_code != 0) {
-        throw new Exception($err_code);
-      } else {
-        Go::cache_set('user_name-'.$id, (string)$user[0]["value"]);
-      }
+      $name = self::directoryLookupById($id, GO_AUTH_CAS_ATTR_NAME);
+      Go::cache_set('user_name-'.$id, $name);
     }
     
     return Go::cache_get('user_name-'.$id);
@@ -327,22 +300,44 @@ class GoAuthCas extends GoAuth {
     }
     
     if (!Go::cache_get('user_email-'.$id)) {
-      phpCAS::serviceWeb(
-        "https://" . GO_AUTH_CAS_HOST . "/directory/?action=get_user&id=" . $id,
-        $err_code, $output
-      );
-      
-      $xml = simplexml_load_string($output);
-      $email = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_AUTH_CAS_ATTR_EMAIL . "']");
-      
-      if (isset($err_code) && $err_code != 0) {
-        throw new Exception($err_code);
-      } else {
-        Go::cache_set('user_email-'.$id, (string)$email[0]["value"]);
-      }
+      $email = self::directoryLookupById($id, GO_AUTH_CAS_ATTR_EMAIL);
+      Go::cache_set('user_email-'.$id, $email);
     }
     
     return Go::cache_get('user_email-'.$id);
+  }
+  
+  /**
+   * Lookup a value in a directory
+   * 
+   * @param string $id The user's Id.
+   * @param string $attributeToReturn Which attribute name to return from the XML document.
+   * @return string
+   */
+  protected static function directoryLookupById ($id, $attributeToReturn) {
+  	$xml = self::directoryFetch('get_user', 'id', $id);
+	$element = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='".$attributeToReturn."']");
+	return (string)$element[0]["value"];
+  }
+  
+  /**
+   * 
+   * 
+   * @param string $action The directory action to take.
+   * @param string $queryKey The parameter name to pass in the query
+   * @param string $queryValue The parameter value to pass in the query
+   * @return SimpleXMLElement
+   */
+  protected static function directoryFetch ($action, $queryKey, $queryValue) {
+  	$params = array(
+		'action'		=> $action,
+		'ADMIN_ACCESS'	=> DIRECTORY_ADMIN_ACCESS_KEY,
+		$queryKey		=> $queryValue,
+	);
+	$xmlString = file_get_contents('http://login.middlebury.edu/directory/?'.http_build_query($params));
+	if (!$xmlString)
+		throw new Exception("Couldn't fetch user for $queryKey '$queryValue'.");
+	return simplexml_load_string($xmlString);
   }
 
 }
