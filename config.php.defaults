@@ -94,3 +94,11 @@ define('GET_USER_DISPLAY_NAME_CALLBACK', 'my_lookup_displayname');
 function my_lookup_displayname($id) {
 	return $id;
 }
+
+//set array $goAdmins that holds the user ids of those
+//who should be able to access the admin pages
+$goAdmin = array(
+);
+
+//allow anonymous user to flag codes as inappropriate (true or false)
+define("ANON_FLAGGING", true);

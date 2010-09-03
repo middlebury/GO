@@ -19,7 +19,8 @@ try {
   
   //we want to add the current code to the session array
   //"flagged" so we know the user has flagged this code
-  $_SESSION['flagged'][$_POST["code"]] = $_POST["code"];
+  $_SESSION['flagged'][] = $_POST["code"];
+  
   
   //bind the values represented by the "?" in the statement
   //first bind code
@@ -41,14 +42,20 @@ try {
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
   //foreach ($goAdmin as $current_admin) {
-  	$to = 'lafrance@middlebury.edu';
-  	//$to[] = GoAuthCas::getEmail($current_admin);
+  $to = array('lafrance@middlebury.edu');
+  //$to[] = GoAuthCas::getEmail($current_admin);
   //}
   $headers['From'] = 'go@middlebury.edu';
   $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
-  $body = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged as linking to inappropriate content. Please administer this flag via the admin interface.
+  if (isset($_SESSION["AUTH"])) {
+  $body = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface.
 
 - The GO application';
+} else {
+	$body = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface.
+
+- The GO application';	
+	}
   $message = Mail::factory('mail');
   foreach ($to as $current_address) {
   	$message->send($current_address, $headers, $body);

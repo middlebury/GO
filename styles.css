@@ -34,6 +34,13 @@ p.gobacktionary_shortcut {
 
 /* Sytles for the Flag as Inappropriate feature */
 
+#already_flagged_message {
+width: 400px;
+padding: 8px;
+border: 1px solid green;
+background-color: lightgreen;
+}
+
 .flag_admin_table {
 border: 1px solid #000;
 margin: 10px 10px 0px 10px;
