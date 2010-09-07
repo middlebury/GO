@@ -18,39 +18,14 @@ try {
 	if (!isSuperAdmin()) {
 		die("You do not have permission to view this page");
 	}
-	//set array to hold results
-	$result = array();
 	//get the statement object for this select statement
-	$select = $connection->prepare("SELECT * FROM flag WHERE code = ?");
+	$select = $connection->prepare("SELECT * FROM flag WHERE code = ? AND institution = ?");
   $select->bindValue(1, str_replace(" ", "+", $_GET["code"]));
+  $select->bindValue(2, $_GET["institution"]);
 	$select->execute();
-  //place the results of the select into results
-  if ($select != '') {
-  	foreach ($select as $row) {
-  		$result[] = $row;
-  	}
-  }
+	?>
 	
-	//array to hold the output for display
-	$output_array = array();
-  	if ($result != '') {
-  	  foreach ($result as $row) {  		
-  		$output_row = array($row['code']);
-  		//finally we can add a row of items to output array
-  		if ($row['user'])
-  			$output_row[] = GoAuthCas::getName($row['user']);
-  		else
-  			$output_row[] = '';
-  		$output_row[] = $row['ipaddress'];
-  		$output_row[] = $row['timestamp'];
-  		$output_array[] = $output_row;
-  	}
-  }
-  ?>
-  
-  <!-- GENERATE THE OUTPUT -->
-  
-  <!-- this is our table of flags -->
+	<!-- this is our table of flags -->
   <h2 class="flag_detail_header">Flags for this Code</h2>
   <table class="flag_admin_table">
   	<tr>
@@ -59,18 +34,21 @@ try {
   		<th>IP Address</th>
   		<th>Timestamp</th>
   	</tr>
-  	<?php
-  	if ($output_array != '') {
-  		//this is where we print out the cells of the table row
-  		foreach ($output_array as $value) {
-  			print "\n<tr>";
-  			foreach ($value as $x) {
-  					print "\n<td>".$x."</td>";
-  				}
-  			print "\n</tr>";
-  			}
-  		}
-  	?>
+	
+	<?php
+	
+  foreach ($select->fetchAll() as $row) {
+  	print "\n<td>".$row['code']."</td>";
+  	if ($row['user']) {
+  		print "\n<td>".GoAuthCas::getName($row['user'])."</td>";
+  	} else {
+  		print "\n<td></td>";
+  	}
+  	print "\n<td>".$row['ipaddress']."</td>";
+  	print "\n<td>".$row['timestamp']."</td>";
+  } //end foreach ($select->fetchAll() as $row) { 
+
+  ?>
   	</table>
 
 	<?php

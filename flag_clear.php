@@ -1,4 +1,6 @@
 <?php
+//functions.php gives us access to the isSuperAdmin function 
+require_once "functions.php";
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
 require_once "go.php";
@@ -8,12 +10,17 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
+if (!isSuperAdmin()) {
+		die("You do not have permission to view this page");
+	}
+
 try {
 	//set array to hold results
 	$result = array();
 	//get the statement object for this select statement
-	$delete = $connection->prepare("DELETE FROM flag WHERE code = ?");
+	$delete = $connection->prepare("DELETE FROM flag WHERE code = ? AND institution = ?");
   $delete->bindValue(1, $_POST['code']);
+  $delete->bindValue(2, $_POST['institution']);
 	$delete->execute();
 	Go::log("Flag as inappropriate flag was cleared", $_POST['code']);
 //now catch any exceptions

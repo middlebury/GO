@@ -98,7 +98,11 @@ try {
 					} else {
 						//pass the xsrfkey and code to the processor
 						print '<div><input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
-						print '<input type="hidden" name="code" value="'. htmlentities($code->getName()) .'" />';
+						
+						print '<input type="hidden" name="code" value="'. $code->getName() .'" />';
+						
+						print '<input type="hidden" name="institution" value="'. $code->getInstitution() .'" />';
+						
 						print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" /></div>';
 					}
 					
