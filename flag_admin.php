@@ -23,7 +23,24 @@ try {
 	}
 	//We want to know the code, the number of times flagged
 	//the destination, and any aliases
-  $select = $connection->prepare("SELECT flag.code, COUNT(flag.code) num_flags, aliases, code.url, code.institution FROM flag LEFT JOIN (SELECT code, GROUP_CONCAT(name SEPARATOR ', ') aliases FROM alias GROUP BY code) AS grouped_alias ON flag.code = grouped_alias.code LEFT JOIN code ON flag.code = code.name AND flag.institution = code.institution GROUP BY code ORDER BY num_flags DESC;");
+  $select = $connection->prepare("
+  SELECT
+  	flag.code,
+  	COUNT(flag.code) AS num_flags,
+  	aliases, code.url,
+  	code.institution
+  FROM
+  	flag
+  	LEFT JOIN
+  			(SELECT
+  				code,
+  				GROUP_CONCAT(name SEPARATOR ', ') AS aliases
+  			FROM alias
+  			GROUP BY code)
+  		AS grouped_alias ON flag.code = grouped_alias.code
+  	LEFT JOIN code ON flag.code = code.name AND flag.institution = code.institution 
+  GROUP BY code 
+  ORDER BY num_flags DESC;");
   $select->execute();
 
   ?>

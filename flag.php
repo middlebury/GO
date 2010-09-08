@@ -6,6 +6,8 @@ require_once "go.php";
 require_once "functions.php";
 //Mail.php is the PEAR script that includes the mail class for sending mail
 require_once "Mail.php";
+//mime.php includes support for mime mail
+require_once "Mail/mime.php";
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -45,24 +47,36 @@ try {
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
   foreach ($goAdmin as $current_admin) {
-  //$to = array('lafrance@middlebury.edu');
   $to[] = GoAuthCas::getEmail($current_admin);
   }
-  $headers['From'] = 'go@middlebury.edu';
+  $to = implode(', ', $to);
+  $headers['From'] = 'nobody@middlebury.edu';
   $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
+  $mime = new Mail_mime;
   if (isset($_SESSION["AUTH"])) {
-  $body = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface.
+  $text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface (http://go.middlebury.edu/flag_admin.php).
+
+- The GO application';
+	$html = 'The GO code (aka. link) "<a href="http://go.middlebury.edu/info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="http://go.middlebury.edu/flag_admin.php">admin interface</a>.<br /><br />
 
 - The GO application';
 } else {
-	$body = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface.
+	$text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface (http://go.middlebury.edu/flag_admin.php).
+
+- The GO application';
+	$html = 'The GO code (aka. link) "<a href="http://go.middlebury.edu/info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="http://go.middlebury.edu/flag_admin.php">admin interface</a>.<br /><br />
 
 - The GO application';	
 	}
+	$mime->setTXTBody($text);
+	$mime->setHTMLBody($html);
+	//get MIME formatted message headers and body
+	$body = $mime->get();
+	$headers = $mime->headers($headers);
   $message = Mail::factory('mail');
-  foreach ($to as $current_address) {
-  	$message->send($current_address, $headers, $body);
-  }
+  //foreach ($to as $current_address) {
+  $message->send($to, $headers, $body);
+  //}
 //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;
