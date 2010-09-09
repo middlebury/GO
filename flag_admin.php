@@ -26,21 +26,34 @@ try {
   $select = $connection->prepare("
   SELECT
   	flag.code,
-  	COUNT(flag.code) AS num_flags,
-  	aliases, code.url,
+  		COUNT(flag.code) AS
+  	num_flags,
+  	aliases,
+  	code.url,
   	code.institution
   FROM
   	flag
-  	LEFT JOIN
+  		LEFT JOIN
   			(SELECT
   				code,
-  				GROUP_CONCAT(name SEPARATOR ', ') AS aliases
-  			FROM alias
-  			GROUP BY code)
-  		AS grouped_alias ON flag.code = grouped_alias.code
-  	LEFT JOIN code ON flag.code = code.name AND flag.institution = code.institution 
-  GROUP BY code 
-  ORDER BY num_flags DESC;");
+  					GROUP_CONCAT(name SEPARATOR ', ') AS
+  				aliases
+  			FROM
+  				alias
+  			GROUP BY
+  				code)
+  		AS
+  	grouped_alias
+  		ON flag.code = grouped_alias.code
+  		LEFT JOIN
+  	code
+  		ON flag.code = code.name
+  		AND flag.institution = code.institution 
+  GROUP BY
+  	code 
+  ORDER BY
+  	num_flags
+  DESC;");
   $select->execute();
 
   ?>
@@ -53,54 +66,37 @@ try {
   		<th>Destination</th>
   		<th>Aliases</th>
   		<th>Actions</th>
-  	</tr>
-  	<?php
-
+  	</tr><?php
 		//Make each row
-  	foreach ($select->fetchAll() as $row) {
-  			print "\n<tr>";
-  			
-  			//the code
-  			print "\n\t<td>";
-  			print "\n\t\t<a href='info.php?code=".$row['code']."'>".$row['code']."</a>";
-  			print "\n\t</td>";
-  			
-  			//the # of flags
-  			print "\n\t<td>";
-  			print $row['num_flags'];
-  			print "\n\t</td>";
-  			
-  			//the url
-  			print "\n\t<td>";
-  			print "<a href='".$row['url']."'>".$row['url']."</a>";
-  			print "\n\t</td>";
-  			
-  			//the aliases
-  			print "\n\t<td>";
-  			print $row['aliases'];
-  			print "\n\t</td>";
-
-  			//we want to be able to get additional info
-  			//or delete all flags for each code in the table
-  			print "\n\t<td class='action_cells'>";
-  			//the info button
-  			print "\n\t\t<a href='flag_details.php?code=".$row['code']."&institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><button>Info</button></a>";
-  			//the clear button
-  			print "\n\t\t<form action='flag_clear.php' method='post'>";
-  			print "\n\t\t<div><input type='hidden' name='xsrfkey' value='". $_SESSION['xsrfkey']."' />";
-  			print "\n<input type='hidden' value='".$row['code']."' name='code' />";
-  			print "\n<input type='hidden' value='".$row['institution']."' name='institution' />";
-  			print "\n<input type='submit' value='Clear Flags' />";
-  			print "\n</div></form>";
-  			print "\n</td>";
-  			print "\n</tr>";
-  		} //end foreach ($select->fetchAll() as $row) {
-  		
-  	?>
-  	</table>
-  	<?php
-
-//now catch any exceptions
+  	foreach ($select->fetchAll() as $row) {?>
+  	<tr>
+  		<!-- the code -->
+  		<td><?php print"<a href='info.php?code=".$row['code']."'>".$row['code']."</a>";?></td>
+  		<!-- the # of flags -->
+  		<td><?php print $row['num_flags'];?></td>
+  		<!-- the URL -->
+  		<td><?php print "<a href='".$row['url']."'>".$row['url']."</a>";?></td>
+  		<!-- the aliases -->
+  		<td><?php print $row['aliases'];?></td>
+  		<!-- we want to be able to get additional info
+  		or delete all flags for each code in the table -->
+  		<td class='action_cells'>
+  			<!-- the info button -->
+  			<?php print "\n\t\t<a href='flag_details.php?code=".$row['code']."&institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><button>Info</button></a>";?>
+  			<!-- the clear button -->
+  			<form action='flag_clear.php' method='post'>
+  				<div>
+  					<?php print "\n\t\t\t\t\t\t\t<input type='hidden' name='xsrfkey' value='".$_SESSION['xsrfkey']."' />";
+  								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['code']."' name='code' />";
+  								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['institution']."' name='institution' />";?>
+  					<input type='submit' value='Clear Flags' />
+  				</div>
+  			</form>
+  		</td>
+  	</tr>
+  <?php } /*end foreach ($select->fetchAll() as $row) { */ ?>
+  </table>
+  <?php //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;
 }
