@@ -120,11 +120,15 @@ foreach($code->getUsers() as $cUser) {
 <?php
 		}
 	}
+	if (!$code->getAliases()) {
+		//This is required by doctype
+		echo '<li style="display: none;">This space is intentionally left blank</li>';
+	}
 ?>
 				</ul>
 				<form action='alias.php' method='post' onsubmit="addAlias('<?php echo $code->getName(); ?>', '<?php echo $code->getInstitution(); ?>'); return false;">
-					<input type="text" name="alias" id="addalias_<?php echo $codename; ?>"/>
-					<input type="submit" value="Add Alias"/>
+					<div><input type="text" name="alias" id="addalias_<?php echo $codename; ?>"/>
+				<input type="submit" value="Add Alias"/></div>
 				</form>
 			</td>
 		</tr>

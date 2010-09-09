@@ -82,7 +82,7 @@ try {
   		or delete all flags for each code in the table -->
   		<td class='action_cells'>
   			<!-- the info button -->
-  			<?php print "\n\t\t<a href='flag_details.php?code=".$row['code']."&institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><button>Info</button></a>";?>
+  			<?php print "\n\t\t<a href='flag_details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><button type='button'>Info</button></a>";?>
   			<!-- the clear button -->
   			<form action='flag_clear.php' method='post'>
   				<div>

@@ -34,9 +34,7 @@ try {
   		<th>IP Address</th>
   		<th>Timestamp</th>
   	</tr>
-	
-	<?php
-	
+  	<tr><?php
   foreach ($select->fetchAll() as $row) {
   	print "\n<td>".$row['code']."</td>";
   	if ($row['user']) {
@@ -49,7 +47,8 @@ try {
   } //end foreach ($select->fetchAll() as $row) { 
 
   ?>
-  	</table>
+  	</tr>
+  </table>
 
 	<?php
 	//COLLECT AND PROCESS THE DATA FOR LOGS
