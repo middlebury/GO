@@ -1,53 +1,10 @@
 <?php
-require_once "config.php";
+//require_once "config.php";
 require_once "go.php";
-
+require_once "header.php";
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head>
-		<title>Shortcut Info</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="robots" content="follow,index" />
-		<link rel="stylesheet" media="screen" type="text/css" href="styles.css" />
-		<link rel="alternate stylesheet" media="screen" type="text/css" href="https://web.middlebury.edu/development/tools/2d/Stylesheets/2dFixed.css" title="fixed" />
-		<script type="text/javascript" src="https://web.middlebury.edu/development/tools/2d/JavaScript/StyleSwitcher.js"></script>
-	</head>
-	<body>
-		<div class="main">
-			<div class="header">
-				<div class="headerWelcome">
-					<?php
-					  foreach(array_keys($institutions) as $inst) {
-					    if ($inst == $institution)
-					  		print "<strong>";
-					    print "<a href=\"".equivalentUrl($inst)."\">" . $inst . "</a> &#160; | &#160;";
-					    if ($inst == $institution)
-					  		print "</strong>";
-					  }
-					?>
-					<a href="#" onclick="setActiveStyleSheet('fixed'); return false;">Fixed</a> or
-					<a href="#" onclick="setActiveStyleSheet('flex'); return false;">Flex</a>
-				</div>
-				<div class="clear">&#160;</div>
-				<?php print $institutions[$institution]['logo_html']; ?>
-				<div class="headerSite">
-					<h1>The GOtionary</h1>
-				</div>
-				<div class="clear">
-					&#160;
-				</div>
-			</div>
-			<div class="headerNavigation">
-				<div class="CssMenu">
-					<div class="AspNet-Menu-Horizontal">
-						<ul class="AspNet-Menu">
-						</ul>
-					</div>
-				</div>
-				<div class="clear">&#160;</div>
-			</div>
 			<div class="content">
+				<div id="response"></div>
 			
 				<p>This page describes the details for a single GO shortcut and its aliases. To view a list of all GO shortcuts, please see the <a href="gotionary.php">GOtionary</a>.</p>
 				<p>GO shortcuts are managed by the people who created them. If you are one of the administrators for this shortcut, please log into the <a href="update.php">self-service admin</a> page to change or update this shortcut.</p>
@@ -103,12 +60,56 @@ try {
 					<dd><?php print ($code->getPublic()? "yes":"no"); ?></dd>
 
 				</dl>
-<?php
-} catch (Exception $e) {
-	print "<div class='error'>Error: ".htmlentities($e->getMessage())."</div>";
-}
-?>
-			</div>
-		</div>
-	</body>
-</html>
+
+				<!-- form for submitting flag as inappropriate -->
+				<form action="flag.php" method="post">
+					<?php
+					//we assume the current code has not been flagged
+					$current_code_flagged = false;
+					//check to see if the current code has been flagged
+					//by this user this session 
+					$current_code_flagged = in_array($code->getName(), $_SESSION['flagged']);
+					//if not, check to see if the user is logged in and if
+					//so, see if they've flagged this before and it's still in
+					//the flag queue
+					if (isset($_SESSION["AUTH"]) && $current_code_flagged == false) { 
+						$result = array();
+						//get a count of the times the current code appears
+						//in the flag table for this user
+  					$select = $connection->prepare("SELECT COUNT(*) FROM flag WHERE code = ? AND user = ?");
+  					$select->bindValue(1, $code->getName());
+  					$select->bindValue(2, $_SESSION["AUTH"]->getId());
+  					$select->execute();
+  					//place the results into count
+  					if (intval($select->fetchColumn()) > 0) {
+  						$current_code_flagged = true;
+  					}
+  				}
+					
+					//if the current code has been flagged this session or
+					//the count is greater than 0 (has been flagged by this
+					//user in a previous session) display this message
+					if ($current_code_flagged == true) {
+						print '<p id="already_flagged_message">You\'ve flagged this link as inappropriate. An administrator has been notified and will review the quality of this link at a later time. Thank you for your assistance in moderating our go links.</p>';
+					//if anon flagging is turned of and the user is not authenticated	
+					} elseif (ANON_FLAGGING == false && !isset($_SESSION["AUTH"])) {
+						//don't display the flag as inappropriate button
+					//otherwise, display the flag as inappropriate button
+					} else {
+						//pass the xsrfkey and code to the processor
+						print '<div><input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey']. '" />';
+						
+						print '<input type="hidden" name="code" value="'. $code->getName() .'" />';
+						
+						print '<input type="hidden" name="institution" value="'. $code->getInstitution() .'" />';
+						
+						print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" /></div>';
+					}
+					
+					?>
+					
+				</form>
+
+				<?php } catch (Exception $e) { print "<div
+				class='error'>Error: ".htmlentities($e->getMessage())."</div>"; } ?>
+				</div> </div> </body> </html>

@@ -5,6 +5,50 @@ require_once "user.php";
 require_once "code.php";
 require_once "alias.php";
 
+// Define admin pages and non-admin pages that need session
+$admin_pages = array("admin.php", "create.php", "update.php", "notify.php", "functions.php", "flag_admin.php");
+$session_pages = array("info.php", "flag.php", "flag_clear.php", "flag_details.php");
+$session_pages = array_merge($session_pages, $admin_pages);
+$current_page = basename($_SERVER['PHP_SELF']);
+
+// Initialize session on all but the redirect
+if (in_array($current_page, $session_pages)) {
+	session_name('GOSID');
+	session_start();
+	
+	//set up a x-site forgery key
+	if (!isset($_SESSION['xsrfkey'])) {
+		$_SESSION['xsrfkey'] = uniqid('', true);
+	}
+	
+	//also set up an array to hold what codes
+	//the authenticated user has flagged this session
+	if (!isset($_SESSION['flagged'])) {
+		$_SESSION['flagged'] = array();
+	}
+}
+
+if (AUTH_METHOD == 'cas') {
+	require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
+}
+
+// Force authentication on admin pages
+if (in_array($current_page, $admin_pages)) {
+	if (AUTH_METHOD == 'ldap') {
+		if (!isset($_SESSION["AUTH"]) && $current_page != "login.php") {
+  		header("Location: login.php?r=" . $_SERVER["PHP_SELF"]);
+  		exit();
+		}
+	} else if (AUTH_METHOD == 'cas') {
+		
+		$_SESSION["AUTH"] = new GoAuthCas();
+		
+	} else {
+		throw new Exception('Unknown Auth Method');
+	}
+}
+
+// Initialize database
 global $connection;
 $connection = new PDO(
   "mysql:dbname=" . GO_DATABASE_NAME . ";host=" . GO_DATABASE_HOST . ";",
@@ -115,9 +159,9 @@ class GoAuthLdap extends GoAuth {
   public function __construct($username, $password) {
     $this->connect();
     
-    $filter = "(&(objectclass=user)(" . GO_ATTR_NAME . "=" . $username . "))";
+    $filter = "(&(objectclass=user)(" . GO_AUTH_LDAP_ATTR_NAME . "=" . $username . "))";
     
-    $result = ldap_search($this->ldap, GO_AUTH_PATH, $filter, array("distinguishedname", GO_ATTR_ID, GO_ATTR_NAME, GO_ATTR_EMAIL));
+    $result = ldap_search($this->ldap, GO_AUTH_LDAP_PATH, $filter, array("distinguishedname", GO_AUTH_LDAP_ATTR_ID, GO_AUTH_LDAP_ATTR_NAME, GO_AUTH_LDAP_ATTR_EMAIL));
     
     if ($result === false) throw new Exception("Cannot find user");
     
@@ -129,68 +173,68 @@ class GoAuthLdap extends GoAuth {
   }
   
   private function connect() {
-    $this->ldap = ldap_connect(GO_AUTH_HOST, GO_AUTH_PORT);
+    $this->ldap = ldap_connect(GO_AUTH_LDAP_HOST, GO_AUTH_LDAP_PORT);
     
     if ($this->ldap === false) throw new Exception("Cannot establish connection to LDAP server");
     
     if (ldap_set_option($this->ldap, LDAP_OPT_PROTOCOL_VERSION, 3) === false) throw new Exception("Cannot set LDAP_OPT_PROTOCOL_VERSION");
     if (ldap_set_option($this->ldap, LDAP_OPT_REFERRALS, 0) === false) throw new Exception("Cannot set LDAP_OPT_REFERRALS");
     
-    if (ldap_bind($this->ldap, GO_AUTH_USER, GO_AUTH_PASS) === false) throw new Exception("Cannot bind as LDAP user");
+    if (ldap_bind($this->ldap, GO_AUTH_LDAP_USER, GO_AUTH_LDAP_PASS) === false) throw new Exception("Cannot bind as LDAP user");
   }
   
   public function getId($username = null) {
     if (is_null($username)) {
-      return $this->user[GO_ATTR_ID][0];
+      return $this->user[GO_AUTH_LDAP_ATTR_ID][0];
     }
     
     $this->connect();
     
-    $filter = "(&(objectclass=user)(" . GO_ATTR_NAME . "=" . $username . "))";
+    $filter = "(&(objectclass=user)(" . GO_AUTH_LDAP_ATTR_NAME . "=" . $username . "))";
     
-    $result = ldap_search($this->ldap, GO_AUTH_PATH, $filter, array(GO_ATTR_ID));
+    $result = ldap_search($this->ldap, GO_AUTH_LDAP_PATH, $filter, array(GO_AUTH_LDAP_ATTR_ID));
     
     if ($result === false) throw new Exception("Cannot find user");
     
     $entries = ldap_get_entries($this->ldap, $result);
     
-    return $entries[0][GO_ATTR_ID][0];
+    return $entries[0][GO_AUTH_LDAP_ATTR_ID][0];
   }
   
   public function getName($id = null) {
     if (is_null($id)) {
-      return $this->user[GO_ATTR_NAME][0];
+      return $this->user[GO_AUTH_LDAP_ATTR_NAME][0];
     }
     
     $this->connect();
     
-    $filter = "(&(objectclass=user)(" . GO_ATTR_ID . "=" . $id . "))";
+    $filter = "(&(objectclass=user)(" . GO_AUTH_LDAP_ATTR_ID . "=" . $id . "))";
     
-    $result = ldap_search($this->ldap, GO_AUTH_PATH, $filter, array(GO_ATTR_NAME));
+    $result = ldap_search($this->ldap, GO_AUTH_LDAP_PATH, $filter, array(GO_AUTH_LDAP_ATTR_NAME));
     
     if ($result === false) throw new Exception("Cannot find user");
     
     $entries = ldap_get_entries($this->ldap, $result);
     
-    return $entries[0][GO_ATTR_NAME][0];
+    return $entries[0][GO_AUTH_LDAP_ATTR_NAME][0];
   }
   
   public function getEmail($id = null) {
     if (is_null($id)) {
-      return $this->user[GO_ATTR_ID][0];
+      return $this->user[GO_AUTH_LDAP_ATTR_ID][0];
     }
     
     $this->connect();
     
-    $filter = "(&(objectclass=user)(" . GO_ATTR_ID . "=" . $id . "))";
+    $filter = "(&(objectclass=user)(" . GO_AUTH_LDAP_ATTR_ID . "=" . $id . "))";
     
-    $result = ldap_search($this->ldap, GO_AUTH_PATH, $filter, array(GO_ATTR_EMAIL));
+    $result = ldap_search($this->ldap, GO_AUTH_LDAP_PATH, $filter, array(GO_AUTH_LDAP_ATTR_EMAIL));
     
     if ($result === false) throw new Exception("Cannot find user");
     
     $entries = ldap_get_entries($this->ldap, $result);
     
-    return $entries[0][GO_ATTR_EMAIL][0];
+    return $entries[0][GO_AUTH_LDAP_ATTR_EMAIL][0];
   }
   
 }
@@ -205,20 +249,17 @@ class GoAuthCas extends GoAuth {
    * @static
    */
   public static function configurePhpCas () {
-    session_name('GOSID');
     
-    require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
+    if (defined('GO_AUTH_CAS_LOG'))
+	    phpCAS::setDebug(GO_AUTH_CAS_LOG);
     
-    if (defined('GO_AUTH_LOG'))
-	    phpCAS::setDebug(GO_AUTH_LOG);
+    phpCAS::proxy(CAS_VERSION_2_0, GO_AUTH_CAS_HOST, GO_AUTH_CAS_PORT, GO_AUTH_CAS_PATH, false);
     
-    phpCAS::proxy(CAS_VERSION_2_0, GO_AUTH_HOST, GO_AUTH_PORT, GO_AUTH_PATH);
-    
-    phpCAS::setFixedCallbackURL(GO_AUTH_PGT);
+    phpCAS::setFixedCallbackURL(GO_AUTH_CAS_PGT);
     
     phpCAS::setNoCasServerValidation();
     
-    phpCAS::setPGTStorageFile('plain', GO_AUTH_PGTSTORE);
+    phpCAS::setPGTStorageFile('plain', GO_AUTH_CAS_PGTSTORE);
   }
   
   public function __construct() {
@@ -233,23 +274,10 @@ class GoAuthCas extends GoAuth {
     }
     
     if (!Go::cache_get('user_id-'.$username)) {
-      
-      @phpCAS::serviceWeb(
-        "https://" . GO_AUTH_HOST . "/directory/?action=search_users_by_attributes&" . GO_ATTR_NAME . "=" . $username,
-        $err_code, $output
-      );
-      if ($err_code || !$output)
-      	throw new Exception("A web-service error $err_code occured: $output", $err_code);
-      $xml = simplexml_load_string($output);
-      $id = $xml->xpath("/cas:results/cas:entry/cas:user");
-      
-      if (isset($err_code) && $err_code != 0) {
-        throw new Exception($err_code);
-      } else  if (!isset($id[0]) || $id[0] == "") {
-        throw new Exception("User " . $_SESSION["phpCAS"]["user"] . " not found.");
-      } else {
-        Go::cache_set('user_id-'.$username, (string)$id[0]);
-      }
+      $xml = self::directoryFetch('search_users_by_attributes', GO_AUTH_CAS_ATTR_NAME, $username);
+      $elements = $xml->xpath("/cas:results/cas:entry/cas:user");
+      $id = (string)$elements[0];
+      Go::cache_set('user_id-'.$username, $id);
     }
     
     return Go::cache_get('user_id-'.$username);
@@ -261,22 +289,8 @@ class GoAuthCas extends GoAuth {
     }
     
     if (!Go::cache_get('user_name-'.$id)) {
-      phpCAS::serviceWeb(
-        "https://" . GO_AUTH_HOST . "/directory/?action=get_user&id=" . $id,
-        $err_code, $output
-      );
-      if ($err_code || !$output)
-      	throw new Exception("A web-service error $err_code occured: $output", $err_code);
-      
-      
-      $xml = simplexml_load_string($output);
-      $user = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_ATTR_NAME . "']");
-      
-      if (isset($err_code) && $err_code != 0) {
-        throw new Exception($err_code);
-      } else {
-        Go::cache_set('user_name-'.$id, (string)$user[0]["value"]);
-      }
+      $name = self::directoryLookupById($id, GO_AUTH_CAS_ATTR_NAME);
+      Go::cache_set('user_name-'.$id, $name);
     }
     
     return Go::cache_get('user_name-'.$id);
@@ -288,22 +302,44 @@ class GoAuthCas extends GoAuth {
     }
     
     if (!Go::cache_get('user_email-'.$id)) {
-      phpCAS::serviceWeb(
-        "https://" . GO_AUTH_HOST . "/directory/?action=get_user&id=" . $id,
-        $err_code, $output
-      );
-      
-      $xml = simplexml_load_string($output);
-      $email = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='" . GO_ATTR_EMAIL . "']");
-      
-      if (isset($err_code) && $err_code != 0) {
-        throw new Exception($err_code);
-      } else {
-        Go::cache_set('user_email-'.$id, (string)$email[0]["value"]);
-      }
+      $email = self::directoryLookupById($id, GO_AUTH_CAS_ATTR_EMAIL);
+      Go::cache_set('user_email-'.$id, $email);
     }
     
     return Go::cache_get('user_email-'.$id);
+  }
+  
+  /**
+   * Lookup a value in a directory
+   * 
+   * @param string $id The user's Id.
+   * @param string $attributeToReturn Which attribute name to return from the XML document.
+   * @return string
+   */
+  protected static function directoryLookupById ($id, $attributeToReturn) {
+  	$xml = self::directoryFetch('get_user', 'id', $id);
+	$element = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='".$attributeToReturn."']");
+	return (string)$element[0]["value"];
+  }
+  
+  /**
+   * 
+   * 
+   * @param string $action The directory action to take.
+   * @param string $queryKey The parameter name to pass in the query
+   * @param string $queryValue The parameter value to pass in the query
+   * @return SimpleXMLElement
+   */
+  protected static function directoryFetch ($action, $queryKey, $queryValue) {
+  	$params = array(
+		'action'		=> $action,
+		'ADMIN_ACCESS'	=> DIRECTORY_ADMIN_ACCESS_KEY,
+		$queryKey		=> $queryValue,
+	);
+	$xmlString = file_get_contents('http://login.middlebury.edu/directory/?'.http_build_query($params));
+	if (!$xmlString)
+		throw new Exception("Couldn't fetch user for $queryKey '$queryValue'.");
+	return simplexml_load_string($xmlString);
   }
 
 }

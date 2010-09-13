@@ -3,9 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 23, 2010 at 03:07 PM
+-- Generation Time: Sep 09, 2010 at 01:30 PM
 -- Server version: 5.0.77
 -- PHP Version: 5.2.12
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
 -- Database: `go`
@@ -21,7 +23,9 @@ CREATE TABLE IF NOT EXISTS `alias` (
   `name` varchar(255) NOT NULL default '',
   `code` varchar(255) NOT NULL default '',
   `institution` varchar(255) NOT NULL default 'example.edu',
-  PRIMARY KEY  (`name`,`institution`)
+  `updated` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`name`,`institution`),
+  KEY `updated` (`updated`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -38,9 +42,24 @@ CREATE TABLE IF NOT EXISTS `code` (
   `institution` varchar(255) NOT NULL default 'example.edu',
   `public` tinyint(1) NOT NULL default '1',
   `url2` text NOT NULL,
-  PRIMARY KEY  (`name`,`institution`)
+  `updated` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`name`,`institution`),
+  KEY `updated` (`updated`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flag`
+--
+
+CREATE TABLE IF NOT EXISTS `flag` (
+  `code` varchar(255) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `ipaddress` varchar(255) NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `institution` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -66,8 +85,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   KEY `institution` (`institution`),
   KEY `user_id` (`user_id`),
   KEY `user_display_name` (`user_display_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -91,5 +109,7 @@ CREATE TABLE IF NOT EXISTS `user_to_code` (
   `code` varchar(255) NOT NULL default '',
   `user` varchar(128) NOT NULL default '0',
   `institution` varchar(255) NOT NULL default 'example.edu',
-  PRIMARY KEY  (`code`,`user`,`institution`)
+  `updated` timestamp NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`code`,`user`,`institution`),
+  KEY `updated` (`updated`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

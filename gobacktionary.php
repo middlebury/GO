@@ -9,7 +9,7 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 }
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<title>The GOBacktionary</title>
@@ -166,9 +166,9 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
     print "\n<p class='gobacktionary_info'>";
     print "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		print "<img src='icons/info.png'/>";	
+		print "<img src='icons/info.png' alt='info'/>";	
 	else
-		print "<img src='icons/alert.png'/>";	
+		print "<img src='icons/alert.png' alt='alert'/>";	
 	print "</a> &nbsp; ";    
     print "</p>\n<p class='gobacktionary_shortcut'>";
 
@@ -184,6 +184,7 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
   $current_url = $row->url;
 }
 ?>
+				</p>
 			</div>
 		</div>
 	</body>

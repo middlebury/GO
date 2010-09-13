@@ -19,12 +19,8 @@ if (isset($_SESSION["AUTH"])) {
   }
 }
 
-if (!isset($_SESSION['xsrfkey'])) {
-	$_SESSION['xsrfkey'] = uniqid('', true);
-}
-
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<title>The GOtrol Panel</title>
@@ -67,26 +63,5 @@ if (!isset($_SESSION['xsrfkey'])) {
 					&#160;
 				</div>
 			</div>
-			<div class="headerNavigation">
-				<div class="CssMenu">
-					<div class="AspNet-Menu-Horizontal">
-						<ul class="AspNet-Menu">
-							<li class="AspNet-Menu-Leaf">
-								<a href="create.php">Create</a>
-							</li>
-							<li class="AspNet-Menu-Leaf">
-								<a href="update.php">View / Update</a>
-							</li>
-							<li class="AspNet-Menu-Leaf">
-								<a href="notify.php">Notify</a>
-							</li>
-							<li class="AspNet-Menu-Leaf">
-								<a href="gotionary.php">GOtionary</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear">&#160;</div>
-			</div>
-			<div class="content">
-				<div id="response"></div>
+
+			

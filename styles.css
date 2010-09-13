@@ -31,3 +31,55 @@ p.gobacktionary_shortcut {
 .error {
 	color: red;
 }
+
+/* Sytles for the Flag as Inappropriate feature */
+
+#already_flagged_message {
+width: 400px;
+padding: 8px;
+border: 1px solid green;
+background-color: lightgreen;
+}
+
+.flag_admin_table {
+border: 1px solid #000;
+margin: 10px 10px 0px 10px;
+padding: 0px;
+width: 98%;
+border-collapse: collapse;
+}
+
+.flag_admin_table th {
+background-color: #000;
+color: #fff;
+padding: 2px;
+}
+
+.flag_admin_table td {
+padding: 2px;
+border-right: 1px solid #000;
+border-bottom: 1px solid #000;
+}
+
+.flag_detail_header {
+margin-left: 10px;
+}
+
+/* make sure the anchor surrounding
+the "details" button is not being
+underlined */
+.action_cells a {
+text-decoration: none;
+}
+
+.action_cells {
+width: 138px;
+}
+
+.action_cells button {
+float: left;
+}
+
+.center {
+text-align: center;
+}
