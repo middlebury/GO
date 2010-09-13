@@ -34,8 +34,9 @@ try {
   		<th>IP Address</th>
   		<th>Timestamp</th>
   	</tr>
-  	<tr><?php
+  	<?php
   foreach ($select->fetchAll() as $row) {
+  	print "\n<tr>";
   	print "\n<td>".$row['code']."</td>";
   	if ($row['user']) {
   		print "\n<td>".GoAuthCas::getName($row['user'])."</td>";
@@ -44,39 +45,21 @@ try {
   	}
   	print "\n<td>".$row['ipaddress']."</td>";
   	print "\n<td>".$row['timestamp']."</td>";
+  	print "\n</tr>";
   } //end foreach ($select->fetchAll() as $row) { 
 
   ?>
-  	</tr>
   </table>
 
 	<?php
 	//COLLECT AND PROCESS THE DATA FOR LOGS
 
-	//set array to hold results
-	$result = array();
 	//get the statement object for this select statement
-	$select = $connection->prepare("SELECT * FROM log WHERE code = ?");
+	$select = $connection->prepare("SELECT * FROM log WHERE code = ? AND institution = ?");
   $select->bindValue(1, str_replace(" ", "+", $_GET["code"]));
+  $select->bindValue(2, $_GET["institution"]);
 	$select->execute();
-  //place the results of the select into results
-  if ($select != '') {
-  	foreach ($select as $row) {
-  		$result[] = $row;
-  	}
-  }
-	
-	//array to hold the output for display
-	$output_array = array();
-  	if ($result != '') {
-  		foreach ($result as $row) {  		
-  		//finally we can add a row of items to output array
-  		$output_array[] = array($row['tstamp'], $row['alias'], $row['description'], $row['user_id'], $row['user_display_name']);
-  	}
-  }
   ?>
-  
-  <!-- GENERATE THE OUTPUT -->
   	
   <!-- this is our table of logs -->
   <h2 class="flag_detail_header">Logs for this Code</h2>
@@ -89,14 +72,17 @@ try {
   		<th>Display Name</th>
   	</tr>
   	<?php
-  	if ($output_array != array()) {
   		//this is where we print out the cells of the table row
-  		foreach ($output_array as $value) {
-  			print "\n<tr>";
-  			foreach ($value as $x) {
-  					print "\n<td>".$x."</td>";
-  				}
-  			print "\n</tr>";
+  		$results = $select->fetchAll();
+  		if ($results != array()) {
+  			foreach ($results as $row) {
+  				print "\n<tr>";
+  				print "\n<td>".$row['tstamp']."</td>";
+  				print "\n<td>".$row['alias']."</td>";
+  				print "\n<td>".$row['description']."</td>";
+  				print "\n<td>".$row['user_id']."</td>";
+  				print "\n<td>".$row['user_display_name']."</td>";
+  				print "\n</tr>";
   			}
   		} else {
   			print "\n<tr>";
