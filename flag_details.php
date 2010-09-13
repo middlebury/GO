@@ -74,7 +74,7 @@ try {
   	<?php
   		//this is where we print out the cells of the table row
   		$results = $select->fetchAll();
-  		if ($results != array()) {
+  		if (count($results)) {
   			foreach ($results as $row) {
   				print "\n<tr>";
   				print "\n<td>".$row['tstamp']."</td>";
