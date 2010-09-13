@@ -91,13 +91,11 @@ function doDeleteAlias($args) {
 		$aliasString = str_replace(" ", "+", $args["alias"]);
 		if (!Alias::exists($aliasString, $args["institution"]))
 			throw new Exception("Alias ".htmlentities($aliasString)." doesn't exist.");
-		$alias = new Alias($aliasString, $args["institution"]);
-
-		// Get the Code from the Alias rather than relying on the request data.
-		$code = new Code($alias->getCode(), $alias->getInstitution());
-
-		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
-			throw new Exception("You do not have access to the shortcut " . $code->getName());
+			$alias = new Alias($aliasString, $args["institution"]);
+			// Get the Code from the Alias rather than relying on the request data.
+			$code = new Code($alias->getCode(), $alias->getInstitution());
+			if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+				throw new Exception("You do not have access to the shortcut " . $code->getName());
 
 		$alias->delete();
 		
