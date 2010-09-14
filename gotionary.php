@@ -1,4 +1,6 @@
 <?php
+//functions.php gives us access to the isSuperAdmin function 
+require_once "functions.php";
 require_once "config.php";
 require_once "go.php";
 
@@ -139,7 +141,36 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 			</div>
 			<div class="content">
 				<p><b>GO needs your help!</b> Find out how you can help by logging in to our <a href="admin.php">new self-service shortcut creation interface</a>!</p>
-				<p>You can also <a href="gobacktionary.php">view this list, sorted by the destination</a>.</p>
+				<p>You can also <a href="gobacktionary.php">view this list, sorted by the destination</a> 
+				<?php
+				// Let users determine if they see all codes or only public codes
+				// basically show a different link depending on if the user has chosen
+				// to see public or all this session
+				// Assume public
+				if (!isset($_SESSION['toggle_all'])) {
+					$_SESSION['toggle_all'] = 'public';
+				}
+				if (GO_SHOW_ALL_CODES_ACCESS == 'all' || (GO_SHOW_ALL_CODES_ACCESS == 'authenticated' && isset($_SESSION["AUTH"])) || (GO_SHOW_ALL_CODES_ACCESS == 'superadmin' && isSuperAdmin())) {
+					// Set public or all depending on which link was clicked
+					if (isset($_GET['display'])) {
+						if ($_GET['display'] == 'public') {
+							$_SESSION['toggle_all'] = 'public';
+						}
+						if ($_GET['display'] == 'all') {
+							$_SESSION['toggle_all'] = 'all';
+						}
+					}
+				
+					// Show the appropriate link (include letter so it stays on the right page)
+					if ($_SESSION['toggle_all'] == 'public') {
+						print " or <a href=\"gotionary.php?display=all&amp;letter=".$letter."\">include all hidden codes</a>.";
+					}
+					if ($_SESSION['toggle_all'] == 'all') {
+						print " or <a href=\"gotionary.php?display=public&amp;letter=".$letter."\">exclude all hidden codes</a>.";
+					}
+				} //end if (GO_SHOW_ALL_CODES_ACCESS == 'all' || (GO_SHOW_ALL_CODES_ACCESS == 'authenticated' && isset($_SESSION["AUTH"]) || (GO_SHOW_ALL_CODES_ACCESS == 'superadmin' && isSuperAdmin())) {
+				?>
+				</p>
 <?php
 
 global $connection;
@@ -148,8 +179,16 @@ $where = "name LIKE '{$letter}%'";
 if ($letter == "[0-9]") {
 	$where = "(name LIKE '0%' OR name LIKE '1%' OR name LIKE '2%' OR name LIKE '3%' OR name LIKE '4%' OR name LIKE '5%' OR name LIKE '6%' OR name LIKE '7%' OR name LIKE '8%' OR name LIKE '9%')";
 }
+// We need a different query for getting all codes and only the public codes
+// All
+if ($_SESSION['toggle_all'] == 'all') {
+	$select = $connection->prepare("SELECT name, description, url FROM code WHERE {$where} AND institution = :institution ORDER BY name");
+}
+// Public
+else {
+	$select = $connection->prepare("SELECT name, description, url FROM code WHERE {$where} AND institution = :institution AND public = 1 ORDER BY name");
+}
 
-$select = $connection->prepare("SELECT name, description, url FROM code WHERE {$where} AND institution = :institution AND public = 1 ORDER BY name");
 $select->bindValue(":institution", $institution);
 $select->execute();
 
@@ -174,7 +213,15 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 }
 
 $where = str_replace("name", "alias.name", $where);
-$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name) WHERE {$where} AND alias.institution = :institution AND code.public = 1 ORDER BY alias.name");
+// We need a different query for getting all codes and only the public
+// All
+if ($_SESSION['toggle_all'] == 'all') {
+	$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name) WHERE {$where} AND alias.institution = :institution ORDER BY alias.name");
+}
+// Public
+else {
+	$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name) WHERE {$where} AND alias.institution = :institution AND code.public = 1 ORDER BY alias.name");
+}
 $alias->bindValue(":institution", $institution);
 $alias->execute();
 

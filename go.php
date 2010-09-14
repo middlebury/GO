@@ -7,7 +7,7 @@ require_once "alias.php";
 
 // Define admin pages and non-admin pages that need session
 $admin_pages = array("admin.php", "create.php", "update.php", "notify.php", "functions.php", "flag_admin.php");
-$session_pages = array("info.php", "flag.php", "flag_clear.php", "flag_details.php");
+$session_pages = array("info.php", "flag.php", "flag_clear.php", "flag_details.php", "gotionary.php");
 $session_pages = array_merge($session_pages, $admin_pages);
 $current_page = basename($_SERVER['PHP_SELF']);
 
