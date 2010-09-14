@@ -68,7 +68,6 @@ try {
   		<th>Timestamp</th>
   		<th>Alias</th>
   		<th>Description</th>
-  		<th>User ID</th>
   		<th>Display Name</th>
   	</tr>
   	<?php
@@ -80,7 +79,6 @@ try {
   				print "\n<td>".$row['tstamp']."</td>";
   				print "\n<td>".$row['alias']."</td>";
   				print "\n<td>".$row['description']."</td>";
-  				print "\n<td>".$row['user_id']."</td>";
   				print "\n<td>".$row['user_display_name']."</td>";
   				print "\n</tr>";
   			}
