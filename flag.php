@@ -50,7 +50,7 @@ try {
   $to[] = GoAuthCas::getEmail($current_admin);
   }
   $to = implode(', ', $to);
-  $headers['From'] = 'nobody@middlebury.edu';
+  $headers['From'] = GO_ALERTS_EMAIL_NAME . ' <' . GO_ALERTS_EMAIL_ADDRESS . '>';
   $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
   $mime = new Mail_mime;
   if (isset($_SESSION["AUTH"])) {
