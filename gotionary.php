@@ -29,6 +29,17 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 			<div class="header">
 				<div class="headerWelcome">
 					<?php
+						//show a login link if a user is not logged in
+						//this is duplicated in header
+						if (!isset($_SESSION["AUTH"])) {
+							if (AUTH_METHOD == 'cas') {
+								//must pass URL as url to cas to redirect back
+								print "<a href='login2.php?&amp;url=".urlencode(curPageURL()."&amp;destination=".curPageURL())."'>Log in</a> | ";
+							} else {
+								//must pass URL as r to ldap to redirect back
+								print "<a href='login.php?r=".urlencode(curPageURL())."'>Log in</a> | ";
+							}
+						}
 					  foreach(array_keys($institutions) as $inst) {
 					    if ($inst == $institution)
 					  		print "<strong>";

@@ -1,5 +1,6 @@
 <?php
-
+// Requiring functions.php give us acces to the curPageURL() function
+require_once "functions.php";
 require_once "go.php";
 
 $name = "";
@@ -40,6 +41,15 @@ if (isset($_SESSION["AUTH"])) {
 			<div class="header">
 				<div class="headerWelcome">
 					<?php
+						//show a login link if a user is not logged in
+						//this is duplicated in gotionary.php
+						if (!isset($_SESSION["AUTH"])) {
+							if (AUTH_METHOD == 'cas') {
+								print "<a href='login2.php?&amp;url=".urlencode(curPageURL()."&amp;destination=".curPageURL())."'>Log in</a> | ";
+							} else {
+								print "<a href='login.php?r=".urlencode(curPageURL())."'>Log in</a> | ";
+							}
+						}
 					  if ($name) {
 					    print "Welcome ".htmlentities($name)." &#160; | &#160; ";
 					  }
