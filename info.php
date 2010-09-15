@@ -103,11 +103,14 @@ try {
 						
 						print '<input type="hidden" name="institution" value="'. $code->getInstitution() .'" />';
 						
-						print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" /></div>';
+						print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />';
 					}
 					
+					if (isSuperAdmin()) {
+					 print "<a class='history_button' href='flag_details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Show History' /></a>";
+					}
 					?>
-					
+					</div>
 				</form>
 
 				<?php } catch (Exception $e) { print "<div

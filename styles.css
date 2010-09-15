@@ -67,7 +67,9 @@ margin-left: 10px;
 
 /* make sure the anchor surrounding
 the "details" button is not being
-underlined */
+underlined. Ditto with history
+button on the info page */
+.history_button,
 .action_cells a {
 text-decoration: none;
 }
