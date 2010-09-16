@@ -100,15 +100,6 @@ class Code {
 	protected $institution;
 	
 	/**
-	 * The user who first created the code.
-	 * 
-	 * @access protected
-	 * @since 02-26-2009
-	 * @var int The user who first created the code.
-	 */
-	protected $creator;
-	
-	/**
 	 * The URL of the code.
 	 * 
 	 * @access protected
@@ -161,7 +152,6 @@ class Code {
 	 * @since 02-25-2009
 	 * @throws Exception from {@link Code::setName()}
 	 * @throws Exception from {@link Code::setInstitution()}
-	 * @throws Exception from {@link Code::setCreator()}
 	 * @throws Exception from {@link Code::setUrl()}
 	 * @throws Exception from {@link Code::setDescription()}
 	 * @throws Exception from PDO functions.
@@ -170,7 +160,7 @@ class Code {
 		global $connection;
 		
 		try {
-			$select = $connection->prepare("SELECT name, institution, creator, url, description, public FROM code WHERE name = :name AND institution = :institution");
+			$select = $connection->prepare("SELECT name, institution, url, description, public FROM code WHERE name = :name AND institution = :institution");
 			$select->bindValue(":name", $name);
 			$select->bindValue(":institution", $institution);
 			$select->execute();
@@ -193,7 +183,6 @@ class Code {
 				$row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT);
 				$this->setName($row->name);
 				$this->setInstitution($row->institution);
-				$this->setCreator($row->creator);
 				$this->setUrl((!is_null($row->url) ? $row->url : ""));
 				$this->setDescription((!is_null($row->description) ? $row->description : ""));
 				$this->setPublic(($row->public == "1"));
@@ -223,17 +212,6 @@ class Code {
 	 */
 	public function getInstitution() {
 		return $this->institution;
-	}
-	
-	/**
-	 * Get the user who created this code.
-	 * 
-	 * @access public
-	 * @return int The user who created this code.
-	 * @since 02-26-2009 
-	 */
-	public function getCreator() {
-		return $this->creator;
 	}
 	
 	/**
@@ -463,41 +441,6 @@ class Code {
 		}
 		
 		$this->institution = $institution;
-	}
-	
-	/**
-	 * Set the name of the user who created this code.
-	 * 
-	 * @access public
-	 * @param string $creator The email of the user who created this code.
-	 * @param bool $save Whether to commit changes to the database (default: false).
-	 * @since 02-26-2009
-	 * @throws Exception if parameter $creator is not a string.
-	 * @throws Exception if parameter $save is not a boolean.
-	 * @throws Exception from PDO functions.
-	 */
-	public function setCreator($creator, $save = false) {		
-		if (!is_bool($save)) {
-			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
-		}
-		
-		if($save && $creator != $this->creator) {
-			global $connection;
-			
-			try {
-				$update = $connection->prepare("UPDATE code SET creator = :creator WHERE name = :name AND institution = :institution");
-				$update->bindValue(":creator", $creator);
-				$update->bindValue(":name", $this->name);
-				$update->bindValue(":institution", $this->institution);
-				$update->execute();
-				
-				Go::log("Updated code creator to '$creator' via Code::setCreator().", $this->name, $this->institution);
-			} catch(Exception $e) {
-				throw $e;
-			}
-		}
-		
-		$this->creator = $creator;
 	}
 	
 	/**

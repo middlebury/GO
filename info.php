@@ -35,13 +35,6 @@ try {
 						print "<dd>".implode(' <br/>', array_keys($aliases))."</dd>";
 					}
 					?>
-					<dt>Creator of this Code</dt>
-					<dd><?php
-						if ($code->getCreator()) {
-							print Go::getUserDisplayName($code->getCreator());
-						} else {
-							print "None -- Contact <a href='mailto:go@middlebury.edu'>go@middlebury.edu</a> to claim this code.";
-						}
 					?></dd>
 					<dt>Administrators of this code</dt>
 					<dd><?php

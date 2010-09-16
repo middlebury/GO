@@ -20,15 +20,10 @@ function doCreate($args) {
 		
 		$code = new Code($codeString, $args["institution"]);
 		
-		if ($code->getCreator() == $_SESSION["AUTH"]->getId()) {
-			throw new Exception("You've already created this code. Did you want to update the URL?");
-		}
-		
 		if ($code->getUrl() != "" && $code->getUrl() != $args["url"]) {
-			throw new Exception("Someone has already created this code.");
+			throw new Exception("Someone has already created this code. Did you want to <a href='update.php'>edit the code</a>? NOTE: You may only edit codes for which you are an admin.");
 		}
 		
-		$code->setCreator($_SESSION["AUTH"]->getId(), true);
 		$code->setUrl($args['url'], true);
 		$code->setDescription($args["description"], true);
 		$code->setPublic(($args["public"] == "1"), true);
@@ -76,8 +71,8 @@ function doDelete($args) {
 			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
 		$code = new Code($codeString, $args["institution"]);
 		
-		if ($code->getCreator() != $_SESSION["AUTH"]->getId())
-			throw new Exception("You are not the creator of the code. Cannot delete.");
+		if ($code->getUser() != $_SESSION["AUTH"]->getId() || !isSuperAdmin())
+			throw new Exception("You are not an admin of the code. Cannot delete.");
 			
 		$code->delete();
 		return "Deleted shortcut " . $codeString;
@@ -94,7 +89,7 @@ function doDeleteAlias($args) {
 			$alias = new Alias($aliasString, $args["institution"]);
 			// Get the Code from the Alias rather than relying on the request data.
 			$code = new Code($alias->getCode(), $alias->getInstitution());
-			if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+			if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())) || !isSuperAdmin)
 				throw new Exception("You do not have access to the shortcut " . $code->getName());
 
 		$alias->delete();
@@ -113,7 +108,7 @@ function doAddUser($args) {
 		$code = new Code($codeString, $args["institution"]);
 		
 		
-		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())) || !isSuperAdmin)
 			throw new Exception("You do not have access to the shortcut " . $codeString);
 		
 		$code->addUser($_SESSION["AUTH"]->getId($args["user"]));
@@ -131,7 +126,7 @@ function doDeleteUser($args) {
 			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
 		$code = new Code($codeString, $args["institution"]);
 		
-		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())) || !isSuperAdmin)
 			throw new Exception("You do not have access to the shortcut " . $codeString);
 		
 		$code->delUser($_SESSION["AUTH"]->getId($args["user"]));
@@ -149,7 +144,7 @@ function doUpdate($args) {
 			throw new Exception("Code ".htmlentities($codeString)." doesn't exist.");
 		$code = new Code($codeString, $args["oldinst"]);
 		
-		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())))
+		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())) || !isSuperAdmin)
 			throw new Exception("You do not have access to the shortcut " . $codeString);
 		
 		$url = urldecode($args['url']);
