@@ -35,7 +35,6 @@ try {
 						print "<dd>".implode(' <br/>', array_keys($aliases))."</dd>";
 					}
 					?>
-					?></dd>
 					<dt>Administrators of this code</dt>
 					<dd><?php
 						if (count($code->getUsers())) {

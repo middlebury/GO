@@ -2,8 +2,8 @@
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
 require_once "go.php";
-//functions.php gives us access to getRealIpAddr() function
-require_once "functions.php";
+//go_functions.php gives us access to getRealIpAddr() function
+require_once "go_functions.php";
 //Mail.php is the PEAR script that includes the mail class for sending mail
 require_once "Mail.php";
 //mime.php includes support for mime mail
