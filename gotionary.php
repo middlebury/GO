@@ -1,4 +1,6 @@
 <?php
+//go_functions.php gives us access to the isSuperAdmin function 
+require_once "go_functions.php";
 require_once "config.php";
 require_once "go.php";
 

@@ -2,8 +2,7 @@
 
 require_once "go.php";
 
-//this caused problems when including in a file so commented out
-//header("Content-type:text/xml");
+header("Content-type:text/xml");
 
 function doCreate($args) {
 	try {
@@ -246,30 +245,4 @@ if (isset($_GET["name"]) && isset($_GET["args"])) {
 	
 	$response .= "</responses>";
 	print $response;
-}
-
-//function to get IP address via client ip or x
-//forwarded first before falling back on remote addr
-function getRealIpAddr() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet
-      $ip=$_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  //to check ip is pass from proxy
-      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else {
-      $ip=$_SERVER['REMOTE_ADDR'];
-    }
-    return $ip;
-}
-
-//function to check if a user is a
-//super admin of the GO application
-function isSuperAdmin() {
-	//this var is not passed to this function, use the global
-	global $goAdmin;
-	//if the current user is logged in, check it they are in the admin array
-	if(isset($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getId(), $goAdmin)) {
-		return true;
-	} else {
-		return false;
-	}
 }
