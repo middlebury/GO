@@ -13,7 +13,9 @@ $admin_pages = array(
 	"notify.php",
 	"functions.php",
 	"flag_admin.php",
-	"login2.php"
+	"login2.php",
+	"my_codes.php",
+	"update2.php"
 );
 $session_pages = array(
 	"info.php",
@@ -21,7 +23,8 @@ $session_pages = array(
 	"flag_clear.php",
 	"flag_details.php",
 	"gotionary.php",
-	"login.php"
+	"login.php",
+	"go_functions.php"
 );
 $session_pages = array_merge($session_pages, $admin_pages);
 $current_page = basename($_SERVER['PHP_SELF']);
