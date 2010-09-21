@@ -16,21 +16,20 @@ $user = new User($_SESSION["AUTH"]->getId());
 
 // Superadmin may admin all codes so show all
 if (isSuperAdmin($user->getName())) {
-	print "<p><a href='all_codes.php'>View all codes</a></p>";
+
+	$select = $connection->prepare("
+  SELECT
+  	name,
+  	institution
+  FROM
+  	code");
+  $select->execute();
+	
+	//
+	foreach ($select->fetchAll() as $row) {
+		//$codes[$row['institution'] . "/" . $row['name']] = new Code($row['name'], $row['institution']);
+		print "<a href='update2.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "'>" . $row['name'] . "</a><br />";
+	}
+} else {
+	die("You are not authorizd to view this page.");
 }
-	$codes = $user->getCodes();
-
-	if (count($codes) > 0) {
-		print "<p>";
-		foreach ($codes as $name => $code) {
-			print "<a href='update2.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "'>" . $code->getName() . "</a><br />";
-		}
-		print "</p>";
-	} //end if (count($codes) > 0) {
-
-?>
-
-
-<?php
-require_once "footer.php";
-?>

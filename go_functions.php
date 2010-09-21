@@ -34,3 +34,29 @@ function curPageURL() {
 	$url = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$_SERVER["REQUEST_URI"];
 	return $url;
 }
+
+function isAdmin($code, $institution) {
+	global $connection;
+	$is_admin = false;
+	// Find what users are admins of this code
+	$select =  $connection->prepare("
+  SELECT
+  	user
+  FROM
+  	user_to_code
+  WHERE
+  	code = ?
+  	AND
+  	institution = ?");
+  $select->bindValue(1, $code);
+  $select->bindValue(2, $institution);
+  $select->execute();
+  
+  // If authenticated user is admin of code then set $is_admin
+  foreach ($select->fetchAll() as $row) {
+		if ($row['user'] == $_SESSION['AUTH']->getId()) {
+			$is_admin = true;
+		}
+	}
+	return $is_admin;
+}

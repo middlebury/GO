@@ -24,7 +24,9 @@ $session_pages = array(
 	"flag_details.php",
 	"gotionary.php",
 	"login.php",
-	"go_functions.php"
+	"go_functions.php",
+	"update_process.php",
+	"all_codes.php"
 );
 $session_pages = array_merge($session_pages, $admin_pages);
 $current_page = basename($_SERVER['PHP_SELF']);
