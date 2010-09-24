@@ -18,16 +18,19 @@ $(document).ready(function(){
 		// in the list we're dealing with
 		$(ul_id + " li").each(function(){
 			// This var is how we identify each element, by its list name with its value
-			var unique_identifier = $(this).text().replace(/(^[\s\xA0]+|[\s\xA0]+$)/g, '') + "_" + ul_id.slice(1);
+			var current_value = $(this).text().replace(/(^[\s\xA0]+|[\s\xA0]+$)/g, '');
+			var unique_identifier = current_value + "_" + ul_id.slice(1);
 			// Give each list item this identifier
   		$(this).attr("class", unique_identifier);
 			// Make a hidden input to pass the value of the list items
 			// when the form is submitted
-			$("<input type='hidden' class='" + unique_identifier + "' name='" + ul_id.slice(1) + "[]' value='" + $(this).text().trim() + "' />").prependTo('form');
+			
+			//$("<input type='hidden' class='" + unique_identifier + "' name='" + ul_id.slice(1) + "[]' value='" + $(this).text().trim() + "' />").prependTo('form');
 			// Bind a function to the Delete button that deletes
 			// the list item with our unique_identifier
-			$(ul_id + ' li>input').bind("click", function(){
+			$(ul_id + ' li.'+ $(this).attr('class') +'>input').bind("click", function(){
 				$(ul_id + " li").remove("." + unique_identifier);
+				$("<input type='hidden' class='" + unique_identifier + "' name='" + ul_id.slice(1) + "_del[]' value='" + current_value + "' />").prependTo('form');
 			}) // End $(ul_id + ' li>input').bind("click", function(){
 		}); // End $(ul_id + " li").each(function(){
 		

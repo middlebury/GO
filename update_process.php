@@ -37,6 +37,31 @@ if (isset($_SESSION['AUTH'])) {
 			//update show in gotionary
 			$code->setPublic((bool) $_POST['public'], true);
 			
+			if (isset($_POST['alias_list'])) {
+				foreach ($_POST['alias_list'] as $current_alias) {
+					$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);	
+				}
+			}
+			
+			if (isset($_POST['admin_list'])) {
+				foreach ($_POST['admin_list'] as $current_admin) {
+					$code->addUser($current_admin);
+				}
+			}
+			
+			if (isset($_POST['alias_list_del'])) {
+				foreach ($_POST['alias_list_del'] as $current_alias) {
+					$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
+					$alias->delete();	
+				}
+			}
+			
+			if (isset($_POST['admin_list_del'])) {
+				foreach ($_POST['admin_list_del'] as $current_admin) {
+					$code->delUser($current_admin);
+				}
+			}
+			
 		}
 		elseif(isset($_POST['delete'])) {
 			print "Delete was pressed";
