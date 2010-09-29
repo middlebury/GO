@@ -276,7 +276,11 @@ class GoAuthCas extends GoAuth {
     if (!Go::cache_get('user_id-'.$username)) {
       $xml = self::directoryFetch('search_users_by_attributes', GO_AUTH_CAS_ATTR_NAME, $username);
       $elements = $xml->xpath("/cas:results/cas:entry/cas:user");
-      $id = (string)$elements[0];
+      if (count($elements)){
+      	$id = (string)$elements[0];
+      } else {
+      	$id = NULL;
+      }
       Go::cache_set('user_id-'.$username, $id);
     }
     

@@ -116,9 +116,10 @@ foreach($code->getUsers() as $cUser) {
 <?php
 		if ($code->getCreator() == $user->getName()) {
 ?>
-					<input type="button" value="Delete" onclick="deleteAlias('<?php echo $alias->getName(); ?>', '<?php echo $alias->getInstitution(); ?>', '<?php echo $alias->getCode(); ?>');" /></li>
+					<input type="button" value="Delete" onclick="deleteAlias('<?php echo $alias->getName(); ?>', '<?php echo $alias->getInstitution(); ?>', '<?php echo $alias->getCode(); ?>');" />
 <?php
 		}
+		print '</li>';
 	}
 	if (!$code->getAliases()) {
 		//This is required by doctype
