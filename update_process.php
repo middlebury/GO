@@ -45,7 +45,7 @@ if (isset($_SESSION['AUTH'])) {
 			
 			if (isset($_POST['admin_list'])) {
 				foreach ($_POST['admin_list'] as $current_admin) {
-					$code->addUser($current_admin);
+					$code->addUser($_SESSION["AUTH"]->getId($current_admin));
 				}
 			}
 			
@@ -58,7 +58,7 @@ if (isset($_SESSION['AUTH'])) {
 			
 			if (isset($_POST['admin_list_del'])) {
 				foreach ($_POST['admin_list_del'] as $current_admin) {
-					$code->delUser($current_admin);
+					$code->delUser($_SESSION["AUTH"]->getId($current_admin));
 				}
 			}
 			
