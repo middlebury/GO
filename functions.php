@@ -110,9 +110,13 @@ function doAddUser($args) {
 		if (!in_array($_SESSION["AUTH"]->getId(), array_keys($code->getUsers())) || !isSuperAdmin)
 			throw new Exception("You do not have access to the shortcut " . $codeString);
 		
-		$code->addUser($_SESSION["AUTH"]->getId($args["user"]));
+		$user_id = $_SESSION["AUTH"]->getId($args["user"]);
+		if ($user_id) {
+			$code->addUser($user_id);
+			return "Added " . $args["user"] . " as a user for " . $codeString;
+		}
+		return "The user is invalid. Admin was not added. Please try again.";
 		
-		return "Added " . $args["user"] . " as a user for " . $codeString;
 	} catch (Exception $e) {
 		throw $e;
 	}
