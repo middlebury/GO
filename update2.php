@@ -5,6 +5,7 @@ require_once "go.php";
 require_once "header.php";
 require_once "admin_nav.php";
 ?>
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script src="update2.js"></script>
 <?php
@@ -28,6 +29,7 @@ if (isset($_SESSION['AUTH'])) {
 					<input type="hidden" name="xsrfkey" value="<?php print $_SESSION['xsrfkey'] ?>" />
 					<input type="hidden" name="code" value="<?php print $code->getName() ?>" />
 					<input type="hidden" name="institution" value="<?php print $code->getInstitution() ?>" />
+					<input type="hidden" name="url" value="<?php print urldecode($_GET['url']) ?>" />
 					<div>
 						<p>You are authorized to admin this code.</p>
 						<h2><?php print $code->getName() ?> (<?php print $code->getInstitution() ?>)</h2>

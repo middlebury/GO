@@ -25,11 +25,13 @@ if (isSuperAdmin($user->getName())) {
   	code");
   $select->execute();
 	
+	print "<ul>";
 	//
 	foreach ($select->fetchAll() as $row) {
 		//$codes[$row['institution'] . "/" . $row['name']] = new Code($row['name'], $row['institution']);
-		print "<a href='update2.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "'>" . $row['name'] . "</a><br />";
+		print "<li><a href='update2.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "'>" . $row['name'] . "</a></li>";
 	}
+	print "</ul>";
 } else {
 	die("You are not authorizd to view this page.");
 }

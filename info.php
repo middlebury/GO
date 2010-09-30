@@ -5,6 +5,15 @@ require_once "header.php";
 ?>
 			<div class="content">
 				<div id="response"></div>
+				
+				<?php // If an update message was set prior to a redirect
+				// to this page display it and clear the message.
+				if (isset($_SESSION['update_message'])) {
+					foreach ($_SESSION['update_message'] as $message) {
+						print $message;
+					}
+					unset($_SESSION['update_message']);
+				}?>
 			
 				<p>This page describes the details for a single GO shortcut and its aliases. To view a list of all GO shortcuts, please see the <a href="gotionary.php">GOtionary</a>.</p>
 				<p>GO shortcuts are managed by the people who created them. If you are one of the administrators for this shortcut, please log into the <a href="update.php">self-service admin</a> page to change or update this shortcut.</p>
@@ -101,6 +110,7 @@ try {
 					if (isSuperAdmin()) {
 					 print "<a class='history_button' href='flag_details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Show History' /></a>";
 					}
+					print "<a class='info_edit_button' href='update2.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'><input type='button' value='Edit this Code'></a>"; 
 					?>
 					</div>
 				</form>

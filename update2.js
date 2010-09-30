@@ -22,10 +22,6 @@ $(document).ready(function(){
 			var unique_identifier = current_value + "_" + ul_id.slice(1);
 			// Give each list item this identifier
   		$(this).attr("class", unique_identifier);
-			// Make a hidden input to pass the value of the list items
-			// when the form is submitted
-			
-			//$("<input type='hidden' class='" + unique_identifier + "' name='" + ul_id.slice(1) + "[]' value='" + $(this).text().trim() + "' />").prependTo('form');
 			// Bind a function to the Delete button that deletes
 			// the list item with our unique_identifier
 			$(ul_id + ' li.'+ $(this).attr('class') +'>input').bind("click", function(){
@@ -38,8 +34,9 @@ $(document).ready(function(){
 		
 		// Do all this stuff when the "add" button is clicked
 		$(button_id).bind("click", function(){
-			// The value the user wants to add
-			var value_to_add = $(text_id).val();
+			// The value the user wants to add (trim it to ignore trailing/leading spaces)
+			var value_to_add = $(text_id).val().trim();
+			//alert(value_to_add.trim());
 			// a flag to be set if the input is not valid
 			var invalid_value = 0;
 			

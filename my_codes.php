@@ -18,14 +18,22 @@ $user = new User($_SESSION["AUTH"]->getId());
 if (isSuperAdmin($user->getName())) {
 	print "<p><a href='all_codes.php'>View all codes</a></p>";
 }
+
+// If an update message was set prior to a redirect
+// to this page display it and clear the message.
+if (isset($_SESSION['update_message'])) {
+	print $_SESSION['update_message'];
+	unset($_SESSION['update_message']);
+}
+
 	$codes = $user->getCodes();
 
 	if (count($codes) > 0) {
-		print "<p>";
+		print "<ul>";
 		foreach ($codes as $name => $code) {
-			print "<a href='update2.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "'>" . $code->getName() . "</a><br />";
+			print "<li><a href='update2.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'>" . $code->getName() . "</a></li>";
 		}
-		print "</p>";
+		print "</ul>";
 	} //end if (count($codes) > 0) {
 
 ?>

@@ -34,7 +34,8 @@ p.gobacktionary_shortcut {
 
 /* Sytles for the Flag as Inappropriate feature */
 
-#already_flagged_message {
+#already_flagged_message,
+.update_message {
 width: 400px;
 padding: 8px;
 border: 1px solid green;
@@ -70,7 +71,8 @@ the "details" button is not being
 underlined. Ditto with history
 button on the info page */
 .history_button,
-.action_cells a {
+.action_cells a,
+.info_edit_button {
 text-decoration: none;
 }
 
