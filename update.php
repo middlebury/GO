@@ -76,7 +76,7 @@ foreach($code->getUsers() as $cUser) {
 			<td rowspan="3">
 				<p>
 					<label for="upurl_<?php echo $codename; ?>">URL</label>&nbsp;
-					<input id="upurl_<?php echo $codename; ?>" name="update_url" type="text" value="<?php echo $code->getUrl(); ?>" size="62" />
+					<input id="upurl_<?php echo $codename; ?>" name="update_url" type="text" value="<?php echo htmlspecialchars($code->getUrl()); ?>" size="62" />
 				</p>
 				<p>
 				<?php
