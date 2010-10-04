@@ -35,11 +35,18 @@ p.gobacktionary_shortcut {
 /* Sytles for the Flag as Inappropriate feature */
 
 #already_flagged_message,
-.update_message {
+.update_message_success {
 width: 400px;
 padding: 8px;
 border: 1px solid green;
 background-color: lightgreen;
+}
+
+.update_message_failure {
+width: 400px;
+padding: 8px;
+border: 1px solid red;
+background-color: pink;
 }
 
 .flag_admin_table {

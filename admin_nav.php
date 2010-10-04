@@ -6,7 +6,7 @@
 								<a href="create.php">Create</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
-								<a href="update.php">View / Update</a>
+								<a href="my_codes.php">View / Update</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
 								<a href="notify.php">Notify</a>

@@ -39,9 +39,36 @@ if (isset($_SESSION['AUTH'])) {
 				foreach ($_POST['alias_list'] as $current_alias) {
 					// Trim in case there is extra whitespace
 					$current_alias = trim($current_alias);
-					// Make a new alias and set a message
-					$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
-					$_SESSION['update_message'][] = "<p class='update_message'>Alias ".$current_alias." was added to '".$code->getName()."'.</p>";
+					$select = $connection->prepare("
+					  (SELECT
+  						name
+					  FROM
+  						alias
+  					WHERE
+  						institution = '" . $_POST['institution'] . "'
+  					AND
+  						name = '" . $current_alias . "')
+  					UNION
+  					(SELECT
+  						name
+  					FROM
+  						code
+  					WHERE
+  						institution = '" . $_POST['institution']. "'
+  					AND
+  						name = '" . $current_alias . "')
+  					");
+  				$select->execute();
+  				//$count = count($select->fetchAll());
+					if(count($select->fetchAll())) {
+						$_SESSION['update_message'][] = "<p class='update_message_failure'>Alias ".$current_alias." already exists as an alias or shortcut name. Was not created as an alias of '".$code->getName()."'.</p>";
+						//$_SESSION['update_message_success'] = false);
+					} else {
+						// Make a new alias and set a message
+						$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
+						$_SESSION['update_message'][] = "<p class='update_message_success'>Alias ".$current_alias." was added to '".$code->getName()."'.</p>";
+						//$_SESSION['update_message_success'] = true);
+					}
 				}
 			}
 			
@@ -128,7 +155,9 @@ if (isset($_SESSION['AUTH'])) {
 			
 		}
 		elseif(isset($_POST['delete'])) {
-			print "Delete was pressed";
+			
+			$code->delete();
+			
 			$_SESSION['update_message'][] = "<p class='update_message'>The code " . $code->getName() . " was deleted.</p>";
 		}
 
