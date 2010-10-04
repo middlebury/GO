@@ -72,7 +72,8 @@ underlined. Ditto with history
 button on the info page */
 .history_button,
 .action_cells a,
-.info_edit_button {
+.info_edit_button,
+.edit_button {
 text-decoration: none;
 }
 
@@ -87,3 +88,25 @@ float: left;
 .center {
 text-align: center;
 }
+
+/* My Codes */
+
+#my_codes_table {
+border-collapse: collapse;
+}
+
+#my_codes_table td,
+#my_codes_table th {
+max-width: 300px;
+border: solid #000 1px;
+padding: 1px 5px 1px 5px;
+}
+
+#my_codes_table th {
+background-color: #000;
+color: #fff;
+}
+
+/* #my_codes_table td.no_border {
+border: none;
+}*/

@@ -15,7 +15,8 @@ $admin_pages = array(
 	"flag_admin.php",
 	"login2.php",
 	"my_codes.php",
-	"update2.php"
+	"update2.php",
+	"create2.php"
 );
 $session_pages = array(
 	"info.php",

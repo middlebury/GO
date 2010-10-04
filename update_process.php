@@ -19,34 +19,37 @@ if (isset($_SESSION['AUTH'])) {
 	// This is only available if user is a superadmin or admin
 	if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
 		
+		// Instantiate a code object using the submitted name/institution
 		$code = new Code($_POST['code'], $_POST['institution']);
-
-		var_dump($_POST);
-
+		
+		// We have two submit buttons on the previous form so we need to acount for both
+		// We want to do the following when "Apply" aka. "update" is pressed
 		if(isset($_POST['update'])) {
 			
-			print "Apply was pressed";
-			
-			//public must be boolean
-			//(bool) $public = $_POST['public'];
-			
-			//update url
+			//update url in database
 			$code->setUrl($_POST['update_url'], true);
-			//update description
+			//update description in database
 			$code->setDescription($_POST['update_description'], true);
-			//update show in gotionary
+			//update show in gotionary in database
 			$code->setPublic((bool) $_POST['public'], true);
+			
+			// ADD ALIAS STUFF
 			
 			if (isset($_POST['alias_list'])) {
 				foreach ($_POST['alias_list'] as $current_alias) {
+					// Trim in case there is extra whitespace
 					$current_alias = trim($current_alias);
+					// Make a new alias and set a message
 					$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
 					$_SESSION['update_message'][] = "<p class='update_message'>Alias ".$current_alias." was added to '".$code->getName()."'.</p>";
 				}
 			}
 			
+			// ADD ADMIN STUFF
+			
 			if (isset($_POST['admin_list'])) {
 				foreach ($_POST['admin_list'] as $current_admin) {
+					// Trim in case there is extra whitespace
 					$current_admin = trim($current_admin);
 					if ($_SESSION["AUTH"]->getId($current_admin)) {
 						// Check to see if user is already an admin
@@ -55,21 +58,27 @@ if (isset($_SESSION['AUTH'])) {
   					$select->bindValue(2, $_POST['code']);
 						$select->execute();
 						$result = $select->fetchAll();
+						// If they aren't already an admin
 						if (!count($result)) {
+							// Add the user to the code and set a message
 							$code->addUser($_SESSION["AUTH"]->getId($current_admin));
 							$_SESSION['update_message'][] = "<p class='update_message'>User ".$current_admin." was added as an admin of '".$code->getName()."'.</p>";
 						}
 						else {
+							// Otherwise set a message saying the user is already an admin
 							$_SESSION['update_message'][] = "<p class='update_message'>User ".$current_admin." is already an admin of '".$code->getName()."'.</p>";
 						}
 					}
 				}
 			}
 			
+			// DELETE ALIAS STUFF
+			
 			if (isset($_POST['alias_list_del'])) {
 				foreach ($_POST['alias_list_del'] as $current_alias) {
+					// Trim in case there is extra whitespace
 					$current_alias = trim($current_alias);
-					// Check to see if alias is being added. If so, don't delete.
+					// Check to see if the same alias is being added. If so, don't delete it.
 					if (isset($_POST['alias_list'])) {
 						$dont_delete_current_alias = 0;
 						foreach ($_POST['alias_list'] as $add_alias) {
@@ -82,7 +91,7 @@ if (isset($_SESSION['AUTH'])) {
 								$_SESSION['update_message'][] = "<p class='update_message'>Alias ".$current_alias." was removed from '".$code->getName()."'.</p>";
 							}
 						}
-					// Otherwise delete.
+					// Otherwise go ahead and delete it.
 					} else {
 						$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
 						$alias->delete();
@@ -91,10 +100,13 @@ if (isset($_SESSION['AUTH'])) {
 				}
 			}
 			
+			// DELETE ADMIN STUFF
+			
 			if (isset($_POST['admin_list_del'])) {
 				foreach ($_POST['admin_list_del'] as $current_admin) {
+					// Trim in case there is extra whitespace
 					$current_admin = trim($current_admin);
-					// Check to see if admin is being added. If so, don't delete.
+					// Check to see if the same admin is being added. If so, don't delete it.
 					if (isset($_POST['admin_list'])) {
 						$dont_delete_current_admin = 0;
 						foreach ($_POST['admin_list'] as $add_admin) {
@@ -106,7 +118,7 @@ if (isset($_SESSION['AUTH'])) {
 								$_SESSION['update_message'][] = "<p class='update_message'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";
 							}
 						}
-					// Otherwise delete.
+					// Otherwise go ahead and delete it.
 					} else {
 						$code->delUser($_SESSION["AUTH"]->getId($current_admin));
 						$_SESSION['update_message'][] = "<p class='update_message'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";
@@ -117,10 +129,12 @@ if (isset($_SESSION['AUTH'])) {
 		}
 		elseif(isset($_POST['delete'])) {
 			print "Delete was pressed";
+			$_SESSION['update_message'][] = "<p class='update_message'>The code " . $code->getName() . " was deleted.</p>";
 		}
 
 	} //end if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
 
 } //end if (isset($_SESSION['AUTH'])) {
 
+// Redirect to originating location
 header("location: " . $_POST['url']);
