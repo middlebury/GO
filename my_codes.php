@@ -27,7 +27,7 @@ print "<h2>" . $_SESSION["AUTH"]->getName() . "'s Shortcuts</h2>";
 
 // Superadmin may admin all codes so show all
 if (isSuperAdmin($user->getName())) {
-	print "<p>As a superadmin you have the ability to <a href='all_codes.php'>view a list of all codes</a>.</p>";
+	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a>.</p>";
 }
 
 	$codes = $user->getCodes();
@@ -38,8 +38,7 @@ if (isSuperAdmin($user->getName())) {
 			<th>Description</th>
 			<th>Aliases</th>
 			<th>Institution</th>
-			<th>Edit</th>
-			<th>Info</th>
+			<th>Actions</th>
 		</tr>";
 		foreach ($codes as $code) {
 			$current_aliases = array();
@@ -62,12 +61,13 @@ if (isSuperAdmin($user->getName())) {
 				<td>
 					" . $code->getInstitution() . "
 				</td>
-				<td class='no_border'>
+				<td>
+				
 					<a class='edit_button' href='update2.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'><input type='button' value='Edit Shortcut' /></a>
-				</td>
-				<td class='no_border'>
+
 					<a class='edit_button' href='flag_details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Info' />
 					</a>
+					
 				</td>
 			</tr>";
 		}
@@ -75,4 +75,3 @@ if (isSuperAdmin($user->getName())) {
 	} //end if (count($codes) > 0) {
 
 require_once "footer.php";
-?>
