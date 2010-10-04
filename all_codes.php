@@ -8,6 +8,8 @@ require_once "admin_nav.php";
 <div class="content">
 	<div id="response"></div>
 
+	<h2>All Codes (click to edit)</h2>
+
 <?php
 // Show all codes the currently logged in user may admin
 // What codes may the current user admin?
@@ -22,16 +24,24 @@ if (isSuperAdmin($user->getName())) {
   	name,
   	institution
   FROM
-  	code");
+  	code
+  ORDER BY
+  	name");
   $select->execute();
 	
-	print "<ul>";
+	print "<table>";
 	//
 	foreach ($select->fetchAll() as $row) {
 		//$codes[$row['institution'] . "/" . $row['name']] = new Code($row['name'], $row['institution']);
-		print "<li><a href='update2.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "'>" . $row['name'] . "</a></li>";
+		print "<tr>
+		<td>
+			<a href='update2.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "'>" . $row['name'] . "</a>
+		</td>
+		<td>
+			" . $row['institution'] . "
+		</td>";
 	}
-	print "</ul>";
+	print "</table>";
 } else {
 	die("You are not authorizd to view this page.");
 }
