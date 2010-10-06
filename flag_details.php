@@ -26,30 +26,35 @@ try {
 	?>
 	
 	<!-- this is our table of flags -->
-  <h2 class="flag_detail_header">Flags for this Code</h2>
-  <table class="flag_admin_table">
-  	<tr>
-  		<th>Code</th>
-  		<th>User</th>
-  		<th>IP Address</th>
-  		<th>Timestamp</th>
-  	</tr>
-  	<?php
-  foreach ($select->fetchAll() as $row) {
-  	print "\n<tr>";
-  	print "\n<td>".$row['code']."</td>";
-  	if ($row['user']) {
-  		print "\n<td>".GoAuthCas::getName($row['user'])."</td>";
-  	} else {
-  		print "\n<td></td>";
-  	}
-  	print "\n<td>".$row['ipaddress']."</td>";
-  	print "\n<td>".$row['timestamp']."</td>";
-  	print "\n</tr>";
-  } //end foreach ($select->fetchAll() as $row) { 
-
-  ?>
-  </table>
+	<?php if (count($select->fetchAll())) { ?>
+  	<h2 class="flag_detail_header">Flags for this Code</h2>
+  	<table class="flag_admin_table">
+  		<tr>
+  			<th>Code</th>
+  			<th>User</th>
+  			<th>IP Address</th>
+  			<th>Timestamp</th>
+  		</tr>
+  		<?php
+  		// We already execute the query earlier for a conditional
+  		// so we need to execute it again in order to fetch it.
+  		// alternately we could have put the resutls in a var
+  		$select->execute();
+  		foreach ($select->fetchAll() as $row) {
+  			print "\n<tr>";
+  			print "\n<td>".$row['code']."</td>";
+  			if ($row['user']) {
+  				print "\n<td>".GoAuthCas::getName($row['user'])."</td>";
+  			} else {
+  				print "\n<td></td>";
+  			}
+  			print "\n<td>".$row['ipaddress']."</td>";
+  			print "\n<td>".$row['timestamp']."</td>";
+  			print "\n</tr>";
+  		} //end foreach ($select->fetchAll() as $row) { 
+  		?>
+  	</table>
+  <?php } //end if (count($select->fetchAll()) { ?>
 
 	<?php
 	//COLLECT AND PROCESS THE DATA FOR LOGS

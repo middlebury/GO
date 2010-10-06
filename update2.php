@@ -7,7 +7,7 @@ require_once "admin_nav.php";
 ?>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script src="update2.js"></script>
+<script src="update2.js" type="text/javascript"></script>
 <?php
 $code = new Code($_GET['code'], $_GET['institution']);
 
@@ -25,11 +25,11 @@ if (isset($_SESSION['AUTH'])) {
 			<div id="response"></div>
 				
 				<form action="update_process.php" method="post">
+					<div>
 					<input type="hidden" name="xsrfkey" value="<?php print $_SESSION['xsrfkey'] ?>" />
 					<input type="hidden" name="code" value="<?php print $code->getName() ?>" />
 					<input type="hidden" name="institution" value="<?php print $code->getInstitution() ?>" />
 					<input type="hidden" name="url" value="<?php print urldecode($_GET['url']) ?>" />
-					<div>
 						<p>You are authorized to admin this code.</p>
 						<h2><?php print $code->getName() ?> (<?php print $code->getInstitution() ?>)</h2>
 						<p>
@@ -51,9 +51,10 @@ if (isset($_SESSION['AUTH'])) {
 								print " <input type='button' value='Delete' /></li>";
 							}
 						?>
+						<!--This is required by doctype-->
+						<li style="display: none;">This space is intentionally left blank</li>
 						</ul>
 						<input type="text" id="add_alias_text" maxlength="150" name="alias" /><input type="button" id="add_alias_button" name="add_alias" value="Add Alias"/>
-						</p>
 						<h3>Admins</h3>
 						<ul id="admin_list">
 						<?php
@@ -63,6 +64,8 @@ if (isset($_SESSION['AUTH'])) {
 								print " <input type='button' value='Delete' /></li>";
 							}
 						?>
+						<!--This is required by doctype-->
+						<li style="display: none;">This space is intentionally left blank</li>
 						</ul>
 						<input type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
 						<p><input type="submit" name="update" value="Apply Changes" />

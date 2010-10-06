@@ -56,7 +56,7 @@ if (isset($_SESSION["AUTH"])) {
 					  foreach(array_keys($institutions) as $inst) {
 					    if ($inst == $institution)
 					  		print "<strong>";
-					    print "<a href=\"".equivalentUrl($inst)."\">" . $inst . "</a> &#160; | &#160;";
+					    print "<a href=\"".htmlentities(equivalentUrl($inst))."\">" . $inst . "</a> &#160; | &#160;";
 					    if ($inst == $institution)
 					  		print "</strong>";
 					  }
