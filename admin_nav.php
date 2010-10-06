@@ -3,7 +3,7 @@
 					<div class="AspNet-Menu-Horizontal">
 						<ul class="AspNet-Menu">
 							<li class="AspNet-Menu-Leaf">
-								<a href="create.php">Create</a>
+								<a href="create2.php">Create</a>
 							</li>
 							<li class="AspNet-Menu-Leaf">
 								<a href="my_codes.php">View / Update</a>

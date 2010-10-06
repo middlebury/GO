@@ -10,7 +10,6 @@ require_once "admin_nav.php";
 <script src="update2.js"></script>
 <?php
 $code = new Code($_GET['code'], $_GET['institution']);
-global $institutions;
 
 // This form should only be available to authenticated users 
 if (isset($_SESSION['AUTH'])) {
