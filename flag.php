@@ -17,7 +17,7 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 //try to do this and catch the error if there is an issue
 try {
 	//get the statement object for this insert statement
-  $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress, institution) VALUES (?, ?, ?, ?)");
+  $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress, institution, url) VALUES (?, ?, ?, ?, ?)");
   
   //we want to add the current code to the session array
   //"flagged" so we know the user has flagged this code
@@ -39,6 +39,9 @@ try {
   
   //bind the institution
   $insert->bindValue(4, $_POST["institution"]);
+  
+  //bind the url
+  $insert->bindValue(5, $_POST["url"]);
   
   //finally execute the statement
   $insert->execute();

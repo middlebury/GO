@@ -29,8 +29,8 @@ try {
   		COUNT(flag.code) AS
   	num_flags,
   	aliases,
-  	code.url,
-  	code.institution
+  	flag.url,
+  	flag.institution
   FROM
   	flag
   		LEFT JOIN
@@ -44,11 +44,7 @@ try {
   				code)
   		AS
   	grouped_alias
-  		ON flag.code = grouped_alias.code
-  		LEFT JOIN
-  	code
-  		ON flag.code = code.name
-  		AND flag.institution = code.institution 
+  		ON flag.code = grouped_alias.code 
   GROUP BY
   	code 
   ORDER BY

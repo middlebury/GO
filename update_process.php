@@ -186,7 +186,7 @@ if (isset($_SESSION['AUTH'])) {
 			
 			$code->delete();
 			
-			$_SESSION['update_message'][] = "<p class='update_message_success'>The code " . $code->getName() . " was deleted.</p>";
+			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut " . $code->getName() . " was deleted.</p>";
 		}
 
 	} //end if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {

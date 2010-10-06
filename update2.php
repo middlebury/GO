@@ -69,7 +69,7 @@ if (isset($_SESSION['AUTH'])) {
 						</ul>
 						<input type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
 						<p><input type="submit" name="update" value="Apply Changes" />
-						<input type="submit" name="delete" value="Delete Code" /></p>
+						<input type="submit" name="delete" value="Delete Shortcut" /></p>
 					</div>
 				</form> 
 		<?php

@@ -16,7 +16,7 @@ require_once "header.php";
 				}?>
 			
 				<p>This page describes the details for a single GO shortcut and its aliases. To view a list of all GO shortcuts, please see the <a href="gotionary.php">GOtionary</a>.</p>
-				<p>GO shortcuts are managed by the people who created them. If you are one of the administrators for this shortcut, please log into the <a href="update.php">self-service admin</a> page to change or update this shortcut.</p>
+				<p>GO shortcuts are managed by the people who created them. If you are one of the administrators for this shortcut, please log into the <a href="admin.php">self-service admin</a> page to change or update this shortcut.</p>
 				<p>If you are not an administrator of this shortcut, please contact one of the shortcut administrators listed below for any problems, changes, or updates related to this shortcut. Be sure to refer to the URL of this page when contacting them.</p>
 <?php
 
@@ -103,6 +103,8 @@ try {
 						print '<input type="hidden" name="code" value="'. $code->getName() .'" />';
 						
 						print '<input type="hidden" name="institution" value="'. $code->getInstitution() .'" />';
+						
+						print '<input type="hidden" name="url" value="'. htmlentities($code->getUrl()) .'" />';
 						
 						print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />';
 					}
