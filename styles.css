@@ -73,6 +73,14 @@ border-bottom: 1px solid #000;
 margin-left: 10px;
 }
 
+#flag_comment {
+width: 300px;
+}
+
+#flag_button_form {
+float: right;
+}
+
 /* make sure the anchor surrounding
 the "details" button is not being
 underlined. Ditto with history
@@ -85,7 +93,7 @@ text-decoration: none;
 }
 
 .action_cells {
-width: 138px;
+width: 220px;
 }
 
 .action_cells button {
@@ -94,6 +102,11 @@ float: left;
 
 .center {
 text-align: center;
+}
+
+.failed_validation {
+background-color: pink;
+border: 1px solid red;
 }
 
 /* My Codes */

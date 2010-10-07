@@ -14,10 +14,19 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
+// Comment is a required field if submitting a flag. If it's not
+// filled in, set a session var, stop executing, and return to the
+// info page.
+if ($_POST['flag_comment'] == '') {
+$_SESSION['comment_required'] = true;
+$_SESSION['update_message'][] = "<p class='update_message_failure'>Reason is a required field. Please fill in the reason the shortcut is being flagged.</p>";
+die(header("location: info.php?code=".$_POST['code']));
+}
+
 //try to do this and catch the error if there is an issue
 try {
 	//get the statement object for this insert statement
-  $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress, institution, url) VALUES (?, ?, ?, ?, ?)");
+  $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress, institution, url, comment) VALUES (?, ?, ?, ?, ?, ?)");
   
   //we want to add the current code to the session array
   //"flagged" so we know the user has flagged this code
@@ -42,6 +51,9 @@ try {
   
   //bind the url
   $insert->bindValue(5, $_POST["url"]);
+  
+  //bind the url
+  $insert->bindValue(6, $_POST["flag_comment"]);
   
   //finally execute the statement
   $insert->execute();
