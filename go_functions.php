@@ -60,3 +60,11 @@ function isAdmin($code, $institution) {
 	}
 	return $is_admin;
 }
+
+function errorCase($error_type, $field_type) {
+	if ($error_type == $field_type) {
+		return 'failed_validation';
+	} else {
+		return '';
+	}
+}

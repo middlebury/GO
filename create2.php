@@ -21,6 +21,7 @@ global $institutions;
 					<input type="hidden" name="url" value="<?php print curPageURL() ?>" />
 					<!-- Set the currently logged in user as an admin of this code -->
 					<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getName() ?>" />
+					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
 					
 					<?php
 						// If an update message was set prior to a redirect
@@ -37,14 +38,14 @@ global $institutions;
 							<p>Shortcuts are the standard way to set up a GO URL.</p>
 						<p>
 							<label for="code">Shortcut</label>
-							<input id="code" name="code" type="text" size="50" />
+								<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'code'); } ?>" id="code" name="code" type="text" size="50" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['code']); } ?>" />
 							<br />example: go/<b>shortcut</b> - don't start the shortcut with 'go/'
 						</p>
 						
 						<!-- ADD URL -->
 						<p>
 							<label for="update_url">URL</label>
-							<input id="update_url" name="update_url" type="text" size="62" />
+							<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_url'); } ?>" id="update_url" name="update_url" type="text" size="62" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_url']); } ?>" />
 							<br />example: http://www.google.com - be sure to include http:// or https://
 						</p>
 						
@@ -65,7 +66,7 @@ global $institutions;
 						<!-- ADD DESCRIPTION -->
 						<p>
 							Description<br />
-							<textarea cols="50" rows="3" name="update_description"></textarea>
+							<textarea class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_description'); } ?>" cols="50" rows="3" name="update_description" id="update_description"><?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_description']); } ?></textarea>
 						</p>
 						<?php if (isSuperAdmin($_SESSION['AUTH']->getId())) { ?>
 						<p>
@@ -79,6 +80,16 @@ global $institutions;
 						<ul id="alias_list">
 						<!--This is required by doctype-->
 						<li style="display: none;">This space is intentionally left blank</li>
+						<?php 
+						// If we've submitted the form with values but it was not yet
+						// processed, repopulate the aliases if needed
+						if (isset($_SESSION['form_values']['alias_list'])) {
+							foreach ($_SESSION['form_values']['alias_list'] as $current_alias) {
+								print "<li class='".$current_alias."_alias_list'>".$current_alias." <input type='button' value='Delete'></li>";
+								print "<input class='".$current_alias."_alias_list' type='hidden' value='".$current_alias."' name='alias_list[]'";
+							}
+						}
+						?>
 						</ul>
 						<input type="text" id="add_alias_text" maxlength="150" name="alias" /><input type="button" id="add_alias_button" name="add_alias" value="Add Alias"/>
 						
@@ -86,6 +97,16 @@ global $institutions;
 						<h3>Admins</h3>
 						<ul id="admin_list">
 						<li style="display: none;">This space is intentionally left blank</li>
+						<?php 
+						// If we've submitted the form with values but it was not yet
+						// processed, repopulate the admins if needed
+						if (isset($_SESSION['form_values']['admin_list'])) {
+							foreach (array_unique($_SESSION['form_values']['admin_list']) as $current_admin) {
+								print "<li class='".$current_admin."_admin_list'>".$current_admin." <input type='button' value='Delete'></li>";
+								print "<input class='".$current_admin."_admin_list' type='hidden' value='".$current_admin."' name='admin_list[]'";
+							}
+						}
+						?>
 						</ul>
 						<input type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
 						<p><input type="submit" name="update" value="Create Shortcut" /></p>
@@ -93,5 +114,6 @@ global $institutions;
 					</div> <!-- end the block level element to hold the contents of the form -->
 				</form> 
 		<?php
+		unset($_SESSION['field_id_in_error']);
 
 require_once "footer.php";

@@ -8,6 +8,7 @@ require_once "go.php";
 // Debugging code
 //var_dump($_POST);
 //die();
+$_SESSION['form_values'] = $_POST;
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -22,6 +23,32 @@ if (isset($_SESSION['AUTH'])) {
 
 	// This is only available if user is a superadmin or admin
 	if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
+		
+		// We have two submit buttons on the edit form (the one on the create for is still
+		// named "update" in order to trigger the same behavior as the button on edit).
+		// We want to do the following when "Apply" aka. "update" is pressed
+		// if delete was pressed then delete would be set and update would not.
+		if(isset($_POST['update'])) {
+		
+		// Check our input
+		if (!Code::isValidCode($_POST['code'])) {
+			$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$_POST['code']."</p>";
+			$_SESSION['field_id_in_error'] = 'code';
+			// Redirect to originating location
+			die(header("location: " . $_POST['form_url']));
+		}
+		if (!Code::isValidUrl($_POST['update_url'])) {
+			$_SESSION['update_message'][] = "<p class='update_message_failure'>The URL you are trying to set (".$_POST['update_url'].") is not valid. Please enter a properly formed URL.</p>";
+			$_SESSION['field_id_in_error'] = 'update_url';
+			// Redirect to originating location
+			die(header("location: " . $_POST['form_url']));
+		}
+		if (!Code::isValidDescription($_POST['update_description'])) {
+			$_SESSION['update_message'][] = "<p class='update_message_failure'>The description you are trying to set contains invalid characters. The characters allowed are letters, numbers, and common puntcuation. Please make adjustments and try again.</p>";
+			$_SESSION['field_id_in_error'] = 'update_description';
+			// Redirect to originating location
+			die(header("location: " . $_POST['form_url']));
+		}
 		
 		// Set messages for the create process (as opposed to the edit
 		// process. We're using this script for both).
@@ -39,23 +66,32 @@ if (isset($_SESSION['AUTH'])) {
 			if ($_POST['update'] == 'Create Shortcut') {
 				$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut ".$_POST['code']." already exists. The shortcut was not created. Would you like to <a href='my_codes.php'>edit your codes</a>?</p>";
 				// Redirect to originating location
-				die(header("location: " . $_POST['url']));
+				die(header("location: " . $_POST['form_url']));
 			}
 		}
+		
 		// Instantiate a code object using the submitted name/institution
 		$code = new Code($_POST['code'], $_POST['institution']);
-		
-		// We have two submit buttons on the edit form want to do the
-		// following when "Apply" aka. "update" is pressed if delete was pressed
-		// then delete would be set and update would not.
-		if(isset($_POST['update'])) {
 			
 			//update url in database
-			$code->setUrl($_POST['update_url'], true);
+			if ($code->getUrl() != $_POST['update_url']) {
+				$code->setUrl($_POST['update_url'], true);
+				$_SESSION['update_message'][] = "<p class='update_message_success'>The url was set to '".$_POST['update_url']."'.</p>";
+			}
 			//update description in database
-			$code->setDescription($_POST['update_description'], true);
+			if ($code->getDescription() != $_POST['update_description']) {
+				$code->setDescription($_POST['update_description'], true);
+				$_SESSION['update_message'][] = "<p class='update_message_success'>The description was set to '".$_POST['update_description']."'.</p>";
+			}
 			//update show in gotionary in database
-			$code->setPublic((bool) $_POST['public'], true);
+			if ($code->getPublic() != $_POST['public']) {
+				$code->setPublic((bool) $_POST['public'], true);
+				if ($_POST['public']) {
+					$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'true'.</p>";
+				} else {
+					$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'false'.</p>";
+				}
+			}
 			
 			// ADD ALIAS STUFF
 			
@@ -184,14 +220,25 @@ if (isset($_SESSION['AUTH'])) {
 		// If delete was pressed just delete the code and set a message.
 		elseif(isset($_POST['delete'])) {
 			
+			// Instantiate a code object using the submitted name/institution
+			$code = new Code($_POST['code'], $_POST['institution']);
+			
 			$code->delete();
 			
 			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut " . $code->getName() . " was deleted.</p>";
+		}
+		// If revert changes was pressed
+		elseif(isset($_POST['revert'])) {
+			$_SESSION['update_message'][] = "<p class='update_message_success'>Changes on this form have been reverted to default.</p>";
+			unset($_SESSION['form_values']);
+			die(header("location: " . $_POST['form_url']));
 		}
 
 	} //end if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
 
 } //end if (isset($_SESSION['AUTH'])) {
+
+unset($_SESSION['form_values']);
 
 // Finally redirect to originating location
 header("location: " . $_POST['url']);

@@ -73,14 +73,100 @@ class Code {
 		
 		return $code;
 	}
-	
+
 	/**
-	 * Regular expression pattern to match allowed characters.
+	 * Regular expression pattern to match allowed characters for codes.
 	 *
 	 * @since 02-25-2009
 	 */
-	const ALLOWED_CHARACTERS = "/[^A-Za-z0-9-_\?\/\.~\+%]/";
+	const ALLOWED_CHARACTERS = "/[A-Za-z0-9-_\?\/\.~\+%]/";
 	
+	/**
+	 * Regular expression pattern to match allowed characters for urls.
+	 *
+	 * @since 10-07-2010
+	 */
+	const URL_ALLOWED_CHARACTERS = "/[A-Za-z0-9-_\?\/\.~\+%&=:; ]/";
+	
+	/**
+	 * Regular expression pattern to match allowed characters for descriptions.
+	 *
+	 * @since 10-08-2010
+	 */
+	const DESC_ALLOWED_CHARACTERS = "/[A-Za-z0-9-_\?\/\.~\+%&=:; \(\)\[\]!@#\$\*'\",]/";
+	
+	/**
+	 * Answer true if name validates, false if not.
+	 * 
+	 * @param string $name The full name of the Code
+	 * @access public
+	 */
+	public static function isValidCode ($name) {
+		$validity = true;
+		// Codes shouldn't start with "go/"
+		if (preg_match('/^go\//', $name)) {
+			$validity = false;
+		}
+		// Codes may only contain allowed characters
+		for($i=0;$i < strlen($name);$i++) {
+			if (!preg_match(Code::ALLOWED_CHARACTERS, $name[$i])) {
+			$validity = false;
+			}
+		}
+		return $validity;
+	}
+	
+	/**
+	 * Answer true if name validates, false if not.
+	 * 
+	 * @param string $name The full name of the Code
+	 * @access public
+	 */
+	public static function isValidUrl ($name) {
+		$validity = true;
+		if (!preg_match('/^http:\/\//', $name) && !preg_match('/^https:\/\//', $name)) {
+			$validity = false;
+		}
+		for($i=0;$i < strlen($name);$i++) {
+			if (!preg_match(Code::URL_ALLOWED_CHARACTERS, $name[$i])) {
+			$validity = false;
+			}
+		}
+		return $validity;
+	}
+	
+	/**
+	 * Answer true if name validates, false if not.
+	 * 
+	 * @param string $name The full name of the Code
+	 * @access public
+	 */
+	public static function isValidDescription ($name) {
+		$validity = true;
+		for($i=0;$i < strlen($name);$i++) {
+			if (!preg_match(Code::DESC_ALLOWED_CHARACTERS, $name[$i])) {
+			$validity = false;
+			}
+		}	
+		return $validity;
+	}
+	
+	/**
+	 * Answer true if name validates, false if not.
+	 * 
+	 * @param string $name The full name of the Code
+	 * @access public
+	 */
+	public static function isValidAlias ($name) {
+		$validity = true;
+		for($i=0;$i < strlen($name);$i++) {
+			if (!preg_match(Code::ALLOWED_CHARACTERS, $name[$i])) {
+			$validity = false;
+			}
+		}	
+		return $validity;
+	}
+		
 	/**
 	 * The "name" of the code is the full path string.
 	 *
@@ -349,7 +435,7 @@ class Code {
 			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
 		}
 
-		if (preg_match(Code::ALLOWED_CHARACTERS, $name) > 0) {
+		if (!Code::isValidCode($name)) {
 			throw new Exception(__METHOD__ . " expects parameter name to contain only A-Z, a-z, 0-9, ?, -, _, and / characters; given " . $name);
 		}
 		

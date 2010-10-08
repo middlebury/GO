@@ -30,14 +30,26 @@ if (isset($_SESSION['AUTH'])) {
 					<input type="hidden" name="code" value="<?php print $code->getName() ?>" />
 					<input type="hidden" name="institution" value="<?php print $code->getInstitution() ?>" />
 					<input type="hidden" name="url" value="<?php print urldecode($_GET['url']) ?>" />
-						<p>You are authorized to admin this code.</p>
+					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
+					
+					<?php
+						// If an update message was set prior to a redirect
+						// to this page display it and clear the message.
+						if (isset($_SESSION['update_message'])) {
+							foreach ($_SESSION['update_message'] as $message) {
+								print $message;
+							}
+							unset($_SESSION['update_message']);
+						}
+					?>
+					
 						<h2><?php print $code->getName() ?> (<?php print $code->getInstitution() ?>)</h2>
 						<p>
-							URL: <input name="update_url" type="text" size="<?php print strlen($code->getUrl()); ?>" value="<?php print $code->getUrl(); ?>" />
+					URL: <input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_url'); } ?>" name="update_url" type="text" size="<?php print strlen($code->getUrl()); ?>" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_url']); } else { print $code->getUrl(); } ?>" />
 						</p>
 						<p>
 							Description<br />
-							<textarea cols="50" rows="3" name="update_description"><?php echo $code->getDescription(); ?></textarea>
+							<textarea class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_description'); } ?>" cols="50" rows="3" name="update_description"><?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_description']); } else { echo $code->getDescription(); } ?></textarea>
 						</p>
 						<p>
 							<input value="1" name="public" type="radio" <?php if($code->getPublic()) echo "checked=\"checked\""; ?> /> Show on GOtionary 
@@ -68,7 +80,8 @@ if (isset($_SESSION['AUTH'])) {
 						<li style="display: none;">This space is intentionally left blank</li>
 						</ul>
 						<input type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
-						<p><input type="submit" name="update" value="Apply Changes" />
+						<p><input type="submit" name="update" value="Apply These Changes" />
+							<input type="submit" name="revert" value="Revert These Changes" />
 						<input type="submit" name="delete" value="Delete Shortcut" /></p>
 					</div>
 				</form> 
@@ -78,5 +91,7 @@ if (isset($_SESSION['AUTH'])) {
 		die("You are not authorized to admin this code.");
 	}
 }
+
+unset($_SESSION['field_id_in_error']);
 
 require_once "footer.php";
