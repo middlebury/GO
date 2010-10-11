@@ -49,6 +49,26 @@ if (isset($_SESSION['AUTH'])) {
 			// Redirect to originating location
 			die(header("location: " . $_POST['form_url']));
 		}
+		if (isset($_POST['alias_list'])) {
+			foreach ($_POST['alias_list'] as $current_alias) {
+				if (!Code::isValidCode($current_alias)) {
+					$_SESSION['update_message'][] = "<p class='update_message_failure'>The alias you are trying to add contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$current_alias."</p>";
+					$_SESSION['field_id_in_error'] = 'add_alias_text';
+					// Redirect to originating location
+					die(header("location: " . $_POST['form_url']));
+				}
+			}
+		}
+		if (isset($_POST['admin_list'])) {
+			foreach ($_POST['admin_list'] as $current_admin) {
+				if (!Code::isValidAdmin($current_admin)) {
+					$_SESSION['update_message'][] = "<p class='update_message_failure'>The admin you are trying to add contains invalid characters. Admins may only contain letters. Given ".$current_admin."</p>";
+					$_SESSION['field_id_in_error'] = 'add_admin_text';
+					// Redirect to originating location
+					die(header("location: " . $_POST['form_url']));
+				}
+			}
+		}
 		
 		// Set messages for the create process (as opposed to the edit
 		// process. We're using this script for both).

@@ -20,7 +20,9 @@ global $institutions;
 					<!-- Pass the current URL to be redirected to after processing -->
 					<input type="hidden" name="url" value="<?php print curPageURL() ?>" />
 					<!-- Set the currently logged in user as an admin of this code -->
-					<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getName() ?>" />
+					<?php if (!isset($_SESSION['form_values']['admin_list'])) { ?>
+						<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getName() ?>" />
+					<?php } ?>
 					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
 					
 					<?php
@@ -91,7 +93,7 @@ global $institutions;
 						}
 						?>
 						</ul>
-						<input type="text" id="add_alias_text" maxlength="150" name="alias" /><input type="button" id="add_alias_button" name="add_alias" value="Add Alias"/>
+						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_alias_text'); } ?>" type="text" id="add_alias_text" maxlength="150" name="alias" /><input type="button" id="add_alias_button" name="add_alias" value="Add Alias"/>
 						
 						<!-- ADD ADMINS -->
 						<h3>Admins</h3>
@@ -108,8 +110,8 @@ global $institutions;
 						}
 						?>
 						</ul>
-						<input type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
-						<p><input type="submit" name="update" value="Create Shortcut" /></p>
+						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_admin_text'); } ?>" type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
+						<p><input type="submit" name="update" value="Create Shortcut" /><input type="submit" name="revert" value="Start Over" /></p>
 						
 					</div> <!-- end the block level element to hold the contents of the form -->
 				</form> 

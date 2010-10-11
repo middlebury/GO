@@ -65,8 +65,18 @@ if (isset($_SESSION['AUTH'])) {
 						?>
 						<!--This is required by doctype-->
 						<li style="display: none;">This space is intentionally left blank</li>
+						<?php 
+						// If we've submitted the form with values but it was not yet
+						// processed, repopulate the aliases if needed
+						if (isset($_SESSION['form_values']['alias_list'])) {
+							foreach ($_SESSION['form_values']['alias_list'] as $current_alias) {
+								print "<li class='".$current_alias."_alias_list'>".$current_alias." <input type='button' value='Delete'></li>";
+								print "<input class='".$current_alias."_alias_list' type='hidden' value='".$current_alias."' name='alias_list[]'";
+							}
+						}
+						?>
 						</ul>
-						<input type="text" id="add_alias_text" maxlength="150" name="alias" /><input type="button" id="add_alias_button" name="add_alias" value="Add Alias"/>
+						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_alias_text'); } ?>" type="text" id="add_alias_text" maxlength="150" name="alias" /><input type="button" id="add_alias_button" name="add_alias" value="Add Alias"/>
 						<h3>Admins</h3>
 						<ul id="admin_list">
 						<?php
@@ -78,8 +88,18 @@ if (isset($_SESSION['AUTH'])) {
 						?>
 						<!--This is required by doctype-->
 						<li style="display: none;">This space is intentionally left blank</li>
+						<?php 
+						// If we've submitted the form with values but it was not yet
+						// processed, repopulate the admins if needed
+						if (isset($_SESSION['form_values']['admin_list'])) {
+							foreach (array_unique($_SESSION['form_values']['admin_list']) as $current_admin) {
+								print "<li class='".$current_admin."_admin_list'>".$current_admin." <input type='button' value='Delete'></li>";
+								print "<input class='".$current_admin."_admin_list' type='hidden' value='".$current_admin."' name='admin_list[]'";
+							}
+						}
+						?>
 						</ul>
-						<input type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
+						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_admin_text'); } ?>" type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
 						<p><input type="submit" name="update" value="Apply These Changes" />
 							<input type="submit" name="revert" value="Revert These Changes" />
 						<input type="submit" name="delete" value="Delete Shortcut" /></p>

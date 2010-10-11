@@ -96,6 +96,13 @@ class Code {
 	const DESC_ALLOWED_CHARACTERS = "/[A-Za-z0-9-_\?\/\.~\+%&=:; \(\)\[\]!@#\$\*'\",]/";
 	
 	/**
+	 * Regular expression pattern to match allowed characters for descriptions.
+	 *
+	 * @since 10-08-2010
+	 */
+	const ADMIN_ALLOWED_CHARACTERS = "/[A-Za-z]/";
+	
+	/**
 	 * Answer true if name validates, false if not.
 	 * 
 	 * @param string $name The full name of the Code
@@ -119,7 +126,7 @@ class Code {
 	/**
 	 * Answer true if name validates, false if not.
 	 * 
-	 * @param string $name The full name of the Code
+	 * @param string $name The full URL
 	 * @access public
 	 */
 	public static function isValidUrl ($name) {
@@ -138,7 +145,7 @@ class Code {
 	/**
 	 * Answer true if name validates, false if not.
 	 * 
-	 * @param string $name The full name of the Code
+	 * @param string $name The description
 	 * @access public
 	 */
 	public static function isValidDescription ($name) {
@@ -161,6 +168,22 @@ class Code {
 		$validity = true;
 		for($i=0;$i < strlen($name);$i++) {
 			if (!preg_match(Code::ALLOWED_CHARACTERS, $name[$i])) {
+			$validity = false;
+			}
+		}	
+		return $validity;
+	}
+	
+	/**
+	 * Answer true if name validates, false if not.
+	 * 
+	 * @param string $name The full name of the admin
+	 * @access public
+	 */
+	public static function isValidAdmin ($name) {
+		$validity = true;
+		for($i=0;$i < strlen($name);$i++) {
+			if (!preg_match(Code::ADMIN_ALLOWED_CHARACTERS, $name[$i])) {
 			$validity = false;
 			}
 		}	
