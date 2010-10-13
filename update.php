@@ -24,7 +24,7 @@ if (isset($_SESSION['AUTH'])) {
 		<div class="content">
 			<div id="response"></div>
 				
-				<form action="update_process.php" method="post">
+				<form action="process.php" method="post">
 					<div>
 					<input type="hidden" name="xsrfkey" value="<?php print $_SESSION['xsrfkey'] ?>" />
 					<input type="hidden" name="code" value="<?php print $code->getName() ?>" />

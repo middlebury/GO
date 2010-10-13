@@ -1,6 +1,6 @@
 <?php
 
-//function to get IP address via client ip or x
+//copy pasted function to get IP address via client ip or x
 //forwarded first before falling back on remote addr
 function getRealIpAddr() {
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet
@@ -35,6 +35,7 @@ function curPageURL() {
 	return $url;
 }
 
+// Check to see if current user is admin of passed code
 function isAdmin($code, $institution) {
 	global $connection;
 	$is_admin = false;
@@ -60,7 +61,11 @@ function isAdmin($code, $institution) {
 	}
 	return $is_admin;
 }
-
+// Check passed field type against error type and return
+// "failed_validation" (the class name that flags and 
+// field has having failed validation) if true. This
+// lets us add this to all fields to check if they are
+// in error or not
 function errorCase($error_type, $field_type) {
 	if ($error_type == $field_type) {
 		return 'failed_validation';

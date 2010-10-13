@@ -52,13 +52,13 @@ try {
   //bind the url
   $insert->bindValue(5, $_POST["url"]);
   
-  //bind the url
+  //bind the comment
   $insert->bindValue(6, $_POST["flag_comment"]);
   
   //finally execute the statement
   $insert->execute();
   
-  //send mail to each go admin indicating that this 
+  //send mail to each go superadmin indicating that this 
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
   foreach ($goAdmin as $current_admin) {

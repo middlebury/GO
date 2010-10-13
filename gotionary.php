@@ -161,6 +161,8 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 				if (!isset($_SESSION['toggle_all'])) {
 					$_SESSION['toggle_all'] = 'public';
 				}
+				// Depending on settings in config display
+				// possibly change the "toggle_all" to "all"
 				if (GO_SHOW_ALL_CODES_ACCESS == 'all' || (GO_SHOW_ALL_CODES_ACCESS == 'authenticated' && isset($_SESSION["AUTH"])) || (GO_SHOW_ALL_CODES_ACCESS == 'superadmin' && isSuperAdmin())) {
 					// Set public or all depending on which link was clicked
 					if (isset($_GET['display'])) {

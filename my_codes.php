@@ -9,8 +9,8 @@ require_once "admin_nav.php";
 	<div id="response"></div>
 
 <?php
+
 // Show all codes the currently logged in user may admin
-// What codes may the current user admin?
 
 $user = new User($_SESSION["AUTH"]->getId());
 
@@ -25,12 +25,14 @@ if (isset($_SESSION['update_message'])) {
 
 print "<h2>" . $_SESSION["AUTH"]->getName() . "'s Shortcuts</h2>";
 
-// Superadmin may admin all codes so show all
+// Superadmin may admin all codes so show a link to "show all"
 if (isSuperAdmin($user->getName())) {
 	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a>.</p>";
 }
-
+	
+	// Get the codes the current user can edit
 	$codes = $user->getCodes();
+	// If there are any, put them in a table with editing options
 	if (count($codes) > 0) {
 		print "<table id='my_codes_table'>
 		<tr>
@@ -46,7 +48,6 @@ if (isSuperAdmin($user->getName())) {
 			foreach ($aliases as $thisalias) {
 				$current_aliases[] = $thisalias->getName();
 			}
-			//var_dump(get_class_methods($code));
 			$current_aliases = implode(', ', $current_aliases);
 			print "<tr>
 				<td>
@@ -65,7 +66,7 @@ if (isSuperAdmin($user->getName())) {
 				
 					<a class='edit_button' href='update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'><input type='button' value='Edit Shortcut' /></a>
 
-					<a class='edit_button' href='flag_details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Info' />
+					<a class='edit_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Info' />
 					</a>
 					
 				</td>

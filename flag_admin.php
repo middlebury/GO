@@ -13,16 +13,17 @@ require_once "admin_nav.php";
 	<div id="response"></div>
 
 <?php
+
 //Create a table of codes so we know which
 //ones have been flagged and how many times
 
 try {
-	//Keep non-admins out of this page
+	//Keep non-superadmins out of this page
 	if (!isSuperAdmin()) {
 		die("You do not have permission to view this page");
 	}
 	//We want to know the code, the number of times flagged
-	//the destination, and any aliases
+	//the destination, any aliases, and any comments
   $select = $connection->prepare("
   SELECT
   	flag.code,
@@ -84,7 +85,7 @@ try {
   			<!-- the info button -->
   			<?php print "\n\t\t<a href='info.php?code=".$row['code']."'><input type='button' value='Info' /></a>"; ?>
   			<!-- the history button -->
-  			<?php print "\n\t\t<a href='flag_details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";?>
+  			<?php print "\n\t\t<a href='details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";?>
   			<!-- the clear button -->
   			<form action='flag_clear.php' method='post' id="flag_button_form">
   				<div>

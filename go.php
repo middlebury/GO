@@ -20,11 +20,11 @@ $session_pages = array(
 	"info.php",
 	"flag.php",
 	"flag_clear.php",
-	"flag_details.php",
+	"details.php",
 	"gotionary.php",
 	"login.php",
 	"go_functions.php",
-	"update_process.php",
+	"process.php",
 	"all_codes.php"
 );
 $session_pages = array_merge($session_pages, $admin_pages);

@@ -10,13 +10,12 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
+// This script should only run for superadmins
 if (!isSuperAdmin()) {
 		die("You do not have permission to view this page");
 	}
 
 try {
-	//set array to hold results
-	$result = array();
 	//get the statement object for this select statement
 	$delete = $connection->prepare("DELETE FROM flag WHERE code = ? AND institution = ?");
   $delete->bindValue(1, $_POST['code']);

@@ -145,29 +145,13 @@ class Code {
 	/**
 	 * Answer true if name validates, false if not.
 	 * 
-	 * @param string $name The description
+	 * @param string $name The full description
 	 * @access public
 	 */
 	public static function isValidDescription ($name) {
 		$validity = true;
 		for($i=0;$i < strlen($name);$i++) {
 			if (!preg_match(Code::DESC_ALLOWED_CHARACTERS, $name[$i])) {
-			$validity = false;
-			}
-		}	
-		return $validity;
-	}
-	
-	/**
-	 * Answer true if name validates, false if not.
-	 * 
-	 * @param string $name The full name of the Code
-	 * @access public
-	 */
-	public static function isValidAlias ($name) {
-		$validity = true;
-		for($i=0;$i < strlen($name);$i++) {
-			if (!preg_match(Code::ALLOWED_CHARACTERS, $name[$i])) {
 			$validity = false;
 			}
 		}	

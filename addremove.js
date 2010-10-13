@@ -1,15 +1,17 @@
 
 $(document).ready(function(){
 	
-	// Apply the "add/remove" to the list of Aliases
+	// Apply the "add/remove behavior" to the list of Aliases
 	addRemoveBehavior('#alias_list','#add_alias_button','#add_alias_text');
-	// Apply the "add/remove" to the list of Admins
+	// Apply the "add/remove behavior" to the list of Admins
 	addRemoveBehavior('#admin_list','#add_admin_button','#add_admin_text');
 	
-	// A function to apply "add/remove" behavior to a list of items that can have items
-	// added to it, each with a delete button next to it that will delete it
-	// Is passed the ID of the list, the ID of the input textfield, and the
-	// ID of the add button
+	// A function to apply "add/remove" behavior to a list of items
+	// that can have items added to it, each with a delete button
+	// next to it that will delete it from the list. There is also
+	// an input field and an add button.
+	// Is passed the ID of the list, the ID of the input textfield,
+	// and the id of the add button
 	function addRemoveBehavior(ul_id, button_id, text_id) {
 		
 		// STUFF THAT HAPPENS TO ITEMS THAT ALREADY EXIST

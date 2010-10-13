@@ -8,6 +8,10 @@ require_once "go.php";
 // Debugging code
 //var_dump($_POST);
 //die();
+
+// add the results of $_POST to $_SESSION. We'll use
+// this to repopulate values in the form if it fails
+// validation
 $_SESSION['form_values'] = $_POST;
 
 //check for xss attempt
@@ -28,11 +32,18 @@ if (isset($_SESSION['AUTH'])) {
 		// named "update" in order to trigger the same behavior as the button on edit).
 		// We want to do the following when "Apply" aka. "update" is pressed
 		// if delete was pressed then delete would be set and update would not.
+		// We'll do something different in that case
 		if(isset($_POST['update'])) {
 		
 		// Check our input
 		if (!Code::isValidCode($_POST['code'])) {
+			// We add these to an array so that we can print out
+			// more than one message at a time
 			$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$_POST['code']."</p>";
+			// This tells us the ID of the field that is in error
+			// if this validation fails. Used to change the class
+			// of the failed field when redirected back to the
+			// original form
 			$_SESSION['field_id_in_error'] = 'code';
 			// Redirect to originating location
 			die(header("location: " . $_POST['form_url']));
@@ -185,23 +196,27 @@ if (isset($_SESSION['AUTH'])) {
 				foreach ($_POST['alias_list_del'] as $current_alias) {
 					// Trim in case there is extra whitespace
 					$current_alias = trim($current_alias);
-					// Check to see if the same alias is being added. If so, don't delete it.
+					// Check to see if the same alias is being added as is being deleted. If so
+					// don't delete it.
 					// This might sound weird, but it's in the case that a user deletes an alias
 					// and then decides they want it and adds it back on the same page load.
 					// It will appear in the remove and add lists but we only want to keep it.
 					if (isset($_POST['alias_list'])) {
 						$dont_delete_current_alias = 0;
 						foreach ($_POST['alias_list'] as $add_alias) {
+							// Keep the alias
 							if ($add_alias == $current_alias) {
 								$dont_delete_current_alias = 1;
 							}
+							// Don't keep the alias
 							if (!$dont_delete_current_alias) {
 								$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
 								$alias->delete();	
 								$_SESSION['update_message'][] = "<p class='update_message_success'>Alias ".$current_alias." was removed from '".$code->getName()."'.</p>";
 							}
 						}
-					// Otherwise go ahead and delete it.
+					// Otherwise none are being added so just go ahead and delete all
+					// the aliases in the "delete list".
 					} else {
 						$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
 						$alias->delete();
@@ -228,7 +243,8 @@ if (isset($_SESSION['AUTH'])) {
 								$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";
 							}
 						}
-					// Otherwise go ahead and delete it.
+					// Otherwise none are being added so just go ahead and delete all
+					// the admins in the "delete list".
 					} else {
 						$code->delUser($_SESSION["AUTH"]->getId($current_admin));
 						$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";

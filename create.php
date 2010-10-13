@@ -7,22 +7,25 @@ require_once "admin_nav.php";
 global $institutions;
 ?>
 
+<!-- Include jQuery/JS to apply add remove behavior to the admin and alias lists -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script src="addremove.js" type="text/javascript"></script>
 
 		<div class="content">
 			<div id="response"></div>
 				
-				<form action="update_process.php" method="post">
+				<form action="process.php" method="post">
 					<div> <!-- a block level element to hold the contents of the form -->
 					<!-- Pass the current xss check value -->
 					<input type="hidden" name="xsrfkey" value="<?php print $_SESSION['xsrfkey'] ?>" />
 					<!-- Pass the current URL to be redirected to after processing -->
 					<input type="hidden" name="url" value="<?php print curPageURL() ?>" />
-					<!-- Set the currently logged in user as an admin of this code -->
+					<!-- Since the currently logged in user is creating a new code
+					set them as an admin of this code, but only if the form hasn't been submitted -->
 					<?php if (!isset($_SESSION['form_values']['admin_list'])) { ?>
 						<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getName() ?>" />
 					<?php } ?>
+					<!-- Pass the current URL --> 
 					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
 					
 					<?php
@@ -40,6 +43,10 @@ global $institutions;
 							<p>Shortcuts are the standard way to set up a GO URL.</p>
 						<p>
 							<label for="code">Shortcut</label>
+								<!-- All the stuff in this input basically just says "If this
+								field didn't validate on submission, then set a class that
+								indicates this. Also set it's value to the previously submitted
+								value. This is duplicated in the rest of the fields in this form -->
 								<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'code'); } ?>" id="code" name="code" type="text" size="50" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['code']); } ?>" />
 							<br />example: go/<b>shortcut</b> - don't start the shortcut with 'go/'
 						</p>

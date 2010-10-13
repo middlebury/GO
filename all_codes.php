@@ -9,8 +9,6 @@ require_once "admin_nav.php";
 	<div id="response"></div>
 
 <?php
-// Show all codes the currently logged in user may admin
-// What codes may the current user admin?
 
 $user = new User($_SESSION["AUTH"]->getId());
 
@@ -25,7 +23,7 @@ if (isset($_SESSION['update_message'])) {
 
 print "<h2>All Codes</h2>";
 
-// Superadmin may admin all codes so show all
+// Only superadmin may admin all codes so show all
 if (isSuperAdmin($user->getName())) {
 
 	$select = $connection->prepare("
@@ -82,7 +80,7 @@ if (isSuperAdmin($user->getName())) {
 				
 				<a class='edit_button' href='update.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "&amp;url=" . urlencode(curPageURL()) . "'><input type='button' value='Edit Shortcut' /></a>
 				
-				<a class='edit_button' href='flag_details.php?code=".$row['name']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Info' />
+				<a class='edit_button' href='details.php?code=".$row['name']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Info' />
 				
 				</a>
 			</td>
