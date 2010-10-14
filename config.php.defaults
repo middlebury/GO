@@ -108,6 +108,9 @@ $goAdmin = array(
 //allow anonymous user to flag codes as inappropriate (true or false)
 define("ANON_FLAGGING", true);
 
+//require a reason be filled in for flagging a code, true or false
+define("REASON_FOR_FLAGGING_REQUIRED", true);
+
 //email address that alert emails from the go application will be from
 define("GO_ALERTS_EMAIL_ADDRESS", 'nobody@example.com');
 

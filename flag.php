@@ -17,10 +17,12 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 // Comment is a required field if submitting a flag. If it's not
 // filled in, set a session var, stop executing, and return to the
 // info page.
-if ($_POST['flag_comment'] == '') {
-$_SESSION['comment_required'] = true;
-$_SESSION['update_message'][] = "<p class='update_message_failure'>Reason is a required field. Please fill in the reason the shortcut is being flagged.</p>";
-die(header("location: info.php?code=".$_POST['code']));
+if (REASON_FOR_FLAGGING_REQUIRED == true) {
+	if ($_POST['flag_comment'] == '') {
+		$_SESSION['comment_required'] = true;
+		$_SESSION['update_message'][] = "<p class='update_message_failure'>Reason is a required field. Please fill in the reason the shortcut is being flagged.</p>";
+		die(header("location: info.php?code=".$_POST['code']));
+	}
 }
 
 //try to do this and catch the error if there is an issue
