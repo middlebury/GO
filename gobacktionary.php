@@ -10,6 +10,23 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 	$letter = $_GET["letter"];
 }
 
+$name = "";
+if (isset($_SESSION["AUTH"])) {
+  try {
+    $name = $_SESSION["AUTH"]->getName();
+  } catch (Exception $e) {
+    // We may have an expired proxy-ticket kept around. If so, regenerate the session
+    // and log-in again.
+    if ($e->getCode() == PHPCAS_SERVICE_PT_FAILURE) {
+      session_destroy();
+      header('Location: '.$_SERVER['REQUEST_URI']);
+      exit;
+    } else {
+    	throw $e;
+    }
+  }
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -40,6 +57,9 @@ if (isset($_GET["letter"]) && preg_match("/^[A-Za-z]|\[0-9\]$/", $_GET["letter"]
 								print "<a href='login.php?r=".urlencode(curPageURL())."'>Log in</a> | ";
 							}
 						}
+						if ($name) {
+					    print "Welcome ".htmlentities($name)." &#160; | &#160; ";
+					  }
 					  foreach(array_keys($institutions) as $inst) {
 					  	if ($inst == $institution)
 					  		print "<strong>";

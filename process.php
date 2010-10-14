@@ -108,21 +108,21 @@ if (isset($_SESSION['AUTH'])) {
 			//update url in database
 			if ($code->getUrl() != $_POST['update_url']) {
 				$code->setUrl($_POST['update_url'], true);
-				$_SESSION['update_message'][] = "<p class='update_message_success'>The url was set to '".$_POST['update_url']."'.</p>";
+				$_SESSION['update_message'][] = "<p class='update_message_success'>The url was set to '".$_POST['update_url']."' for shortcut ".$_POST['code'].".</p>";
 			}
 			//update description in database
 			if ($code->getDescription() != $_POST['update_description']) {
 				$code->setDescription($_POST['update_description'], true);
-				$_SESSION['update_message'][] = "<p class='update_message_success'>The description was set to '".$_POST['update_description']."'.</p>";
+				$_SESSION['update_message'][] = "<p class='update_message_success'>The description was set to '".$_POST['update_description']."' for shortcut ".$_POST['code'].".</p>";
 			}
 			//update show in gotionary in database
 			if (isSuperAdmin($_SESSION['AUTH']->getId())) {
 				if ($code->getPublic() != $_POST['public']) {
 					$code->setPublic((bool) $_POST['public'], true);
 					if ($_POST['public']) {
-						$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'true'.</p>";
+						$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'true' for shortcut ".$_POST['code'].".</p>";
 					} else {
-						$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'false'.</p>";
+						$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'false' for shortcut ".$_POST['code'].".</p>";
 					}
 				}
 			}
