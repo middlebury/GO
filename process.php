@@ -23,10 +23,11 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 if (isset($_SESSION['AUTH'])) {
 	
 	// Is logged in user an admin?
-	$is_admin = isAdmin($_POST['code'], $_POST['institution']);
+	//$is_admin = isAdmin($_POST['code'], $_POST['institution']);
 
-	// This is only available if user is a superadmin or admin
-	if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
+	// This is only available to authenticated users
+	if (isset($_SESSION['AUTH'])) {
+	//if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
 		
 		// We have two submit buttons on the edit form (the one on the create for is still
 		// named "update" in order to trigger the same behavior as the button on edit).
@@ -115,12 +116,14 @@ if (isset($_SESSION['AUTH'])) {
 				$_SESSION['update_message'][] = "<p class='update_message_success'>The description was set to '".$_POST['update_description']."'.</p>";
 			}
 			//update show in gotionary in database
-			if ($code->getPublic() != $_POST['public']) {
-				$code->setPublic((bool) $_POST['public'], true);
-				if ($_POST['public']) {
-					$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'true'.</p>";
-				} else {
-					$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'false'.</p>";
+			if (isSuperAdmin($_SESSION['AUTH']->getId())) {
+				if ($code->getPublic() != $_POST['public']) {
+					$code->setPublic((bool) $_POST['public'], true);
+					if ($_POST['public']) {
+						$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'true'.</p>";
+					} else {
+						$_SESSION['update_message'][] = "<p class='update_message_success'>The publicity was set to 'false'.</p>";
+					}
 				}
 			}
 			

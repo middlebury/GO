@@ -51,10 +51,12 @@ if (isset($_SESSION['AUTH'])) {
 							Description<br />
 							<textarea class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_description'); } ?>" cols="50" rows="3" name="update_description"><?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_description']); } else { echo $code->getDescription(); } ?></textarea>
 						</p>
-						<p>
-							<input value="1" name="public" type="radio" <?php if($code->getPublic()) echo "checked=\"checked\""; ?> /> Show on GOtionary 
-							<input value="0" name="public" type="radio" <?php if(!$code->getPublic()) echo "checked=\"checked\""; ?> /> Hide from GOtionary
-						</p>
+						<?php if (!$code->getPublic() || isSuperAdmin($_SESSION['AUTH']->getId())) { ?>
+							<p>
+								<input value="1" name="public" type="radio" <?php if($code->getPublic()) echo "checked=\"checked\""; ?> /> Show on GOtionary
+								<input value="0" name="public" type="radio" <?php if(!$code->getPublic()) echo "checked=\"checked\""; ?> /> Hide from GOtionary
+							</p>
+						<?php } ?>
 						<h3>Aliases</h3>
 						<ul id="alias_list">
 						<?php

@@ -115,5 +115,5 @@ define("GO_ALERTS_EMAIL_ADDRESS", 'nobody@example.com');
 define("GO_ALERTS_EMAIL_NAME", 'example name');
 
 //takes 'all', 'authenticated', or 'superadmin'. Will allow anyone
-//only authenticated users, or only superadmins to view hidden codes respectively
-define("GO_SHOW_ALL_CODES_ACCESS", 'authenticated');
+//only authenticated users, or only superadmins to hide/show hidden codes respectively
+define("GO_SHOW_ALL_CODES_ACCESS", 'superadmin');
