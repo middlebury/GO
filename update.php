@@ -10,7 +10,7 @@ require_once "admin_nav.php";
 <script src="addremove.js" type="text/javascript"></script>
 <script src="md5.js" type="text/javascript"></script>
 <?php
-$code = new Code($_GET['code'], $_GET['institution']);
+$code = new Code(str_replace(' ', '+', $_GET['code']), $_GET['institution']);
 
 // This form should only be available to authenticated users 
 if (isset($_SESSION['AUTH'])) {
