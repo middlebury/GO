@@ -22,6 +22,7 @@ $session_pages = array(
 	"flag_clear.php",
 	"details.php",
 	"gotionary.php",
+	"gobacktionary.php",
 	"login.php",
 	"go_functions.php",
 	"process.php",
