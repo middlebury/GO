@@ -21,6 +21,13 @@ if (isset($_SESSION['AUTH'])) {
 	// This form is only available if user is a superadmin or admin
 	if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
 		
+		// Check to see if we're in the midst of editing this code
+		if (isset($_SESSION['form_values'])) {
+			if ($_SESSION['form_values']['this_code'] != $_GET['code']) {
+				unset($_SESSION['form_values']);
+			}
+		}
+		
 		?>
 		<div class="content">
 			<div id="response"></div>
