@@ -49,6 +49,11 @@ $(document).ready(function(){
 				if (value_to_add == existing_value) {
 					invalid_value = 1;
 				}
+				for (var i=0;i<value_to_add.length;i++) {
+					if (!value_to_add[i].match(/[A-Za-z0-9-_\?\/\.~\+%]/)) {
+						invalid_value = 1;
+					}
+				}
 			})
 			
 			// If the value IS valid
