@@ -64,8 +64,6 @@ if (isset($_SESSION["AUTH"])) {
 
 		<script type="text/javascript" src="https://web.middlebury.edu/development/tools/2d/JavaScript/StyleSwitcher.js"></script>
 
-		<script type="text/javascript" src="scripts.js"></script>
-
 		<!--[if IE]>
 		<link rel="stylesheet" media="screen" type="text/css" href="styles-ie.css" />
 		<![endif]-->
