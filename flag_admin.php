@@ -13,24 +13,27 @@ require_once "admin_nav.php";
 	<div id="response"></div>
 
 <?php
+
 //Create a table of codes so we know which
 //ones have been flagged and how many times
 
 try {
-	//Keep non-admins out of this page
+	//Keep non-superadmins out of this page
 	if (!isSuperAdmin()) {
 		die("You do not have permission to view this page");
 	}
 	//We want to know the code, the number of times flagged
-	//the destination, and any aliases
+	//the destination, any aliases, and any comments
   $select = $connection->prepare("
   SELECT
   	flag.code,
   		COUNT(flag.code) AS
   	num_flags,
   	aliases,
-  	code.url,
-  	code.institution
+  	flag.url,
+  	flag.institution,
+  	GROUP_CONCAT(comment SEPARATOR ', ') AS
+  		comment
   FROM
   	flag
   		LEFT JOIN
@@ -44,11 +47,7 @@ try {
   				code)
   		AS
   	grouped_alias
-  		ON flag.code = grouped_alias.code
-  		LEFT JOIN
-  	code
-  		ON flag.code = code.name
-  		AND flag.institution = code.institution 
+  		ON flag.code = grouped_alias.code 
   GROUP BY
   	code 
   ORDER BY
@@ -65,6 +64,7 @@ try {
   		<th># of Flags</th>
   		<th>Destination</th>
   		<th>Aliases</th>
+  		<th>Comment(s)</th>
   		<th>Actions</th>
   	</tr><?php
 		//Make each row
@@ -78,18 +78,21 @@ try {
   		<td><?php print "<a href='".$row['url']."'>".$row['url']."</a>";?></td>
   		<!-- the aliases -->
   		<td><?php print $row['aliases'];?></td>
+  		<td><?php print $row['comment'];?></td>
   		<!-- we want to be able to get additional info
   		or delete all flags for each code in the table -->
   		<td class='action_cells'>
   			<!-- the info button -->
-  			<?php print "\n\t\t<a href='flag_details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><button type='button'>Info</button></a>";?>
+  			<?php print "\n\t\t<a href='info.php?code=".$row['code']."'><input type='button' value='Info' /></a>"; ?>
+  			<!-- the history button -->
+  			<?php print "\n\t\t<a href='details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";?>
   			<!-- the clear button -->
-  			<form action='flag_clear.php' method='post'>
+  			<form action='flag_clear.php' method='post' id="flag_button_form">
   				<div>
+  					<input type='submit' value='Clear Flag(s)' />
   					<?php print "\n\t\t\t\t\t\t\t<input type='hidden' name='xsrfkey' value='".$_SESSION['xsrfkey']."' />";
   								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['code']."' name='code' />";
   								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['institution']."' name='institution' />";?>
-  					<input type='submit' value='Clear Flags' />
   				</div>
   			</form>
   		</td>

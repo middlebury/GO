@@ -1,6 +1,6 @@
 <?php
 
-//function to get IP address via client ip or x
+//copy pasted function to get IP address via client ip or x
 //forwarded first before falling back on remote addr
 function getRealIpAddr() {
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet
@@ -33,4 +33,43 @@ function curPageURL() {
 	$port = ($port) ? ':'.$_SERVER["SERVER_PORT"] : '';
 	$url = ($isHTTPS ? 'https://' : 'http://').$_SERVER["SERVER_NAME"].$port.$_SERVER["REQUEST_URI"];
 	return $url;
+}
+
+// Check to see if current user is admin of passed code
+function isAdmin($code, $institution) {
+	global $connection;
+	$is_admin = false;
+	// Find what users are admins of this code
+	$select =  $connection->prepare("
+  SELECT
+  	user
+  FROM
+  	user_to_code
+  WHERE
+  	code = ?
+  	AND
+  	institution = ?");
+  $select->bindValue(1, $code);
+  $select->bindValue(2, $institution);
+  $select->execute();
+  
+  // If authenticated user is admin of code then set $is_admin
+  foreach ($select->fetchAll() as $row) {
+		if ($row['user'] == $_SESSION['AUTH']->getId()) {
+			$is_admin = true;
+		}
+	}
+	return $is_admin;
+}
+// Check passed field type against error type and return
+// "failed_validation" (the class name that flags and 
+// field has having failed validation) if true. This
+// lets us add this to all fields to check if they are
+// in error or not
+function errorCase($error_type, $field_type) {
+	if ($error_type == $field_type) {
+		return 'failed_validation';
+	} else {
+		return '';
+	}
 }

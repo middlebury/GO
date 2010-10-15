@@ -34,11 +34,19 @@ p.gobacktionary_shortcut {
 
 /* Sytles for the Flag as Inappropriate feature */
 
-#already_flagged_message {
+#already_flagged_message,
+.update_message_success {
 width: 400px;
 padding: 8px;
 border: 1px solid green;
 background-color: lightgreen;
+}
+
+.update_message_failure {
+width: 400px;
+padding: 8px;
+border: 1px solid red;
+background-color: pink;
 }
 
 .flag_admin_table {
@@ -65,15 +73,27 @@ border-bottom: 1px solid #000;
 margin-left: 10px;
 }
 
+#flag_comment {
+width: 300px;
+}
+
+#flag_button_form {
+float: right;
+}
+
 /* make sure the anchor surrounding
 the "details" button is not being
-underlined */
-.action_cells a {
+underlined. Ditto with history
+button on the info page */
+.history_button,
+.action_cells a,
+.info_edit_button,
+.edit_button {
 text-decoration: none;
 }
 
 .action_cells {
-width: 138px;
+width: 220px;
 }
 
 .action_cells button {
@@ -83,3 +103,30 @@ float: left;
 .center {
 text-align: center;
 }
+
+.failed_validation {
+background-color: pink;
+border: 1px solid red;
+}
+
+/* My Codes */
+
+#my_codes_table {
+border-collapse: collapse;
+}
+
+#my_codes_table td,
+#my_codes_table th {
+max-width: 300px;
+border: solid #000 1px;
+padding: 1px 5px 1px 5px;
+}
+
+#my_codes_table th {
+background-color: #000;
+color: #fff;
+}
+
+/* #my_codes_table td.no_border {
+border: none;
+}*/

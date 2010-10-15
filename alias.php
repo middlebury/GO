@@ -171,7 +171,7 @@ class Alias {
 			throw new Exception(__METHOD__ . " expects parameter name to be a string; given " . $name);
 		}
 		
-		if (preg_match(Code::ALLOWED_CHARACTERS, $name) > 0) {
+		if (!Code::isValidCode($name)) {
 			throw new Exception(__METHOD__ . " expects parameter name to contain only A-Z, a-z, 0-9, ?, -, _, and / characters; given " . $name);
 		}
 		

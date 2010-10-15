@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 09, 2010 at 01:30 PM
+-- Generation Time: Oct 06, 2010 at 03:46 PM
 -- Server version: 5.0.77
 -- PHP Version: 5.2.12
 
@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `alias` (
 
 CREATE TABLE IF NOT EXISTS `code` (
   `name` varchar(255) NOT NULL default '',
-  `creator` varchar(128) NOT NULL default '0',
   `url` text,
   `description` text,
   `institution` varchar(255) NOT NULL default 'example.edu',
@@ -58,7 +57,8 @@ CREATE TABLE IF NOT EXISTS `flag` (
   `user` varchar(255) NOT NULL,
   `ipaddress` varchar(255) NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `institution` varchar(255) NOT NULL
+  `institution` varchar(255) NOT NULL,
+  `url` text
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
