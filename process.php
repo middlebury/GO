@@ -141,20 +141,20 @@ if (isset($_SESSION['AUTH'])) {
 					  FROM
   						alias
   					WHERE
-  						institution = '" . $_POST['institution'] . "'
+  						institution = ?
   					AND
-  						name = '" . $current_alias . "')
+  						name = ?)
   					UNION
   					(SELECT
   						name
   					FROM
   						code
   					WHERE
-  						institution = '" . $_POST['institution']. "'
+  						institution = ?
   					AND
-  						name = '" . $current_alias . "')
+  						name = ?)
   					");
-  				$select->execute();
+  				$select->execute(array($_POST['institution'], $current_alias, $_POST['institution'], $current_alias));
   				// If there are results then don't make the alias and set a message.
 					if(count($select->fetchAll())) {
 						$_SESSION['update_message'][] = "<p class='update_message_failure'>Alias ".$current_alias." already exists as an alias or shortcut name. Was not created as an alias of '".$code->getName()."'.</p>";
