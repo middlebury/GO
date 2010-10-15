@@ -51,10 +51,10 @@ if (isSuperAdmin($user->getName())) {
 			$current_aliases = implode(', ', $current_aliases);
 			print "<tr>
 				<td>
-					<a href='" . $code->getUrl() . "'>" . $code->getName() . "</a>
+					<a href='" . htmlspecialchars($code->getUrl()) . "'>" . $code->getName() . "</a>
 				</td>
 				<td>
-					" . $code->getDescription() . "
+					" . htmlspecialchars($code->getDescription()) . "
 				</td>
 				<td>
 					" . $current_aliases . "

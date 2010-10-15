@@ -30,7 +30,7 @@ if (isset($_SESSION['AUTH'])) {
 					<input type="hidden" name="xsrfkey" value="<?php print $_SESSION['xsrfkey'] ?>" />
 					<input type="hidden" name="code" value="<?php print $code->getName() ?>" />
 					<input type="hidden" name="institution" value="<?php print $code->getInstitution() ?>" />
-					<input type="hidden" name="url" value="<?php print urldecode($_GET['url']) ?>" />
+					<input type="hidden" name="url" value="<?php print htmlspecialchars(urldecode($_GET['url'])) ?>" />
 					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
 					
 					<?php

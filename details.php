@@ -89,7 +89,7 @@ try {
   			}
   		} else {
   			print "\n<tr>";
-  			print "\n<td colspan=5 class='center'>No results</td>";
+  			print "\n<td colspan='5' class='center'>No results</td>";
   			print "\n</tr>";
   		}
   	?>

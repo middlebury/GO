@@ -31,7 +31,7 @@ try {
 					<dt>Destination</dt>
 					<dd><?php
 						if (strlen($code->getUrl())) {
-							print '<a href="'.$code->getUrl().'">'.htmlentities($code->getUrl()).'</a>';
+							print '<a href="'.htmlspecialchars($code->getUrl()).'">'.htmlentities($code->getUrl()).'</a>';
 							if (!Code::isUrlValid($code->getUrl()))
 								print '<br/><span class="error">Error: This URL is not valid.</span>';
 						} else 
