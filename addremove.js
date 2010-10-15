@@ -42,17 +42,17 @@ $(document).ready(function(){
 			// a flag to be set if the input is not valid
 			var invalid_value = 0;
 			
+			if (value_to_add.match(/[^A-Za-z0-9-_\?\/\.~\+%]/)) {
+				alert('Invalid characters.');
+				return false;
+			}
+			
 			// Check to see if it's valid
 			// If the value is already in the list then it's invalid
 			$(ul_id + " li").each(function(){
 				var existing_value = $(this).text().replace(/(^[\s\xA0]+|[\s\xA0]+$)/g, '');
 				if (value_to_add == existing_value) {
 					invalid_value = 1;
-				}
-				for (var i=0;i<value_to_add.length;i++) {
-					if (!value_to_add[i].match(/[A-Za-z0-9-_\?\/\.~\+%]/)) {
-						invalid_value = 1;
-					}
 				}
 			})
 			
