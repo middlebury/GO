@@ -108,7 +108,7 @@ if (isset($_SESSION['AUTH'])) {
 			//update url in database
 			if ($code->getUrl() != $_POST['update_url']) {
 				$code->setUrl($_POST['update_url'], true);
-				$_SESSION['update_message'][] = "<p class='update_message_success'>The url was set to '".$_POST['update_url']."' for shortcut ".$_POST['code'].".</p>";
+				$_SESSION['update_message'][] = "<p class='update_message_success'>The url was set to '".htmlentities($_POST['update_url'])."' for shortcut ".$_POST['code'].".</p>";
 			}
 			//update description in database
 			if ($code->getDescription() != $_POST['update_description']) {
