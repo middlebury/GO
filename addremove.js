@@ -21,7 +21,7 @@ $(document).ready(function(){
 		$(ul_id + " li").each(function(){
 			// This var is how we identify each element, by its list name with its value
 			var current_value = $(this).text().replace(/(^[\s\xA0]+|[\s\xA0]+$)/g, '');
-			var unique_identifier = current_value + "_" + ul_id.slice(1);
+			var unique_identifier = hex_md5(current_value) + "_" + ul_id.slice(1);
 			// Give each list item this identifier
   		$(this).attr("class", unique_identifier);
 			// Bind a function to the Delete button that deletes
@@ -54,7 +54,7 @@ $(document).ready(function(){
 			// If the value IS valid
 			if (value_to_add.length > 0 & invalid_value != 1) {
 				// This var is how we identify each element, by its list name with its value
-				var unique_identifier = value_to_add + "_" + ul_id.slice(1);
+				var unique_identifier = hex_md5(value_to_add) + "_" + ul_id.slice(1);
 				// Create a new li with the new value and a unique identifier
 				$("<li class='"+ unique_identifier +"'>" + $(text_id).val() + " <input type='button' value='Delete' /></li>").appendTo(ul_id);
 				//Create a hidden input with the same
