@@ -9,10 +9,13 @@ require_once "go.php";
 //var_dump($_POST);
 //die();
 
-// add the results of $_POST to $_SESSION. We'll use
+// Add the results of $_POST to $_SESSION. We'll use
 // this to repopulate values in the form if it fails
 // validation
 $_SESSION['form_values'] = $_POST;
+// Add the current code to form values for our check to see if we're
+// still editing the same code or have switched to editing a different one
+$_SESSION['form_values']['this_code'] = $_POST['code'];
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
