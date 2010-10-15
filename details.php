@@ -83,7 +83,7 @@ try {
   				print "\n<tr>";
   				print "\n<td>".$row['tstamp']."</td>";
   				print "\n<td>".$row['alias']."</td>";
-  				print "\n<td>".$row['description']."</td>";
+  				print "\n<td>".htmlentities($row['description'])."</td>";
   				print "\n<td>".$row['user_display_name']."</td>";
   				print "\n</tr>";
   			}
