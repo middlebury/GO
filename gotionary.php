@@ -47,7 +47,7 @@ if (isset($_SESSION["AUTH"])) {
 						if (!isset($_SESSION["AUTH"])) {
 							if (AUTH_METHOD == 'cas') {
 								//must pass URL as url to cas to redirect back
-								print "<a href='login2.php?&amp;url=".urlencode(curPageURL()."&amp;destination=".curPageURL())."'>Log in</a> | ";
+								print "<a href='login2.php?&amp;url=".urlencode(curPageURL())."'>Log in</a> | ";
 							} else {
 								//must pass URL as r to ldap to redirect back
 								print "<a href='login.php?r=".urlencode(curPageURL())."'>Log in</a> | ";
