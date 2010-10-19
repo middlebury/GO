@@ -8,9 +8,6 @@
 							<li class="AspNet-Menu-Leaf">
 								<a href="my_codes.php">View / Update</a>
 							</li>
-							<li class="AspNet-Menu-Leaf">
-								<a href="notify.php">Notify</a>
-							</li>
 							<?php
 								if (isSuperAdmin()) {
 									print"\n<li class=\"AspNet-Menu-Leaf\">";
