@@ -83,7 +83,7 @@ try {
   		or delete all flags for each code in the table -->
   		<td class='action_cells'>
   			<!-- the info button -->
-  			<?php print "\n\t\t<a href='info.php?code=".$row['code']."'><input type='button' value='Info' /></a>"; ?>
+  			<?php print "\n\t\t<a href='info.php?code=".$row['code']."'><input onclick='window.location=\"info.php?code=".$row['code']."\"' type='button' value='Info' /></a>"; ?>
   			<!-- the history button -->
   			<?php print "\n\t\t<a href='details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";?>
   			<!-- the clear button -->

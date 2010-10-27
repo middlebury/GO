@@ -37,7 +37,7 @@ $(document).ready(function(){
 		// Do all this stuff when the "add" button is clicked
 		$(button_id).bind("click", function(){
 			// The value the user wants to add (trim it to ignore trailing/leading spaces)
-			var value_to_add = $(text_id).val().trim();
+			var value_to_add = $(text_id).val().replace(/(^[\s\xA0]+|[\s\xA0]+$)/g, '');
 			//alert(value_to_add.trim());
 			// a flag to be set if the input is not valid
 			var invalid_value = 0;
