@@ -79,28 +79,28 @@ class Code {
 	 *
 	 * @since 02-25-2009
 	 */
-	const ALLOWED_CHARACTERS = "/[A-Za-z0-9-_\?\/\.~\+%]/";
+	const ALLOWED_CODES = "/^[A-Za-z0-9-_\?\/\.~\+%]+$/";
 	
 	/**
 	 * Regular expression pattern to match allowed characters for urls.
 	 *
 	 * @since 10-07-2010
 	 */
-	const URL_ALLOWED_CHARACTERS = "/[A-Za-z0-9-_\?\/\.~\+%&=:; ]/";
+	const ALLOWED_URLS = "/^(http|ftp)s?:\/\/[A-Za-z0-9-_\?\/\.~\+%&=:;#@ ]+$/";
 	
 	/**
 	 * Regular expression pattern to match allowed characters for descriptions.
 	 *
 	 * @since 10-08-2010
 	 */
-	const DESC_ALLOWED_CHARACTERS = "/[A-Za-z0-9-_\?\/\.~\+%&=:; \(\)\[\]!@#\$\*'\",]/";
+	const ALLOWED_DESC = "/^[A-Za-z0-9-_\?\/\.~\+%&=:;\s\(\)\[\]!@#\$\*'\",]*$/";
 	
 	/**
 	 * Regular expression pattern to match allowed characters for descriptions.
 	 *
 	 * @since 10-08-2010
 	 */
-	const ADMIN_ALLOWED_CHARACTERS = "/[A-Za-z]/";
+	const ALLOWED_ADMIN = "/^[A-Za-z]+$/";
 	
 	/**
 	 * Answer true if name validates, false if not.
@@ -109,18 +109,14 @@ class Code {
 	 * @access public
 	 */
 	public static function isValidCode ($name) {
-		$validity = true;
 		// Codes shouldn't start with "go/"
-		if (preg_match('/^go\//', $name)) {
-			$validity = false;
-		}
-		// Codes may only contain allowed characters
-		for($i=0;$i < strlen($name);$i++) {
-			if (!preg_match(Code::ALLOWED_CHARACTERS, $name[$i])) {
-			$validity = false;
-			}
-		}
-		return $validity;
+		if (preg_match('/^go\//', $name))
+			return false;
+
+		if (!preg_match(Code::ALLOWED_CODES, $name))
+			return false;
+
+		return true;
 	}
 	
 	/**
@@ -130,16 +126,7 @@ class Code {
 	 * @access public
 	 */
 	public static function isValidUrl ($name) {
-		$validity = true;
-		if (!preg_match('/^http:\/\//', $name) && !preg_match('/^https:\/\//', $name)) {
-			$validity = false;
-		}
-		for($i=0;$i < strlen($name);$i++) {
-			if (!preg_match(Code::URL_ALLOWED_CHARACTERS, $name[$i])) {
-			$validity = false;
-			}
-		}
-		return $validity;
+		return preg_match(Code::ALLOWED_URLS, $name);
 	}
 	
 	/**
@@ -149,13 +136,8 @@ class Code {
 	 * @access public
 	 */
 	public static function isValidDescription ($name) {
-		$validity = true;
-		for($i=0;$i < strlen($name);$i++) {
-			if (!preg_match(Code::DESC_ALLOWED_CHARACTERS, $name[$i])) {
-			$validity = false;
-			}
-		}	
-		return $validity;
+		return preg_match(Code::ALLOWED_DESC, $name);
+
 	}
 	
 	/**
@@ -165,13 +147,7 @@ class Code {
 	 * @access public
 	 */
 	public static function isValidAdmin ($name) {
-		$validity = true;
-		for($i=0;$i < strlen($name);$i++) {
-			if (!preg_match(Code::ADMIN_ALLOWED_CHARACTERS, $name[$i])) {
-			$validity = false;
-			}
-		}	
-		return $validity;
+		return preg_match(Code::ALLOWED_ADMIN, $name);
 	}
 		
 	/**
