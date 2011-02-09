@@ -14,6 +14,7 @@ require_once "admin_nav.php";
 </ul>
 <p><b>NOTE</b>: We reserve the right to remove any shortcuts deemed inappropriate. We may also need to
 re-appropriate a shortcut for a critical need of the College, but we will contact you in this event.</p>
+<p>Also is no longer possible to hide GO links. GO by its nature is a public application and shortcuts in GO are publicly accessible whether they are "hidden" or not. If you feel you have a legitimate reason to hide GO links from the Gotionary and you are concerned about this please feel free to contact <a href="mailto:go@middlebury.edu">go@middlebury.edu</a>.</p>
 <h2>GO needs your help!</h2>
 <p>There are several thousand existing GO shortcuts with noone to take care of them! If you requested one 
 of these, or believe that you are the best person to manage the shortcut, let us know by emailing 
