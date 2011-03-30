@@ -14,6 +14,11 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
+// Add the results of $_POST to $_SESSION. We'll use
+		// this to repopulate values in the form if it fails
+		// validation
+		$_SESSION['form_values'] = $_POST;
+
 //recatcha stuff
 if (!isset($_SESSION['AUTH'])) {
 	require_once('recaptcha/recaptchalib.php');
@@ -25,11 +30,6 @@ if (!isset($_SESSION['AUTH'])) {
 
 	// What happens when the CAPTCHA was entered incorrectly
 	if (!$resp->is_valid) {
-
-  	// Add the results of $_POST to $_SESSION. We'll use
-		// this to repopulate values in the form if it fails
-		// validation
-		$_SESSION['form_values'] = $_POST;
 
 		$_SESSION['update_message'][] = "<p class='update_message_failure'>The reCAPTCHA wasn't entered correctly. (reCAPTCHA said: " . $resp->error . ").</p>";
 		die(header("location: info.php?code=".$_POST['code']));
