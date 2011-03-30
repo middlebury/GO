@@ -59,8 +59,10 @@ CREATE TABLE IF NOT EXISTS `flag` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `institution` varchar(255) NOT NULL,
   `url` text,
-  `comment` text
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `comment` text,
+  `completed` varchar(255) NOT NULL default '0',
+  `completed_on` datetime NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 

@@ -68,6 +68,7 @@ try {
 				<form action="flag.php" method="post">
 
 					<?php
+					
 					//we assume the current code has not been flagged
 					$current_code_flagged = false;
 					//check to see if the current code has been flagged
@@ -110,14 +111,26 @@ try {
 						print '<input type="hidden" name="url" value="'. htmlentities($code->getUrl()) .'" />';
 						
 						print '<input type="submit" id="flag_inappropriate" value="Flag as Inappropriate" />';
+						
 						if (isset($_SESSION['comment_required'])) {
-							print ' Reason: <input type="text" id="flag_comment" name="flag_comment" class="failed_validation" />';
+							//handle the "reason" field if it failed validation
+							?>
+							Reason: <input type="text" id="flag_comment" name="flag_comment" class="failed_validation" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['flag_comment']); } ?>"/>
+							<?php
 							unset($_SESSION['comment_required']);
 						} else {
-							print ' Reason: <input type="text" id="flag_comment" name="flag_comment" />';
+							//handle the "reason" field normally
+							?>
+							Reason: <input type="text" id="flag_comment" name="flag_comment" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['flag_comment']); } ?>"/>
+							<?php
 						}
+						//include captcha
+						require_once('recaptcha/recaptchalib.php');
+          	$publickey = RECAPTCHA_PUBLIC; // you got this from the signup page
+						echo recaptcha_get_html($publickey);
 					}
 					
+					//superadimin stuff
 					if (isset($_SESSION['AUTH'])) {
 						if (isSuperAdmin($_SESSION['AUTH']->getId())) {
 					 		print "<p>Admin:<br /><a class='history_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Show History' /></a>";

@@ -34,6 +34,27 @@ p.gobacktionary_shortcut {
 
 /* Sytles for the Flag as Inappropriate feature */
 
+.flag_admin_table.completed td {
+border-right: 1px solid #AAA;
+border-bottom: 1px solid #AAA;
+}
+
+.flag_admin_table.completed th {
+background-color: #AAA;
+}
+
+.flag_admin_table.completed a {
+color: #AAA;
+}
+
+.flag_admin_table.completed {
+border: 1px solid #AAA;
+}
+
+.completed {
+color: #AAA;
+}
+
 #already_flagged_message,
 .update_message_success {
 width: 400px;
@@ -93,7 +114,11 @@ text-decoration: none;
 }
 
 .action_cells {
-width: 220px;
+width: 200px;
+}
+
+.completed .action_cells {
+width: 115px;
 }
 
 .action_cells button {

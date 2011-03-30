@@ -14,6 +14,34 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
+//recatcha stuff
+require_once('recaptcha/recaptchalib.php');
+$privatekey = RECAPTCHA_PRIVATE;
+$resp = recaptcha_check_answer ($privatekey,
+                                $_SERVER["REMOTE_ADDR"],
+                                $_POST["recaptcha_challenge_field"],
+                                $_POST["recaptcha_response_field"]);
+
+// What happens when the CAPTCHA was entered incorrectly
+if (!$resp->is_valid) {
+
+  // Add the results of $_POST to $_SESSION. We'll use
+	// this to repopulate values in the form if it fails
+	// validation
+	$_SESSION['form_values'] = $_POST;
+
+	$_SESSION['update_message'][] = "<p class='update_message_failure'>The reCAPTCHA wasn't entered correctly. (reCAPTCHA said: " . $resp->error . ").</p>";
+		die(header("location: info.php?code=".$_POST['code']));
+}
+
+//validation of reason field
+if (!Code::isValidDescription($_POST['flag_comment'])) {
+			$_SESSION['update_message'][] = "<p class='update_message_failure'>The reason you entered contains invalid characters. The characters allowed are letters, numbers, and common puntcuation. Please make adjustments and try again.</p>";
+			$_SESSION['comment_required'] = true; //appropriating this to trigger failed validation state
+			// Redirect to originating location
+			die(header("location: info.php?code=".$_POST['code']));
+		}
+
 // Comment is a required field if submitting a flag. If it's not
 // filled in, set a session var, stop executing, and return to the
 // info page.
@@ -98,6 +126,8 @@ try {
 } catch (Exception $e) {
 	throw $e;
 }
+
+unset($_SESSION['form_values']);
 
 //redirect on completion
 header("location: info.php?code=".$_POST['code']);

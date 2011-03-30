@@ -22,6 +22,7 @@ try {
 	if (!isSuperAdmin()) {
 		die("You do not have permission to view this page");
 	}
+	
 	//We want to know the code, the number of times flagged
 	//the destination, any aliases, and any comments
   $select = $connection->prepare("
@@ -48,14 +49,57 @@ try {
   		AS
   	grouped_alias
   		ON flag.code = grouped_alias.code 
+ 	WHERE
+ 		completed = '0'
   GROUP BY
   	code 
   ORDER BY
   	num_flags
   DESC;");
   $select->execute();
-
+	
+	//We want to know the code, the number of times flagged
+	//the destination, any aliases, and any comments
+  $select2 = $connection->prepare("
+  SELECT
+  	flag.code,
+  		COUNT(flag.code) AS
+  	num_flags,
+  	aliases,
+  	flag.url,
+  	flag.institution,
+  	flag.completed,
+  	flag.completed_on,
+  	GROUP_CONCAT(comment SEPARATOR ', ') AS
+  		comment
+  FROM
+  	flag
+  		LEFT JOIN
+  			(SELECT
+  				code,
+  					GROUP_CONCAT(name SEPARATOR ', ') AS
+  				aliases
+  			FROM
+  				alias
+  			GROUP BY
+  				code)
+  		AS
+  	grouped_alias
+  		ON flag.code = grouped_alias.code 
+ 	WHERE
+ 		completed != '0'
+  GROUP BY
+  	code 
+  ORDER BY
+  	flag.completed_on
+  DESC
+  LIMIT
+  	20;");
+  $select2->execute();
+	
   ?>
+	
+	<p>Flags in need of moderation</p>
 	
 	<!-- Here is the table -->
   <table class="flag_admin_table">
@@ -67,8 +111,12 @@ try {
   		<th>Comment(s)</th>
   		<th>Actions</th>
   	</tr><?php
+  	$results = $select->fetchAll();
+  	if ($results == array()) {
+				print "<td colspan='6' style='text-align: center;'>None</td>";
+		}
 		//Make each row
-  	foreach ($select->fetchAll() as $row) {?>
+  	foreach ($results as $row) {?>
   	<tr>
   		<!-- the code -->
   		<td><?php print"<a href='info.php?code=".$row['code']."'>".$row['code']."</a>";?></td>
@@ -89,7 +137,7 @@ try {
   			<!-- the clear button -->
   			<form action='flag_clear.php' method='post' id="flag_button_form">
   				<div>
-  					<input type='submit' value='Clear Flag(s)' />
+  					<input type='submit' value='Complete' />
   					<?php print "\n\t\t\t\t\t\t\t<input type='hidden' name='xsrfkey' value='".$_SESSION['xsrfkey']."' />";
   								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['code']."' name='code' />";
   								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['institution']."' name='institution' />";?>
@@ -99,6 +147,46 @@ try {
   	</tr>
   <?php } /*end foreach ($select->fetchAll() as $row) { */ ?>
   </table>
+  
+  <p class="completed" >Completed Flags</p>
+  
+  <table class="flag_admin_table completed">
+  	<tr>
+  		<th>Code</th>
+  		<th># of Flags</th>
+  		<th>Destination</th>
+  		<th>Aliases</th>
+  		<th>Comment(s)</th>
+  		<th>Completed By</th>
+  		<th>On</th>
+  		<th>Actions</th>
+  	</tr><?php
+		//Make each row
+  	foreach ($select2->fetchAll() as $row) {?>
+  	<tr>
+  		<!-- the code -->
+  		<td><?php print"<a href='info.php?code=".$row['code']."'>".$row['code']."</a>";?></td>
+  		<!-- the # of flags -->
+  		<td><?php print $row['num_flags'];?></td>
+  		<!-- the URL -->
+  		<td><?php print "<a href='".$row['url']."'>".$row['url']."</a>";?></td>
+  		<!-- the aliases -->
+  		<td><?php print $row['aliases'];?></td>
+  		<td><?php print $row['comment'];?></td>
+  		<td><?php print $row['completed'];?></td>
+  		<td><?php print $row['completed_on'];?></td>
+  		<!-- we want to be able to get additional info
+  		or delete all flags for each code in the table -->
+  		<td class='action_cells'>
+  			<!-- the info button -->
+  			<?php print "\n\t\t<a href='info.php?code=".$row['code']."'><input onclick='window.location=\"info.php?code=".$row['code']."\"' type='button' value='Info' /></a>"; ?>
+  			<!-- the history button -->
+  			<?php print "\n\t\t<a href='details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";?>
+  		</td>
+  	</tr>
+  <?php } /*end foreach ($select->fetchAll() as $row) { */ ?>
+  </table>
+  
   <?php //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;

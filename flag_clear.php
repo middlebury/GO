@@ -16,12 +16,16 @@ if (!isSuperAdmin()) {
 	}
 
 try {
-	//get the statement object for this select statement
-	$delete = $connection->prepare("DELETE FROM flag WHERE code = ? AND institution = ?");
-  $delete->bindValue(1, $_POST['code']);
-  $delete->bindValue(2, $_POST['institution']);
-	$delete->execute();
-	Go::log("Flag as inappropriate flag was cleared", $_POST['code']);
+	//get the statement object for this update statement
+	//set who completed the flag and when it was completed
+	$update = $connection->prepare("UPDATE flag SET completed = ?, completed_on = NOW() WHERE code = ? AND institution = ? AND completed = '0'");
+	$update->bindValue(1, $_SESSION["AUTH"]->getName());
+  $update->bindValue(2, $_POST['code']);
+  $update->bindValue(3, $_POST['institution']);
+	$update->execute();
+	
+	//log completion
+	Go::log("Flag as inappropriate flag was completed", $_POST['code']);
 //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;
