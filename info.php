@@ -125,9 +125,11 @@ try {
 							<?php
 						}
 						//include captcha
-						require_once('recaptcha/recaptchalib.php');
-          	$publickey = RECAPTCHA_PUBLIC; // you got this from the signup page
-						echo recaptcha_get_html($publickey);
+						if (!isset($_SESSION['AUTH'])) {
+							require_once('recaptcha/recaptchalib.php');
+          		$publickey = RECAPTCHA_PUBLIC; // you got this from the signup page
+							echo recaptcha_get_html($publickey);
+						}
 					}
 					
 					//superadimin stuff
