@@ -51,11 +51,11 @@ try {
   $mime = new Mail_mime;
   if (isset($_SESSION["AUTH"])) {
     $text = 'The flagged GO code (aka. link) "'.$_POST["code"].'" was completed by '.$_SESSION["AUTH"]->getName().'. History may be viewed via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
-
-- The GO application';
+    
+    '.$_SESSION["AUTH"]->getName().'\'s notes: '.$_POST['notes'];
 	  $html = 'The flagged GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was completed by '.$_SESSION["AUTH"]->getName().'. History may be viewed via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
-
-- The GO application';	
+	  
+	  '.$_SESSION["AUTH"]->getName().'\'s notes: '.$_POST['notes'];	
 	}
 	$mime->setTXTBody($text);
 	$mime->setHTMLBody($html);
