@@ -83,6 +83,10 @@ global $institutions;
 							<input value="1" name="public" type="radio" checked="checked" /> Show on GOtionary 
 							<input value="0" name="public" type="radio" /> Hide from GOtionary
 						</p>
+						<p>
+							<input value="0" name="unsearchable" type="radio" checked="checked" /> Searchable on website 
+							<input value="1" name="unsearchable" type="radio" /> Unsearchable on webiste
+						</p>
 						<?php } ?>
 						
 						<!-- ADD ALIASES -->

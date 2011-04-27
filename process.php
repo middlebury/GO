@@ -129,6 +129,17 @@ if (isset($_SESSION['AUTH'])) {
 					}
 				}
 			}
+			//update unsearchable on main site in database
+			if (isSuperAdmin($_SESSION['AUTH']->getId())) {
+				if ($code->getUnsearchable() != $_POST['unsearchable']) {
+					$code->setUnsearchable((bool) $_POST['unsearchable'], true);
+					if ($_POST['unsearchable']) {
+						$_SESSION['update_message'][] = "<p class='update_message_success'>The searchability was set to 'false' for shortcut ".$_POST['code'].".</p>";
+					} else {
+						$_SESSION['update_message'][] = "<p class='update_message_success'>The searchability was set to 'true' for shortcut ".$_POST['code'].".</p>";
+					}
+				}
+			}
 			
 			// ADD ALIAS STUFF
 			

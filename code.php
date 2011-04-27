@@ -196,6 +196,15 @@ class Code {
 	protected $public;
 	
 	/**
+	 * Whether or not the code is searchable on the main website.
+	 * 
+	 * @access protected
+	 * @since 04-06-2009
+	 * @var bool Whether or not the code is searchable on the main website.
+	 */
+	protected $unsearchable;
+	
+	/**
 	 * An array of {@link User}s that have access to this code.
 	 * 
 	 * @access protected
@@ -229,7 +238,7 @@ class Code {
 		global $connection;
 		
 		try {
-			$select = $connection->prepare("SELECT name, institution, url, description, public FROM code WHERE name = :name AND institution = :institution");
+			$select = $connection->prepare("SELECT name, institution, url, description, public, unsearchable FROM code WHERE name = :name AND institution = :institution");
 			$select->bindValue(":name", $name);
 			$select->bindValue(":institution", $institution);
 			$select->execute();
@@ -255,6 +264,7 @@ class Code {
 				$this->setUrl((!is_null($row->url) ? $row->url : ""));
 				$this->setDescription((!is_null($row->description) ? $row->description : ""));
 				$this->setPublic(($row->public == "1"));
+				$this->setUnsearchable(($row->unsearchable == "1"));
 			}
 		} catch (Exception $e) {
 			throw $e;
@@ -314,6 +324,16 @@ class Code {
 	 */
 	public function getPublic() {
 		return $this->public;
+	}
+	
+	/**
+	 * Get whether the code is not searchable on the main website.
+	 * 
+	 * @access public
+	 * @return bool Whether the code is not searchable on the main website
+	 */
+	public function getUnsearchable() {
+		return $this->unsearchable;
 	}
 	
 	/**
@@ -673,6 +693,45 @@ class Code {
 		}
 		
 		$this->public = $public;
+	}
+	
+	/**
+	 * Set whether this code is not searchable on the main website.
+	 *
+	 * @access public
+	 * @param bool $unsearchable Whether this code is not searchable on the main website.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 04-06-2009
+	 * @throws Exception if parameter $unsearchable is not a boolean.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setUnsearchable($unsearchable, $save = false) {
+		if (!is_bool($unsearchable)) {
+			throw new Exception(__METHOD__ . " expects parameter unsearchable to be a bool; given " . $unsearchable);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if ($save && $unsearchable != $this->unsearchable) {
+			global $connection;
+			
+			try {
+				$update = $connection->prepare("UPDATE code SET unsearchable = :unsearchable WHERE name = :name AND institution = :institution");
+				$update->bindValue(":unsearchable", ($unsearchable ? "1" : "0"));
+				$update->bindValue(":name", $this->name);
+				$update->bindValue(":institution", $this->institution);
+				$update->execute();
+				
+				Go::log("Updated code unsearchablity to '".($unsearchable ? "1" : "0")."' via Code::setUnsearchable().", $this->name, $this->institution);
+			} catch(Exception $e) {
+				throw $e;
+			}
+		}
+		
+		$this->unsearchable = $unsearchable;
 	}
 	
 	/**
