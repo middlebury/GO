@@ -167,7 +167,7 @@ class User {
 		global $connection;
 		
 		try {
-			$select = $connection->prepare("SELECT code, institution FROM user_to_code WHERE user = :name");
+			$select = $connection->prepare("SELECT code, institution FROM user_to_code WHERE user = :name ORDER BY code ASC");
 			$select->bindValue(":name", $this->name);
 			$select->execute();
 			
