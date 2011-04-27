@@ -14,6 +14,15 @@ require_once "admin_nav.php";
 
 <?php
 
+// If an update message was set prior to a redirect
+// to this page display it and clear the message.
+if (isset($_SESSION['update_message'])) {
+	foreach ($_SESSION['update_message'] as $message) {
+		print $message;
+	}
+	unset($_SESSION['update_message']);
+}
+
 //Create a table of codes so we know which
 //ones have been flagged and how many times
 
@@ -70,6 +79,7 @@ try {
   	flag.institution,
   	flag.completed,
   	flag.completed_on,
+  	flag.notes,
   	GROUP_CONCAT(comment SEPARATOR ', ') AS
   		comment
   FROM
@@ -130,18 +140,19 @@ try {
   		<!-- we want to be able to get additional info
   		or delete all flags for each code in the table -->
   		<td class='action_cells'>
+  		  <form action='flag_clear.php' method='post' id="flag_button_form">
   			<!-- the info button -->
   			<?php print "\n\t\t<a href='info.php?code=".$row['code']."'><input onclick='window.location=\"info.php?code=".$row['code']."\"' type='button' value='Info' /></a>"; ?>
   			<!-- the history button -->
   			<?php print "\n\t\t<a href='details.php?code=".$row['code']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";?>
   			<!-- the clear button -->
-  			<form action='flag_clear.php' method='post' id="flag_button_form">
-  				<div>
   					<input type='submit' value='Complete' />
   					<?php print "\n\t\t\t\t\t\t\t<input type='hidden' name='xsrfkey' value='".$_SESSION['xsrfkey']."' />";
   								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['code']."' name='code' />";
   								print "\n\t\t\t\t\t\t\t<input type='hidden' value='".$row['institution']."' name='institution' />";?>
-  				</div>
+  					<br />
+            Notes:<br />
+            <textarea name='notes'/></textarea>
   			</form>
   		</td>
   	</tr>
@@ -156,7 +167,7 @@ try {
   		<th># of Flags</th>
   		<th>Destination</th>
   		<th>Aliases</th>
-  		<th>Comment(s)</th>
+  		<th>Notes</th>
   		<th>Completed By</th>
   		<th>On</th>
   		<th>Actions</th>
@@ -172,7 +183,7 @@ try {
   		<td><?php print "<a href='".$row['url']."'>".$row['url']."</a>";?></td>
   		<!-- the aliases -->
   		<td><?php print $row['aliases'];?></td>
-  		<td><?php print $row['comment'];?></td>
+  		<td><?php print $row['notes'];?></td>
   		<td><?php print $row['completed'];?></td>
   		<td><?php print $row['completed_on'];?></td>
   		<!-- we want to be able to get additional info

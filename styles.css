@@ -102,6 +102,10 @@ width: 300px;
 float: right;
 }
 
+#flag_button_form input {
+float: left;
+}
+
 /* make sure the anchor surrounding
 the "details" button is not being
 underlined. Ditto with history

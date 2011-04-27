@@ -14,6 +14,13 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
+//validation of reason field
+if (!Code::isValidDescription($_POST['notes'])) {
+			$_SESSION['update_message'][] = "<p class='update_message_failure'>The notes you entered contain invalid characters. The characters allowed are letters, numbers, and common puntcuation. Please make adjustments and try again.</p>";
+			// Redirect to originating location
+			die(header("location: flag_admin.php"));
+}
+
 // This script should only run for superadmins
 if (!isSuperAdmin()) {
 		die("You do not have permission to view this page");
@@ -22,12 +29,13 @@ if (!isSuperAdmin()) {
 try {
 	//get the statement object for this update statement
 	//set who completed the flag and when it was completed
-	$update = $connection->prepare("UPDATE flag SET completed = ?, completed_on = NOW() WHERE code = ? AND institution = ? AND completed = '0'");
+	$update = $connection->prepare("UPDATE flag SET completed = ?, completed_on = NOW(), notes = ? WHERE code = ? AND institution = ? AND completed = '0'");
 	$update->bindValue(1, $_SESSION["AUTH"]->getName());
-  $update->bindValue(2, $_POST['code']);
-  $update->bindValue(3, $_POST['institution']);
+	$update->bindValue(2, $_POST['notes']);
+  $update->bindValue(3, $_POST['code']);
+  $update->bindValue(4, $_POST['institution']);
 	$update->execute();
-	
+		
 	//log completion
 	Go::log("Flag as inappropriate flag was completed", $_POST['code']);
 	
