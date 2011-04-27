@@ -32,6 +32,7 @@ try {
   		<tr>
   			<th>Code</th>
   			<th>User</th>
+  			<th>Comment</th>
   			<th>IP Address</th>
   			<th>Timestamp</th>
   		</tr>
@@ -48,6 +49,7 @@ try {
   			} else {
   				print "\n<td></td>";
   			}
+  			print "\n<td>".$row['comment']."</td>";
   			print "\n<td>".$row['ipaddress']."</td>";
   			print "\n<td>".$row['timestamp']."</td>";
   			print "\n</tr>";
