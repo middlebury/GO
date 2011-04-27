@@ -90,6 +90,9 @@ try {
   //finally execute the statement
   $insert->execute();
   
+  //log completion
+	Go::log("Flag as inappropriate flag was created", $_POST['code']);
+  
   //send mail to each go superadmin indicating that this 
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
