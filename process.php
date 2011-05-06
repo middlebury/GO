@@ -52,6 +52,16 @@ if (isset($_SESSION['AUTH'])) {
 			// Redirect to originating location
 			die(header("location: " . $_POST['form_url']));
 		}
+		if (Alias::exists($_POST['code'], $_POST['institution'])) {
+		  $_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make is already an alias of another code.</p>";
+		  // This tells us the ID of the field that is in error
+			// if this validation fails. Used to change the class
+			// of the failed field when redirected back to the
+			// original form
+			$_SESSION['field_id_in_error'] = 'code';
+			// Redirect to originating location
+			die(header("location: " . $_POST['form_url']));
+		}
 		if (!Code::isValidUrl($_POST['update_url'])) {
 			$_SESSION['update_message'][] = "<p class='update_message_failure'>The URL you are trying to set (".$_POST['update_url'].") is not valid. Please enter a properly formed URL.</p>";
 			$_SESSION['field_id_in_error'] = 'update_url';
