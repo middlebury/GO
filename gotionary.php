@@ -203,7 +203,7 @@ if (isset($_SESSION["AUTH"])) {
 <?php
 
 global $connection;
-
+ 
 $where = "name LIKE '{$letter}%'";
 if ($letter == "[0-9]") {
 	$where = "(name LIKE '0%' OR name LIKE '1%' OR name LIKE '2%' OR name LIKE '3%' OR name LIKE '4%' OR name LIKE '5%' OR name LIKE '6%' OR name LIKE '7%' OR name LIKE '8%' OR name LIKE '9%')";
@@ -231,7 +231,11 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	else
 		$line .= "<img src='icons/alert.png' alt='alert'/>";	
 	$line .= "</a> &nbsp; &nbsp; ";	
-	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	if (!preg_match('#middlebury.edu#',$row->url) && !preg_match('#miis.edu#',$row->url)) {
+		$line .= "<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	} else {
+		$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	}
 
 	if($row->description != "") {
 		$line .= " - ".htmlentities($row->description);
@@ -262,7 +266,11 @@ while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	else
 		$line .= "<img src='icons/alert.png' alt='alert'/>";	
 	$line .= "</a> &nbsp; &nbsp; ";
-	$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	if (!preg_match('#middlebury.edu#',$row->url) && !preg_match('#miis.edu#',$row->url)) {
+		$line .= "<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	} else {
+		$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	}
 
 	if($row->description != "") {
 		$line .= " - ".htmlentities($row->description);

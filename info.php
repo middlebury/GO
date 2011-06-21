@@ -31,7 +31,11 @@ try {
 					<dt>Destination</dt>
 					<dd><?php
 						if (strlen($code->getUrl())) {
-							print '<a href="'.htmlspecialchars($code->getUrl()).'">'.htmlentities($code->getUrl()).'</a>';
+							if (!preg_match('#middlebury.edu#',$code->getUrl()) && !preg_match('#miis.edu#',$code->getUrl())) {
+								print '<a class="external" rel="nofollow" href="'.htmlspecialchars($code->getUrl()).'">'.htmlentities($code->getUrl()).'</a>';
+							} else {
+								print '<a href="'.htmlspecialchars($code->getUrl()).'">'.htmlentities($code->getUrl()).'</a>';
+							}
 							if (!Code::isUrlValid($code->getUrl()))
 								print '<br/><span class="error">Error: This URL is not valid.</span>';
 						} else 

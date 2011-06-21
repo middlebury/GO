@@ -159,3 +159,12 @@ color: #fff;
 /* #my_codes_table td.no_border {
 border: none;
 }*/
+
+/* External Links */
+
+.external {
+background-image: url('external.png');
+background-repeat: no-repeat;
+padding-right: 15px;
+background-position: right;
+}

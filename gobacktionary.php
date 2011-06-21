@@ -207,7 +207,12 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 
     print htmlentities($row->description);
     
-    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+    if (!preg_match('#middlebury.edu#',$row->url) && !preg_match('#miis.edu#',$row->url)) {
+		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	} else {
+		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+	}
+    
   }
   
   if ($row->alias) {
