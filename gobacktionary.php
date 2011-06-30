@@ -206,8 +206,16 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
     print "</p>\n<p class='gobacktionary_shortcut'>";
 
     print htmlentities($row->description);
-    
-    if (!preg_match('#middlebury.edu#',$row->url) && !preg_match('#miis.edu#',$row->url)) {
+  
+  //add rel=nofollow and extrnal class to external links
+	$host_url = parse_url($row->url, PHP_URL_HOST);
+	$internal_host = false;  
+	foreach ($internal_hosts as $host) {
+		if (preg_match($host, $host_url)) {
+			$internal_host = true;
+		}
+	}
+	if (!$internal_host) {
 		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
 	} else {
 		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";

@@ -31,7 +31,14 @@ try {
 					<dt>Destination</dt>
 					<dd><?php
 						if (strlen($code->getUrl())) {
-							if (!preg_match('#middlebury.edu#',$code->getUrl()) && !preg_match('#miis.edu#',$code->getUrl())) {
+							$host_url = parse_url($code->getUrl(), PHP_URL_HOST);
+							$internal_host = false;  
+							foreach ($internal_hosts as $host) {
+								if (preg_match($host, $host_url)) {
+									$internal_host = true;
+								}
+							}
+							if (!$internal_host) {
 								print '<a class="external" rel="nofollow" href="'.htmlspecialchars($code->getUrl()).'">'.htmlentities($code->getUrl()).'</a>';
 							} else {
 								print '<a href="'.htmlspecialchars($code->getUrl()).'">'.htmlentities($code->getUrl()).'</a>';

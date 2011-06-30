@@ -124,3 +124,8 @@ define("GO_SHOW_ALL_CODES_ACCESS", 'superadmin');
 //public and private recaptcha keys go here
 define("RECAPTCHA_PUBLIC", '');
 define("RECAPTCHA_PRIVATE", '');
+
+//array of regex for internal hosts ending with, other hosts will be dealt with as external
+$internal_hosts = array(
+	'#example.edu$#',
+);

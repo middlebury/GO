@@ -230,8 +230,16 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 		$line .= "<img src='icons/info.png' alt='info'/>";	
 	else
 		$line .= "<img src='icons/alert.png' alt='alert'/>";	
-	$line .= "</a> &nbsp; &nbsp; ";	
-	if (!preg_match('#middlebury.edu#',$row->url) && !preg_match('#miis.edu#',$row->url)) {
+	$line .= "</a> &nbsp; &nbsp; ";
+	//add rel=nofollow and extrnal class to external links
+	$host_url = parse_url($row->url, PHP_URL_HOST);
+	$internal_host = false;
+	foreach ($internal_hosts as $host) {
+		if (preg_match($host, $host_url)) {
+			$internal_host = true;
+		}
+	}
+	if (!$internal_host) {
 		$line .= "<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
 	} else {
 		$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
@@ -257,7 +265,6 @@ else {
 }
 $alias->bindValue(":institution", $institution);
 $alias->execute();
-
 while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
 	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
@@ -266,7 +273,15 @@ while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	else
 		$line .= "<img src='icons/alert.png' alt='alert'/>";	
 	$line .= "</a> &nbsp; &nbsp; ";
-	if (!preg_match('#middlebury.edu#',$row->url) && !preg_match('#miis.edu#',$row->url)) {
+	//add rel=nofollow and extrnal class to external links
+	$host_url = parse_url($row->url, PHP_URL_HOST);
+	$internal_host = false;
+	foreach ($internal_hosts as $host) {
+		if (preg_match($host, $host_url)) {
+			$internal_host = true;
+		}
+	}
+	if (!$internal_host) {
 		$line .= "<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
 	} else {
 		$line .= "<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
