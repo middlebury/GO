@@ -135,6 +135,10 @@ try {
 							Reason: <input type="text" id="flag_comment" name="flag_comment" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['flag_comment']); } ?>"/>
 							<?php
 						}
+						
+						//Display QR code
+						print "<p><a href='qr.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."'>Display QR code</a></p>";
+						
 						//include captcha
 						if (!isset($_SESSION['AUTH'])) {
 							require_once('recaptcha/recaptchalib.php');
@@ -155,6 +159,7 @@ try {
 					</div>
 				</form>
 
-				<?php } catch (Exception $e) { print "<div
+				<?php 
+				} catch (Exception $e) { print "<div
 				class='error'>Error: ".htmlentities($e->getMessage())."</div>"; } ?>
 				</div> </div> </body> </html>
