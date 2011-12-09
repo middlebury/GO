@@ -27,7 +27,7 @@ try {
 	
 	<!-- this is our table of flags -->
 	<?php if (count($select->fetchAll())) { ?>
-  	<h2 class="flag_detail_header">Flags for this Code</h2>
+  	<h2 class="flag_detail_header">Flags for go/<?php print htmlentities($_GET["code"]); ?></h2>
   	<table class="flag_admin_table">
   		<tr>
   			<th>Code</th>
@@ -69,7 +69,7 @@ try {
   ?>
   	
   <!-- this is our table of logs -->
-  <h2 class="flag_detail_header">Logs for this Code</h2>
+  <h2 class="flag_detail_header">Logs for go/<?php print htmlentities($_GET["code"]); ?></h2>
   <table class="flag_admin_table">
   	<tr>
   		<th>Timestamp</th>
