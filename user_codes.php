@@ -42,6 +42,7 @@ try {
 			<tr>
 				<th>Go Shortcut</th>
 				<th>Aliases</th>
+				<th>URL</th>
 				<th>Description</th>
 				<th>Institution</th>
 				<th>Actions</th>
@@ -59,6 +60,9 @@ try {
 					</td>
 					<td>
 						" . $current_aliases . "
+					</td>
+					<td style='overflow: hidden'>
+						" . htmlspecialchars($code->getUrl()) . "
 					</td>
 					<td>
 						" . htmlspecialchars($code->getDescription()) . "
