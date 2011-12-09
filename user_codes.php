@@ -47,6 +47,7 @@ try {
 				<th>URL</th>
 				<th>Description</th>
 				<th>Institution</th>
+				<th>Last Updated</th>
 				<th>Actions</th>
 			</tr>";
 			foreach ($codes as $code) {
@@ -63,7 +64,7 @@ try {
 					<td>
 						" . $current_aliases . "
 					</td>
-					<td style='overflow: hidden'>
+					<td style='max-width: 200px; overflow: hidden'>
 						" . htmlspecialchars($code->getUrl()) . "
 					</td>
 					<td>
@@ -71,6 +72,9 @@ try {
 					</td>
 					<td>
 						" . $code->getInstitution() . "
+					</td>
+					<td>
+						" . $code->getLastUpdateDate() . "
 					</td>
 					<td>
 						";

@@ -238,7 +238,7 @@ class Code {
 		global $connection;
 		
 		try {
-			$select = $connection->prepare("SELECT name, institution, url, description, public, unsearchable FROM code WHERE name = :name AND institution = :institution");
+			$select = $connection->prepare("SELECT name, institution, url, description, public, unsearchable, updated FROM code WHERE name = :name AND institution = :institution");
 			$select->bindValue(":name", $name);
 			$select->bindValue(":institution", $institution);
 			$select->execute();
@@ -265,6 +265,7 @@ class Code {
 				$this->setDescription((!is_null($row->description) ? $row->description : ""));
 				$this->setPublic(($row->public == "1"));
 				$this->setUnsearchable(($row->unsearchable == "1"));
+				$this->setUpdated($row->updated);
 			}
 		} catch (Exception $e) {
 			throw $e;
@@ -732,6 +733,27 @@ class Code {
 		}
 		
 		$this->unsearchable = $unsearchable;
+	}
+	
+	private $updated = 'Unknown';
+	/**
+	 * Set the last-updated date of the code.
+	 * 
+	 * @param string $date
+	 * @return void
+	 */
+	protected function setUpdated ($date) {
+		if ($time = strtotime($date))
+			$this->updated = date ('Y-m-d H:i', $time);
+	}
+	
+	/**
+	 * Answer the date the code was last updated.
+	 * 
+	 * @return string
+	 */
+	public function getLastUpdateDate () {
+		return $this->updated;
 	}
 	
 	/**
