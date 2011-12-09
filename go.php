@@ -26,7 +26,8 @@ $session_pages = array(
 	"login.php",
 	"go_functions.php",
 	"process.php",
-	"all_codes.php"
+	"all_codes.php",
+	"user_codes.php"
 );
 $session_pages = array_merge($session_pages, $admin_pages);
 $current_page = basename($_SERVER['PHP_SELF']);

@@ -61,9 +61,13 @@ try {
 						if (count($code->getUsers())) {
 							$userStrings = array();
 							foreach ($code->getUsers() as $user) {
-								$userStrings[] = Go::getUserDisplayName($user->getName());
+								$userString = Go::getUserDisplayName($user->getName());
+								if (isAuditor()) {
+									$userString = "<a href=\"user_codes.php?name=".$user->getName()."\">".$userString."</a>";
+								}
+								$userStrings[] = $userString;
 							}
-							print implode (' <br/>', $userStrings);
+							print implode ("\n <br/>", $userStrings);
 							print "<br/><br/>Please contact one of these people for changes to this shortcut. ";
 						} else {
 							print "None -- Contact <a href='mailto:go@middlebury.edu'>go@middlebury.edu</a> to claim this code.";
