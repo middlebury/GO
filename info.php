@@ -148,12 +148,11 @@ try {
 					}
 					
 					//superadimin stuff
-					if (isset($_SESSION['AUTH'])) {
-						if (isSuperAdmin($_SESSION['AUTH']->getId())) {
-					 		print "<p>Admin:<br /><a class='history_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Show History' /></a>";
-					
-							print "<a class='info_edit_button' href='update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'><input onclick='window.location=\"update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "\"' type='button' value='Edit this Code' /></a></p>";
-						}
+					if (isAuditor()) {
+				 		print "<p>Admin:<br /><a class='history_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Show History' /></a>";
+				 	}
+				 	if (isSuperAdmin()) {
+						print "<a class='info_edit_button' href='update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'><input onclick='window.location=\"update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "\"' type='button' value='Edit this Code' /></a></p>";
 					}
 					?>
 					</div>

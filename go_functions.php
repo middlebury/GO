@@ -26,6 +26,19 @@ function isSuperAdmin() {
 	}
 }
 
+//function to check if a user can view details (history, flags, user-to-code lists).
+function isAuditor() {
+	if (isSuperAdmin())
+		return true;
+	
+	//if the current user is logged in, check it they are in the auditors array
+	global $goAuditors;
+	if(!empty($goAuditors) && !empty($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getId(), $goAuditors))
+		return true;
+	
+	return false;
+}
+
 // This is copy pasted function to get URL from current page 
 function curPageURL() {
 	$isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");

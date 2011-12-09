@@ -105,6 +105,10 @@ function my_lookup_displayname($id) {
 $goAdmin = array(
 );
 
+//users who can view details (history, flags, user-to-code lists).
+$goAuditors = array(
+);
+
 //allow anonymous user to flag codes as inappropriate (true or false)
 define("ANON_FLAGGING", true);
 

@@ -15,7 +15,7 @@ require_once "header.php";
 
 try {
 	//check if user should see this page
-	if (!isSuperAdmin()) {
+	if (!isAuditor()) {
 		die("You do not have permission to view this page");
 	}
 	//get the statement object for this select statement
