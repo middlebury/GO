@@ -19,7 +19,9 @@ require_once "header.php";
 <?php
 
 try {
-	if (empty($_SESSION["AUTH"]) || !isAuditor()) {
+	if (empty($_SESSION["AUTH"])) {
+		throw new Exception("You must log in (above).");
+	} else if(!isAuditor()) {
 		throw new Exception("You do not have permission to view this page");
 	} else {
 		$userName = str_replace(" ", "+", $_GET["name"]);
