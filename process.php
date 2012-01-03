@@ -198,9 +198,10 @@ if (isset($_SESSION['AUTH'])) {
 					$current_admin = trim($current_admin);
 					if ($_SESSION["AUTH"]->getId($current_admin)) {
 						// Check to see if user is already an admin
-						$select = $connection->prepare("SELECT user FROM user_to_code WHERE user = ? AND code = ?");
+						$select = $connection->prepare("SELECT user FROM user_to_code WHERE user = ? AND code = ? AND institution = ?");
   					$select->bindValue(1, $_SESSION["AUTH"]->getId($current_admin));
   					$select->bindValue(2, $_POST['code']);
+  					$select->bindValue(3, $_POST['institution']);
 						$select->execute();
 						$result = $select->fetchAll();
 						// If they aren't already an admin
