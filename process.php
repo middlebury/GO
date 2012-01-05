@@ -161,7 +161,7 @@ if (isset($_SESSION['AUTH'])) {
 					// alias already exists
 					$select = $connection->prepare("
 					  (SELECT
-  						name
+  						code
 					  FROM
   						alias
   					WHERE
@@ -180,8 +180,17 @@ if (isset($_SESSION['AUTH'])) {
   					");
   				$select->execute(array($_POST['institution'], $current_alias, $_POST['institution'], $current_alias));
   				// If there are results then don't make the alias and set a message.
-					if(count($select->fetchAll())) {
-						$_SESSION['update_message'][] = "<p class='update_message_failure'>Alias ".$current_alias." already exists as an alias or shortcut name. Was not created as an alias of '".$code->getName()."'.</p>";
+					$results = $select->fetchAll();
+					$match = 0;
+					if ($results[0][0] == $current_alias) {
+						$match = 1;	
+					}
+					if(count($results)) {
+						if ($match == 1) {
+							$_SESSION['update_message'][] = "<p class='update_message_failure'>Alias '".$current_alias."' already exists as a GO shortcut. Was not created as an alias of '".$code->getName()."'.</p>";
+						} else {
+							$_SESSION['update_message'][] = "<p class='update_message_failure'>Alias '".$current_alias."' already exists as an alias of the code '".$results[0][0]."'. Was not created as an alias of '".$code->getName()."'.</p>";
+						}
 					} else {
 						// Otherwise make a new alias and set a message
 						$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
