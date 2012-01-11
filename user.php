@@ -184,6 +184,43 @@ class User {
 	}
 	
 	/**
+	 * Get the array of {@link Code}s that the user created, but are now deleted
+	 * 
+	 * @access public
+	 * @return array The array of {@link Code}s
+	 * @throws Exception from PDO functions.
+	 */
+	public function getDeletedCodes() {
+		global $connection;
+		
+		try {
+			$codes = array();
+			$select = $connection->prepare(
+"SELECT
+	log.code, log.institution, log.user_id
+FROM
+	`log` 
+	LEFT JOIN code ON (log.code = code.name AND log.institution = code.institution)
+WHERE 
+	log.description LIKE 'Created%' 
+	AND code.name IS NULL
+	AND log.user_id = :name
+GROUP BY log.institution, log.code
+ORDER BY log.code ASC, log.tstamp DESC");
+			$select->execute(array(':name' => $this->name));
+			foreach ($select->fetchAll(PDO::FETCH_OBJ) as $row) {
+				$codes[$row->institution . "/" . $row->code] = new DeletedCode($row->code, $row->institution, $row->user_id);
+			}
+			
+			$select->closeCursor();
+		} catch(Exception $e) {
+			throw $e;
+		}
+		
+		return $codes;
+	}
+	
+	/**
 	 * Set the name of the {@link User}.
 	 * 
 	 * @access public

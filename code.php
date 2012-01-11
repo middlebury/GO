@@ -902,7 +902,353 @@ class Code {
 		
 		return $this->aliases;
 	}
+}
+
+/**
+ * A class to provide access to information about deleted codes.
+ */
+class DeletedCode extends Code {
+	/**
+	 * Class constructor for {@link Code}.
+	 *
+	 * @access public
+	 * @param string $name The full path string of the code.
+	 * @since 02-25-2009
+	 * @throws Exception from {@link Code::setName()}
+	 * @throws Exception from {@link Code::setInstitution()}
+	 * @throws Exception from {@link Code::setUrl()}
+	 * @throws Exception from {@link Code::setDescription()}
+	 * @throws Exception from PDO functions.
+	 */
+	public function __construct($name, $institution = "middlebury.edu", $creator_id = null) {
+		$this->name = $name;
+		$this->institution = $institution;
+		$this->creator_id = $creator_id;
+	}
 	
+	/**
+	 * Get a single {@link User} which the user has access to.
+	 *
+	 * @access public
+	 * @param string $user The name of the {@link User}
+	 * @return {@link User} A {@link User} who has access to the code.
+	 * @since 02-25-2009
+	 * @throws Exception if parameter $user is not an int.
+	 * @throws Exception if $user does not have access to this code.
+	 * @throws Exception from PDO functions.
+	 */
+	public function getUser($user) {		
+		throw new Exception("Method not supported: ".__CLASS__."::".__FUNCTION__."()");
+	}
+	
+	/**
+	 * Get the array of {@link User}s that have access to the code.
+	 * 
+	 * @access public
+	 * @return array The array of {@link User}s that have access to the code.
+	 * @since 02-25-2009
+	 * @throws Exception from PDO functions.
+	 */
+	public function getUsers() {
+		$users = array();
+		$users[] = new User($this->creator_id);
+		global $connection;
+		
+		try {
+			$select = $connection->prepare(
+"SELECT description 
+FROM log
+WHERE
+	log.description REGEXP '^Added user'
+	AND code = :code 
+	AND institution = :institution
+ORDER BY tstamp ASC
+");
+			$select->execute(array(':code' => $this->name, ':institution' => $this->institution));
+			// Get all users who had been added to the code at any point.
+			foreach ($select->fetchAll(PDO::FETCH_OBJ) as $row) {
+				if (preg_match("/^Added user '([a-zA-Z0-9]+)'/", $row->description, $m)) {
+					$users[] = new User($m[2]);
+				}
+			}
+		} catch(Exception $e) {
+			throw $e;
+		}
+		
+		return $users;
+	}
+	
+	/**
+	 * Set the full path string for this code.
+	 * 
+	 * This function will throw an exception if the path is not a string type in PHP or if it contains characters other than the allowed character set for GO shortcuts.
+	 * 
+	 * Allowed characters:
+	 * <ul>
+	 * 	<li>Alphabetical characters A-Z and a-z</li>
+	 *  <li>Numeric characters 0-9</li>
+	 * 	<li>The Question Mark ?</li>
+	 *  <li>The Forward Slash /</li>
+	 *  <li>The Hyphen -</li>
+	 *  <li>The Underscore _</li>
+	 * </ul>
+	 * 
+	 * The question mark and forward slash are control characters used to separate sections of the GO shortcut.
+	 *
+	 * @access public
+	 * @param string $name The full path string for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 02-25-2009
+	 * @throws Exception if parameter $name is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception if parameter $name contains characters other than A-Z, a-z, 0-9, ?, /, -, and _.
+	 * @throws Exception if parameter $name begins with a / or ? character or 'go/'.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setName($name, $save = false) {
+		if (!is_string($name)) {
+			throw new Exception(__METHOD__ . " expects parameter name to be a string; given " . $name);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+
+		if (!Code::isValidCode($name)) {
+			throw new Exception(__METHOD__ . " expects parameter name to contain only A-Z, a-z, 0-9, ?, -, _, and / characters; given " . $name);
+		}
+		
+		if ($name[0] == "/" || $name[0] == "?") {
+			throw new Exception("Code names cannot begin with a / or ? character.");
+		}
+		
+/*
+		if (substr($name, strlen($name) - 1, 1) == "/") {
+		    throw new Exception("Code names cannot end with a / character.");
+		}
+*/		
+		if (substr($name, 0, 3) == "go/") {
+			throw new Exception("Code names cannot begin with 'go/'");
+		}
+		
+		if($save && $name != $this->name) {
+			throw new Exception("Saving is not supported by ".__CLASS__."::".__FUNCTION__."()");
+		}
+		
+		$this->name = $name;
+	}
+	
+	/**
+	 * Set the institution or "host" for this code.
+	 *
+	 * @access public
+	 * @param string $institution The institution or "host" for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 04-03-2009
+	 * @throws Exception if parameter $institution is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setInstitution($institution, $save = false) {
+		if (!is_string($institution)) {
+			throw new Exception(__METHOD__ . " expects parameter institution to be a string; given " . $institution);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if ($this->institution != null && $institution != $this->institution) {
+			throw new Exception("Saving is not supported by ".__CLASS__."::".__FUNCTION__."()");
+		}
+		
+		if($save && $institution != $this->institution) {
+			throw new Exception("Saving is not supported by ".__CLASS__."::".__FUNCTION__."()");
+		}
+		
+		$this->institution = $institution;
+	}
+	
+	/**
+	 * Set the URL for this code.
+	 * 
+	 * @access public
+	 * @param string $url The URL for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 02-26-2009
+	 * @throws Exception if parameter $url is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setUrl($url, $save = false) {
+		if (!is_string($url)) {
+			throw new Exception(__METHOD__ . " expects parameter url to be a string; given " . $url);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if($save && $url != $this->url) {
+			throw new Exception("Saving is not supported by ".__CLASS__."::".__FUNCTION__."()");
+		}
+		
+		$this->url = $url;
+	}
+	
+	/**
+	 * Set the description for this code.
+	 *
+	 * @access public
+	 * @param string $description The description for this code.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @throws Exception if parameter $description is not a string.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setDescription($description, $save = false) {
+		if (!is_string($description)) {
+			throw new Exception(__METHOD__ . " expects parameter description to be a string; given " . $description);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if($save && $description != $this->description) {
+			throw new Exception("Saving is not supported by ".__CLASS__."::".__FUNCTION__."()");
+		}
+		
+		$this->description = $description;
+	}
+	
+	/**
+	 * Set whether this code is displayed on the GOtionary.
+	 *
+	 * @access public
+	 * @param bool $public Whether this code is displayed on the GOtionary.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 04-06-2009
+	 * @throws Exception if parameter $public is not a boolean.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setPublic($public, $save = false) {
+		if (!is_bool($public)) {
+			throw new Exception(__METHOD__ . " expects parameter public to be a bool; given " . $public);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if ($save && $public != $this->public) {
+			throw new Exception("Saving is not supported by ".__CLASS__."::".__FUNCTION__."()");
+		}
+		
+		$this->public = $public;
+	}
+	
+	/**
+	 * Set whether this code is not searchable on the main website.
+	 *
+	 * @access public
+	 * @param bool $unsearchable Whether this code is not searchable on the main website.
+	 * @param bool $save Whether to commit changes to the database (default: false).
+	 * @since 04-06-2009
+	 * @throws Exception if parameter $unsearchable is not a boolean.
+	 * @throws Exception if parameter $save is not a boolean.
+	 * @throws Exception from PDO functions.
+	 */
+	public function setUnsearchable($unsearchable, $save = false) {
+		if (!is_bool($unsearchable)) {
+			throw new Exception(__METHOD__ . " expects parameter unsearchable to be a bool; given " . $unsearchable);
+		}
+		
+		if (!is_bool($save)) {
+			throw new Exception(__METHOD__ . " expects parameter save to be a bool; given " . $save);
+		}
+		
+		if ($save && $unsearchable != $this->unsearchable) {
+			throw new Exception("Saving is not supported by ".__CLASS__."::".__FUNCTION__."()");
+		}
+		
+		$this->unsearchable = $unsearchable;
+	}
+	
+	/**
+	 * Delete this code from the database.
+	 *
+	 * @access public
+	 * @since 04-03-2009
+	 * @throws Exception from PDO functions.
+	 */
+	public function delete() {
+		throw new Exception("Method not supported: ".__CLASS__."::".__FUNCTION__."()");
+	}
+	
+	/**
+	 * Grant a {$link User} access to this code's administration.
+	 *
+	 * @access public
+	 * @param int $name The name of the {@link User}
+	 * @since 04-03-2009
+	 * @throws Exception if parameter $user is not an integer.
+	 * @throws Exception if the user already has access to this code.
+	 * @throws Exception from PDO functions.
+	 */
+	public function addUser($name) {		
+		throw new Exception("Method not supported: ".__CLASS__."::".__FUNCTION__."()");
+	}
+
+	/**
+	 * Revoke a {$link User} access to this code's administration.
+	 *
+	 * @access public
+	 * @param int $name The name of the {@link User}
+	 * @since 04-03-2009
+	 * @throws Exception if parameter $user is not an integer.
+	 * @throws Exception if the user does not have access to this code.
+	 * @throws Exception from PDO functions.
+	 */
+	public function delUser($name) {
+		throw new Exception("Method not supported: ".__CLASS__."::".__FUNCTION__."()");
+	}
+	
+	/**
+	 * Get an array of {@link Alias}es associated with this {$link Code}.
+	 *
+	 * @access public
+	 * @return array An array of {@link Alias}es associated with this {@link Code}.
+	 * @since 04-03-2009
+	 * @throws Exception from PDO functions.
+	 */
+	public function getAliases() {
+		$aliases = array();
+		global $connection;
+		
+		try {
+			$select = $connection->prepare(
+"SELECT alias
+FROM log 
+WHERE
+	code = :code
+	AND institution = :institution
+	AND alias != ''
+GROUP BY alias
+ORDER BY alias
+	");
+			$select->execute(array(':code' => $this->name, ':institution' => $this->institution));
+			
+			foreach ($select->fetchAll(PDO::FETCH_OBJ) as $row) {
+				$aliases[$row->name] = new DeletedAlias($row->alias, $this->name, $this->institution);
+			}
+		} catch(Exception $e) {
+			throw $e;
+		}
+		
+		return $aliases;
+	}
 }
 
 ?>
