@@ -1,5 +1,5 @@
 <?php
-	if ($_SERVER["HTTP_HOST"] != "devwww.middlebury.edu") {
+	if (in_array($_SERVER["HTTP_HOST"], array("go.middlebury.edu", "go.miis.edu"))) {
 ?>
     <script type="text/javascript">
     var _gaq = _gaq || [];
