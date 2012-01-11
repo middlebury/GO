@@ -117,7 +117,13 @@ if (isset($_SESSION['AUTH'])) {
 						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_admin_text'); } ?>" type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
 						<p><input type="submit" name="update" value="Apply These Changes" />
 							<input type="submit" name="revert" value="Revert These Changes" />
-						<input type="submit" name="delete" value="Delete Shortcut" /></p>
+						</p>
+						<p>
+						<input type="submit" name="delete" value="Delete Shortcut"  />
+						<?php	if (isSuperAdmin($_SESSION['AUTH']->getId())) {
+							print ' <input type="submit" name="delete_and_ban" value="Delete and Ban Shortcut" title="Ban this shortcut from future usage."/>';
+						} ?>
+						</p>
 					</div>
 				</form> 
 		<?php

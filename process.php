@@ -100,7 +100,7 @@ if (isset($_SESSION['AUTH'])) {
 		// If the code is new then say it was created, otherwise it's
 		// being edited and we don't need to say that.
 		if (!Code::exists($_POST['code'], $_POST['institution'])) {
-			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut ".$_POST['code']." was created.</p>";
+			$showCreateMessage = true;
 		} else {
 		// If it does exist, we need to know if it's being edited or created
 		// Check the "udate" value (the value of the submit button). If it's
@@ -116,7 +116,15 @@ if (isset($_SESSION['AUTH'])) {
 		}
 		
 		// Instantiate a code object using the submitted name/institution
-		$code = new Code($_POST['code'], $_POST['institution']);
+		try {
+			$code = new Code($_POST['code'], $_POST['institution']);
+			if (!empty($showCreateMessage))
+				$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut ".$_POST['code']." was created.</p>";
+		} catch (Exception $e) {
+			$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding code failed: '".$e->getMessage()."'.</p>";
+			header("location: " . $_POST['form_url']);
+			exit;
+		}
 			
 			//update url in database
 			if ($code->getUrl() != $_POST['update_url']) {
@@ -192,9 +200,13 @@ if (isset($_SESSION['AUTH'])) {
 							$_SESSION['update_message'][] = "<p class='update_message_failure'>Alias '".$current_alias."' already exists as an alias of the code '".$results[0][0]."'. Was not created as an alias of '".$code->getName()."'.</p>";
 						}
 					} else {
-						// Otherwise make a new alias and set a message
-						$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
-						$_SESSION['update_message'][] = "<p class='update_message_success'>Alias ".$current_alias." was added to '".$code->getName()."'.</p>";
+						try {
+							// Otherwise make a new alias and set a message
+							$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
+							$_SESSION['update_message'][] = "<p class='update_message_success'>Alias ".$current_alias." was added to '".$code->getName()."'.</p>";
+						} catch (Exception $e) {
+							$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding alias ".$current_alias." failed: '".$e->getMessage()."'.</p>";
+						}
 					}
 				}
 			}
@@ -299,6 +311,17 @@ if (isset($_SESSION['AUTH'])) {
 			$code->delete();
 			
 			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut " . $code->getName() . " was deleted.</p>";
+		}
+		// If delete_and_ban was pressed just delete the code and set a message.
+		elseif(isset($_POST['delete_and_ban']) && isSuperAdmin($_SESSION['AUTH']->getId())) {
+			
+			// Instantiate a code object using the submitted name/institution
+			$code = new Code($_POST['code'], $_POST['institution']);
+			$code->delete();
+			
+			Code::banCode($_POST['code']);
+			
+			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut " . $code->getName() . " was deleted and banned from future usage.</p>";
 		}
 		// If revert changes was pressed
 		elseif(isset($_POST['revert'])) {

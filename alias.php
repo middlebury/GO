@@ -175,6 +175,9 @@ class Alias {
 			throw new Exception(__METHOD__ . " expects parameter name to contain only A-Z, a-z, 0-9, ?, -, _, and / characters; given " . $name);
 		}
 		
+		if (Code::isCodeBanned($name))
+			throw new Exception($name." is banned from usage.");
+		
 		if ($name[0] == "/" || $name[0] == "?") {
 			throw new Exception("Alias names cannot begin with a / or ? character.");
 		}

@@ -118,6 +118,33 @@ class Code {
 	}
 	
 	/**
+	 * Answer true if a name is banned
+	 * 
+	 * @param string $name
+	 * @return boolean
+	 */
+	public static function isCodeBanned ($name) {
+		global $connection;
+		$select = $connection->prepare("SELECT COUNT(*) FROM banned_codes WHERE code = ?");
+		$select->execute(array(strtolower($name)));
+		$num = $select->fetchColumn();
+		$select->closeCursor();
+		return !empty($num);
+	}
+	
+	/**
+	 * Ban a name from being used in the future.
+	 * 
+	 * @param string $name
+	 * @return void
+	 */
+	public static function banCode ($name) {
+		global $connection;
+		$insert = $connection->prepare("INSERT INTO banned_codes (code, banned_by, banned_by_display_name) VALUES (?, ?, ?)");
+		$insert->execute(array(strtolower($name), $_SESSION["AUTH"]->getId(), $_SESSION["AUTH"]->getName()));
+	}
+	
+	/**
 	 * Answer true if name validates, false if not.
 	 * 
 	 * @param string $name The full URL
@@ -439,6 +466,9 @@ class Code {
 		if (!Code::isValidCode($name)) {
 			throw new Exception(__METHOD__ . " expects parameter name to contain only A-Z, a-z, 0-9, ?, -, _, and / characters; given " . $name);
 		}
+		
+		if (Code::isCodeBanned($name))
+			throw new Exception($name." is banned from usage.");
 		
 		if ($name[0] == "/" || $name[0] == "?") {
 			throw new Exception("Code names cannot begin with a / or ? character.");
