@@ -21,7 +21,7 @@ class Code {
 	 * Answer true if the code exists, false otherwise.
 	 *
 	 * @access public
-1	 * @param string $name The full path string of the code.
+	 * @param string $name The full path string of the code.
 	 * @param optional string $institution The institution for the code.
 	 * @throws Exception from PDO functions.
 	 */
