@@ -112,10 +112,8 @@ class Code {
 		// Codes shouldn't start with "go/"
 		if (preg_match('/^go\//', $name))
 			return false;
-
 		if (!preg_match(Code::ALLOWED_CODES, $name))
 			return false;
-
 		return true;
 	}
 	
@@ -137,7 +135,6 @@ class Code {
 	 */
 	public static function isValidDescription ($name) {
 		return preg_match(Code::ALLOWED_DESC, $name);
-
 	}
 	
 	/**
