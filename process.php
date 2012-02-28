@@ -32,6 +32,21 @@ if (isset($_SESSION['AUTH'])) {
 	if (isset($_SESSION['AUTH'])) {
 	//if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
 		
+		//make the following check only if we are trying to create a code (not update)
+		if(isset($_POST['create'])) {
+			//if the code is already being used as an alias, throw an error.
+			if (Alias::exists($_POST['code'], $_POST['institution'])) {
+		  	$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make is already an alias of another code.".$_POST['institution']."</p>";
+		  	// This tells us the ID of the field that is in error
+				// if this validation fails. Used to change the class
+				// of the failed field when redirected back to the
+				// original form
+				$_SESSION['field_id_in_error'] = 'code';
+				// Redirect to originating location
+				die(header("location: " . $_POST['form_url']));
+			}
+		}
+		
 		// We have two submit buttons on the edit form (the one on the create for is still
 		// named "update" in order to trigger the same behavior as the button on edit).
 		// We want to do the following when "Apply" aka. "update" is pressed
@@ -45,16 +60,6 @@ if (isset($_SESSION['AUTH'])) {
 			// more than one message at a time
 			$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$_POST['code']."</p>";
 			// This tells us the ID of the field that is in error
-			// if this validation fails. Used to change the class
-			// of the failed field when redirected back to the
-			// original form
-			$_SESSION['field_id_in_error'] = 'code';
-			// Redirect to originating location
-			die(header("location: " . $_POST['form_url']));
-		}
-		if (Alias::exists($_POST['code'], $_POST['institution'])) {
-		  $_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make is already an alias of another code.</p>";
-		  // This tells us the ID of the field that is in error
 			// if this validation fails. Used to change the class
 			// of the failed field when redirected back to the
 			// original form

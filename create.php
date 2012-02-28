@@ -122,6 +122,7 @@ global $institutions;
 						}
 						?>
 						</ul>
+						<input name="create" style="display: none;"/> <!-- hiddent input to allow process.php to know this came from "create" -->
 						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_admin_text'); } ?>" type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
 						<p><input type="submit" name="update" value="Create Shortcut" /><input type="submit" name="revert" value="Start Over" /></p>
 						
