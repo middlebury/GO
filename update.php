@@ -95,11 +95,15 @@ if (isset($_SESSION['AUTH'])) {
 						<h3>Admins</h3>
 						<ul id="admin_list">
 						<?php
+						try {
 							foreach($code->getUsers() as $cUser) {
 								$username = $_SESSION["AUTH"]->getName($cUser->getName());
 								print "<li id='" . $username . "'>". $username;
 								print " <input type='button' value='Delete' /></li>";
 							}
+						} catch (Exception $e) {
+							print "<p class='update_message_failure'>".$e->getMessage()."</p>";
+						}
 						?>
 						<!--This is required by doctype-->
 						<li style="display: none;">This space is intentionally left blank</li>
