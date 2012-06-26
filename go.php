@@ -28,6 +28,7 @@ $session_pages = array(
 	"go_functions.php",
 	"process.php",
 	"all_codes.php",
+	"process_batchadmin.php",
 );
 $session_pages = array_merge($session_pages, $admin_pages);
 $current_page = basename($_SERVER['PHP_SELF']);

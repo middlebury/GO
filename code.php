@@ -145,6 +145,21 @@ class Code {
 	}
 	
 	/**
+	 * Answer true if user is an admin of code, false if not.
+	 * 
+	 * @param string $name The username
+	 * @access public
+	 */
+	public function isAdmin ($name) {
+		$users = $this->getUsers();
+		if (array_key_exists($name, $users)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Answer true if name validates, false if not.
 	 * 
 	 * @param string $name The full URL
