@@ -5,6 +5,10 @@ require_once "header.php";
 require_once "admin_nav.php";
 ?>
 
+<!-- Include jQuery/JS -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script src="my_codes.js" type="text/javascript"></script>
+
 <div class="content">
 	<div id="response"></div>
 
@@ -34,8 +38,9 @@ if (isSuperAdmin($user->getName())) {
 	$codes = $user->getCodes();
 	// If there are any, put them in a table with editing options
 	if (count($codes) > 0) {
-		print "<table id='my_codes_table'>
+		print "<form action='process_batchadmin.php' method='post' id='bulk_admin'><table id='my_codes_table'>
 		<tr>
+			<th></th>
 			<th>Go Shortcut</th>
 			<th>Description</th>
 			<th>Aliases</th>
@@ -50,6 +55,9 @@ if (isSuperAdmin($user->getName())) {
 			}
 			$current_aliases = implode(', ', $current_aliases);
 			print "<tr>
+				<td>
+					<input type='checkbox' class='code_checkbox' name='codes[".$code->getInstitution()."][".$code->getName()."]'>
+				</td>
 				<td>
 					<a href='" . htmlspecialchars($code->getUrl()) . "'>" . $code->getName() . "</a>
 				</td>
@@ -74,7 +82,22 @@ if (isSuperAdmin($user->getName())) {
 				"</td>
 			</tr>";
 		}
-		print "</table>";
+		print "<tr>
+				<td>
+					<input type='checkbox' id='check_all' />
+				</td>
+				<td colspan='5'>Check/Uncheck All</td>
+			</tr>
+			</table>";
+	
 	} //end if (count($codes) > 0) {
+	
+	print '<p>
+	<strong>Bulk Admin Add/Remove:</strong> Admin username <input type="text" name="admin_name" max="30" required="required" autocomplete="yes" /> Ex: "lafrance" <input type="submit" form="bulk_admin" name="bulk_admin_add" value="Add admin to checked codes" /> <input type="submit" form="bulk_admin" name="bulk_admin_remove" value="Remove admin from checked codes" />
+<!-- Pass the current URL --> 
+<input type="hidden" name="form_url" value="'. htmlentities(curPageURL()) .'" />
+<input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey'] .'" />
+</p>
+</form>';
 
 require_once "footer.php";
