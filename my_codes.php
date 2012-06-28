@@ -31,7 +31,7 @@ print "<h2>" . $_SESSION["AUTH"]->getName() . "'s Shortcuts</h2>";
 
 // Superadmin may admin all codes so show a link to "show all"
 if (isSuperAdmin($user->getName())) {
-	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a>.</p>";
+	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a> or view/subscribe to a <a href='feed/'>feed of new codes <img src='icons/feed.png' alt='rss icon' /></a>.</p>";
 }
 	
 	// Get the codes the current user can edit
