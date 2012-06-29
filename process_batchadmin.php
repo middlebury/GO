@@ -9,9 +9,9 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 }
 
 // Check for user authentication and POST values
-if (!isset($_SESSION['AUTH']) || !isset($_POST['admin_name']) || !isset($_POST['codes'])) {
+if (!isset($_SESSION['AUTH']) || !isset($_POST['admin_name']) || !isset($_POST['codes']) || $_POST['admin_name'] == '') {
 	if (isset($_POST['form_url'])){
-		$_SESSION['update_message'][] = "<p class='update_message_failure'>No codes checked or other inappropriate values passed.</p>";
+		$_SESSION['update_message'][] = "<p class='update_message_failure'>Inappropriate values passed. Make sure you've checked at least one check box and have entered an admin username.</p>";
 		die(header("location: " . $_POST['form_url']));
 	} else {
 		die(header("You must be authenticated and pass appropriate values to access this page."));
