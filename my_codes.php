@@ -38,7 +38,9 @@ if (isSuperAdmin($user->getName())) {
 	$codes = $user->getCodes();
 	// If there are any, put them in a table with editing options
 	if (count($codes) > 0) {
-		print "<form action='process_batchadmin.php' method='post' id='bulk_admin'><table id='my_codes_table'>
+		print "<form action='process_batchadmin.php' method='post' id='bulk_admin'>
+		<p><strong>Bulk Admin Add/Remove:</strong> Admin username <input type='text' name='admin_name' max='30' required='required' autocomplete='yes' /> <input type='submit' form='bulk_admin' name='bulk_admin_add' value='Add admin to checked codes' /> <input type='submit' form='bulk_admin' name='bulk_admin_remove' value='Remove admin from checked codes' /></p>
+		<table id='my_codes_table'>
 		<tr>
 			<th></th>
 			<th>Go Shortcut</th>
@@ -46,6 +48,16 @@ if (isSuperAdmin($user->getName())) {
 			<th>Aliases</th>
 			<th>Institution</th>
 			<th>Actions</th>
+		</tr>
+		<tr>
+			<td>
+				<input type='checkbox' id='check_all' />
+			</td>
+			<td>Check/Uncheck All</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>";
 		foreach ($codes as $code) {
 			$current_aliases = array();
@@ -82,18 +94,11 @@ if (isSuperAdmin($user->getName())) {
 				"</td>
 			</tr>";
 		}
-		print "<tr>
-				<td>
-					<input type='checkbox' id='check_all' />
-				</td>
-				<td colspan='5'>Check/Uncheck All</td>
-			</tr>
-			</table>";
+		print "</table>";
 	
 	} //end if (count($codes) > 0) {
 	
 	print '<p>
-	<strong>Bulk Admin Add/Remove:</strong> Admin username <input type="text" name="admin_name" max="30" required="required" autocomplete="yes" /> Ex: "lafrance" <input type="submit" form="bulk_admin" name="bulk_admin_add" value="Add admin to checked codes" /> <input type="submit" form="bulk_admin" name="bulk_admin_remove" value="Remove admin from checked codes" />
 <!-- Pass the current URL --> 
 <input type="hidden" name="form_url" value="'. htmlentities(curPageURL()) .'" />
 <input type="hidden" name="xsrfkey" value="'. $_SESSION['xsrfkey'] .'" />
