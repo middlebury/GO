@@ -2,7 +2,7 @@
 //gives us access to connection.
 require_once "../go.php";
 
-//header("Content-Type: application/rss+xml; charset=ISO-8859-1");
+header("Content-Type: application/rss+xml; charset=ISO-8859-1");
 
 $select = $connection->prepare("
 	(SELECT
