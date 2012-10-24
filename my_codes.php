@@ -18,6 +18,17 @@ require_once "admin_nav.php";
 
 $user = new User($_SESSION["AUTH"]->getId());
 
+//current user is the user whose codes we will see
+$current_user = $user;
+
+//only for superadmins, the current user may be different from themselves
+if (isSuperAdmin($user->getName())) {
+	if(isset($_POST['other_username'])) {
+		$current_user = new User($_SESSION["AUTH"]->getId($_POST['other_username']));
+		unset($_POST['other_username']);
+	}
+}
+
 // If an update message was set prior to a redirect
 // to this page display it and clear the message.
 if (isset($_SESSION['update_message'])) {
@@ -27,15 +38,20 @@ if (isset($_SESSION['update_message'])) {
 	unset($_SESSION['update_message']);
 }
 
-print "<h2>" . $_SESSION["AUTH"]->getName() . "'s Shortcuts</h2>";
+	print "<h2>" . Go::getUserDisplayName($current_user->getName()) . "'s Shortcuts</h2>";
 
-// Superadmin may admin all codes so show a link to "show all"
+// Superadmin may admin all codes so show a link to "show all" and
+// submit a user whose codes they'd like to see.
 if (isSuperAdmin($user->getName())) {
-	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a> or view/subscribe to a <a href='feed/'>feed of new codes <img src='icons/feed.png' alt='rss icon' /></a>.</p>";
-}
+	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a> or view/subscribe to a <a href='feed/'>feed of new codes <img src='icons/feed.png' alt='rss icon' /></a>.</p>
+	
+	<form action='my_codes.php' method='post' id='other_users_codes'>
+	<p><strong>Edit Codes for User:</strong> username <input type='text' name='other_username' max='30' required='required' autocomplete='yes' /> <input type='submit' form='other_users_codes' name='show_users_codes' value=\"Show User's Codes\" /></p>
+	</form>";
+}	
 	
 	// Get the codes the current user can edit
-	$codes = $user->getCodes();
+	$codes = $current_user->getCodes();
 	// If there are any, put them in a table with editing options
 	if (count($codes) > 0) {
 		print "<form action='process_batchadmin.php' method='post' id='bulk_admin'>
