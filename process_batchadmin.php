@@ -42,7 +42,7 @@ $current_user = $user;
 
 //super admins can work with a user that is not themselves
 if (isSuperAdmin($user->getName())) {
-	if(isset($_POST['current_user_id'])) {
+	if($_POST['current_user_id'] != null) {
 		$current_user = new User($_SESSION["AUTH"]->getId($_POST['current_user_id']));
 	}
 }
