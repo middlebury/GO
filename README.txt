@@ -28,8 +28,8 @@ resource.
  Authors
 =====================================
    Ian McBride (imcbride@middlebury.edu)
-*  Adam Franco (afranco@middlebury.edu)
-
+   Adam Franco (afranco@middlebury.edu)
+*  Matt La France (lafrance@middlebury.edu)
 
 * Current Maintainer
 
