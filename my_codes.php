@@ -20,11 +20,13 @@ $user = new User($_SESSION["AUTH"]->getId());
 
 //current user is the user whose codes we will see
 $current_user = $user;
+$current_user_id = '';
 
 //only for superadmins, the current user may be different from themselves
 if (isSuperAdmin($user->getName())) {
 	if(isset($_POST['other_username'])) {
-		$current_user = new User($_SESSION["AUTH"]->getId($_POST['other_username']));
+		$current_user_id = trim($_POST['other_username']);
+		$current_user = new User($_SESSION["AUTH"]->getId($current_user_id));
 		unset($_POST['other_username']);
 	}
 }
@@ -55,7 +57,7 @@ if (isSuperAdmin($user->getName())) {
 	// If there are any, put them in a table with editing options
 	if (count($codes) > 0) {
 		print "<form action='process_batchadmin.php' method='post' id='bulk_admin'>
-		<p><strong>Bulk Admin Add/Remove:</strong> Admin username <input type='text' name='admin_name' max='30' required='required' autocomplete='yes' /> <input type='submit' form='bulk_admin' name='bulk_admin_add' value='Add admin to checked codes' /> <input type='submit' form='bulk_admin' name='bulk_admin_remove' value='Remove admin from checked codes' /></p>
+		<p><strong>Bulk Admin Add/Remove:</strong> Admin username <input type='text' name='admin_name' max='30' required='required' autocomplete='yes' /> <input type='submit' form='bulk_admin' name='bulk_admin_add' value='Add admin to checked codes' /> <input type='submit' form='bulk_admin' name='bulk_admin_remove' value='Remove admin from checked codes' /><input type='hidden' name='current_user_id' value='". $current_user_id ."'> </p>
 		<table id='my_codes_table'>
 		<tr>
 			<th></th>
