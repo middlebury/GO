@@ -2,6 +2,7 @@
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
 require_once "go.php";
+require_once "go_functions.php"; //for access to isSuperAdmin()
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -35,13 +36,21 @@ if (!Code::isValidAdmin($bulk_admin)) {
 	die(header("location: " . $_POST['form_url']));
 }
 
-// Instantiate user
+// Instantiate user(s)
 $user = new User($_SESSION["AUTH"]->getId());
+$current_user = $user;
+
+//super admins can work with a user that is not themselves
+if (isSuperAdmin($user->getName())) {
+	if(isset($_POST['current_user_id'])) {
+		$current_user = new User($_SESSION["AUTH"]->getId($_POST['current_user_id']));
+	}
+}
 
 // Get codes for all institutions
 foreach ($_POST['codes'] as $inst => $shortcuts) {
 	foreach ($shortcuts as $name => $value) {
-		$codes[] = $user->getCode($name, $inst);
+		$codes[] = $current_user->getCode($name, $inst);
 	}
 }
 
