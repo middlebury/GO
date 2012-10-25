@@ -28,6 +28,10 @@ if (isSuperAdmin($user->getName())) {
 		$current_user_id = trim($_POST['other_username']);
 		$current_user = new User($_SESSION["AUTH"]->getId($current_user_id));
 		unset($_POST['other_username']);
+	} elseif (isset($_SESSION['current_user_id'])) {
+		$current_user_id = $_SESSION['current_user_id'];
+		$current_user = new User($_SESSION["AUTH"]->getId($current_user_id));
+		unset($_SESSION['current_user_id']);
 	}
 }
 

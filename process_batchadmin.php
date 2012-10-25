@@ -44,6 +44,7 @@ $current_user = $user;
 if (isSuperAdmin($user->getName())) {
 	if($_POST['current_user_id'] != null) {
 		$current_user = new User($_SESSION["AUTH"]->getId($_POST['current_user_id']));
+		$_SESSION['current_user_id'] = $_POST['current_user_id'];
 	}
 }
 
