@@ -63,6 +63,7 @@ if (isSuperAdmin($user->getName())) {
 			<th></th>
 			<th>Go Shortcut</th>
 			<th>Description</th>
+			<th>Admins</th>
 			<th>Aliases</th>
 			<th>Institution</th>
 			<th>Actions</th>
@@ -84,6 +85,14 @@ if (isSuperAdmin($user->getName())) {
 				$current_aliases[] = $thisalias->getName();
 			}
 			$current_aliases = implode(', ', $current_aliases);
+			$current_users = array();
+			$users = $code->getUsers();
+			foreach ($users as $thisuser) {
+				if ($thisuser->getName() != '') {
+					$current_users[] = preg_replace('#\(.+\)#','',Go::getUserDisplayName($thisuser->getName()));
+				}
+			}
+			$current_users = implode(', ', $current_users);
 			print "<tr>
 				<td>
 					<input type='checkbox' class='code_checkbox' name='codes[".$code->getInstitution()."][".$code->getName()."]'>
@@ -93,6 +102,9 @@ if (isSuperAdmin($user->getName())) {
 				</td>
 				<td>
 					" . htmlspecialchars($code->getDescription()) . "
+				</td>
+				<td>
+					" . $current_users . "
 				</td>
 				<td>
 					" . $current_aliases . "
