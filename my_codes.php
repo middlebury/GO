@@ -14,8 +14,15 @@ require_once "admin_nav.php";
 
 <?php
 
-// Show all codes the currently logged in user may admin
+//validation
+if ($_POST != array()) {
+	if (!$_SESSION["AUTH"]->getId($_POST['other_username'])) {
+		$_SESSION['update_message'][] = "<p class='update_message_failure'>User is not a valid user. Check that the user name is correct.</p>";
+		unset($_POST['other_username']);
+	}
+}
 
+// Show all codes the currently logged in user may admin
 $user = new User($_SESSION["AUTH"]->getId());
 
 //current user is the user whose codes we will see
@@ -93,7 +100,7 @@ if (isSuperAdmin($user->getName())) {
 			$users = $code->getUsers();
 			foreach ($users as $thisuser) {
 				if ($thisuser->getName() != '') {
-					$current_users[] = preg_replace('#\(.+\)#','',Go::getUserDisplayName($thisuser->getName()));
+						$current_users[] = trim(preg_replace('#\(.+\)#','',Go::getUserDisplayName($thisuser->getName())));
 				}
 			}
 			$current_users = implode(', ', $current_users);
