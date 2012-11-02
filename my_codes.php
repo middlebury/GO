@@ -14,9 +14,33 @@ require_once "admin_nav.php";
 
 <?php
 
-// Show all codes the currently logged in user may admin
+//validation
+if ($_POST != array()) {
+	if (!$_SESSION["AUTH"]->getId($_POST['other_username'])) {
+		$_SESSION['update_message'][] = "<p class='update_message_failure'>User is not a valid user. Check that the user name is correct.</p>";
+		unset($_POST['other_username']);
+	}
+}
 
+// Show all codes the currently logged in user may admin
 $user = new User($_SESSION["AUTH"]->getId());
+
+//current user is the user whose codes we will see
+$current_user = $user;
+$current_user_id = '';
+
+//only for superadmins, the current user may be different from themselves
+if (isSuperAdmin($user->getName())) {
+	if(isset($_POST['other_username'])) {
+		$current_user_id = trim($_POST['other_username']);
+		$current_user = new User($_SESSION["AUTH"]->getId($current_user_id));
+		unset($_POST['other_username']);
+	} elseif (isset($_SESSION['current_user_id'])) {
+		$current_user_id = $_SESSION['current_user_id'];
+		$current_user = new User($_SESSION["AUTH"]->getId($current_user_id));
+		unset($_SESSION['current_user_id']);
+	}
+}
 
 // If an update message was set prior to a redirect
 // to this page display it and clear the message.
@@ -27,24 +51,30 @@ if (isset($_SESSION['update_message'])) {
 	unset($_SESSION['update_message']);
 }
 
-print "<h2>" . $_SESSION["AUTH"]->getName() . "'s Shortcuts</h2>";
+	print "<h2>" . Go::getUserDisplayName($current_user->getName()) . "'s Shortcuts</h2>";
 
-// Superadmin may admin all codes so show a link to "show all"
+// Superadmin may admin all codes so show a link to "show all" and
+// submit a user whose codes they'd like to see.
 if (isSuperAdmin($user->getName())) {
-	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a> or view/subscribe to a <a href='feed/'>feed of new codes <img src='icons/feed.png' alt='rss icon' /></a>.</p>";
-}
+	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a> or view/subscribe to a <a href='feed/'>feed of new codes <img src='icons/feed.png' alt='rss icon' /></a>.</p>
+	
+	<form action='my_codes.php' method='post' id='other_users_codes'>
+	<p><strong>Edit Codes for User:</strong> username <input type='text' name='other_username' max='30' required='required' autocomplete='yes' /> <input type='submit' form='other_users_codes' name='show_users_codes' value=\"Show User's Codes\" /></p>
+	</form>";
+}	
 	
 	// Get the codes the current user can edit
-	$codes = $user->getCodes();
+	$codes = $current_user->getCodes();
 	// If there are any, put them in a table with editing options
 	if (count($codes) > 0) {
 		print "<form action='process_batchadmin.php' method='post' id='bulk_admin'>
-		<p><strong>Bulk Admin Add/Remove:</strong> Admin username <input type='text' name='admin_name' max='30' required='required' autocomplete='yes' /> <input type='submit' form='bulk_admin' name='bulk_admin_add' value='Add admin to checked codes' /> <input type='submit' form='bulk_admin' name='bulk_admin_remove' value='Remove admin from checked codes' /></p>
+		<p><strong>Bulk Admin Add/Remove:</strong> Admin username <input type='text' name='admin_name' max='30' required='required' autocomplete='yes' /> <input type='submit' form='bulk_admin' name='bulk_admin_add' value='Add admin to checked codes' /> <input type='submit' form='bulk_admin' name='bulk_admin_remove' value='Remove admin from checked codes' /><input type='hidden' name='current_user_id' value='". $current_user_id ."'> </p>
 		<table id='my_codes_table'>
 		<tr>
 			<th></th>
 			<th>Go Shortcut</th>
 			<th>Description</th>
+			<th>Admins</th>
 			<th>Aliases</th>
 			<th>Institution</th>
 			<th>Actions</th>
@@ -66,6 +96,14 @@ if (isSuperAdmin($user->getName())) {
 				$current_aliases[] = $thisalias->getName();
 			}
 			$current_aliases = implode(', ', $current_aliases);
+			$current_users = array();
+			$users = $code->getUsers();
+			foreach ($users as $thisuser) {
+				if ($thisuser->getName() != '') {
+						$current_users[] = trim(preg_replace('#\(.+\)#','',Go::getUserDisplayName($thisuser->getName())));
+				}
+			}
+			$current_users = implode(', ', $current_users);
 			print "<tr>
 				<td>
 					<input type='checkbox' class='code_checkbox' name='codes[".$code->getInstitution()."][".$code->getName()."]'>
@@ -75,6 +113,9 @@ if (isSuperAdmin($user->getName())) {
 				</td>
 				<td>
 					" . htmlspecialchars($code->getDescription()) . "
+				</td>
+				<td>
+					" . $current_users . "
 				</td>
 				<td>
 					" . $current_aliases . "
