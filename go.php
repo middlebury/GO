@@ -54,6 +54,8 @@ if (AUTH_METHOD == 'cas') {
 	require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
 }
 
+class AuthorizationFailedException extends Exception { }
+
 // Force authentication on admin pages
 if (in_array($current_page, $admin_pages)) {
 	if (AUTH_METHOD == 'ldap') {
@@ -62,8 +64,13 @@ if (in_array($current_page, $admin_pages)) {
   		exit();
 		}
 	} else if (AUTH_METHOD == 'cas') {
-		
-		$_SESSION["AUTH"] = new GoAuthCas();
+		try {
+			$_SESSION["AUTH"] = new GoAuthCas();
+		}
+		catch (AuthorizationFailedException $e) {
+			header("Location: authfail.php");
+			exit();
+		}
 		
 	} else {
 		throw new Exception('Unknown Auth Method');
@@ -276,7 +283,7 @@ class GoAuthCas extends GoAuth {
 	    phpCAS::setDebug(GO_AUTH_CAS_LOG);
     
     phpCAS::client(CAS_VERSION_2_0, GO_AUTH_CAS_HOST, GO_AUTH_CAS_PORT, GO_AUTH_CAS_PATH, false);
-
+    
     phpCAS::setNoCasServerValidation();
   }
   
@@ -284,6 +291,27 @@ class GoAuthCas extends GoAuth {
     self::configurePhpCas();
     
     phpCAS::forceAuthentication();
+
+    $groups = phpCAS::getAttribute('MemberOf');
+    
+    //use $allowedGroups from config
+    global $allowedGroups;
+    
+    //check that user is member of a group
+    if (empty($groups)) {
+    	throw new AuthorizationFailedException();
+    //check groups against allowed groups if $allowedGroups is set	
+    } elseif (isset($allowedGroups) && !empty($allowedGroups)) {
+    	if (!is_array($groups) && !in_array($groups, $allowedGroups)) {
+    		throw new AuthorizationFailedException();
+    	} else {
+    		foreach ($groups as $group) {
+    			if (in_array($group, $allowedGroups))
+    				return;
+    		}
+    		throw new AuthorizationFailedException();
+    	}
+    }
   }
   
   public function getId($username = null) {
