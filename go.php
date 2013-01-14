@@ -275,13 +275,9 @@ class GoAuthCas extends GoAuth {
     if (defined('GO_AUTH_CAS_LOG'))
 	    phpCAS::setDebug(GO_AUTH_CAS_LOG);
     
-    phpCAS::proxy(CAS_VERSION_2_0, GO_AUTH_CAS_HOST, GO_AUTH_CAS_PORT, GO_AUTH_CAS_PATH, false);
-    
-    phpCAS::setFixedCallbackURL(GO_AUTH_CAS_PGT);
-    
+    phpCAS::client(CAS_VERSION_2_0, GO_AUTH_CAS_HOST, GO_AUTH_CAS_PORT, GO_AUTH_CAS_PATH, false);
+
     phpCAS::setNoCasServerValidation();
-    
-    phpCAS::setPGTStorageFile('plain', GO_AUTH_CAS_PGTSTORE);
   }
   
   public function __construct() {
