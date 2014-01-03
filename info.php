@@ -70,7 +70,7 @@ try {
 							print implode ("\n <br/>", $userStrings);
 							print "<br/><br/>Please contact one of these people for changes to this shortcut. ";
 						} else {
-							print "None -- Contact <a href='mailto:go@middlebury.edu'>go@middlebury.edu</a> to claim this code.";
+							print "None -- Contact ".GO_HELP_HTML." to claim this code.";
 						}
 					?></dd>
 					<dt>Display In GOtionary?</dt>

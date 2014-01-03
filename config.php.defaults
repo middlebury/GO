@@ -136,3 +136,6 @@ define("RECAPTCHA_PRIVATE", '');
 $internal_hosts = array(
 	'#example.edu$#',
 );
+
+//HTML for contacting/submitting a request for help with the application
+define("GO_HELP_HTML", "<a href='#'>our help area.</a>");
