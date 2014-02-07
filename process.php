@@ -293,14 +293,24 @@ if (isset($_SESSION['AUTH'])) {
 								$dont_delete_current_admin = 1;
 							}
 							if (!$dont_delete_current_admin) {
-								$code->delUser($_SESSION["AUTH"]->getId($current_admin));
+								try {
+									$code->delUser($_SESSION["AUTH"]->getId($current_admin));
+								//if the user isn't found and the ID is passed, just use the id
+								} catch (Exception $e) {
+									$code->delUser($current_admin);
+								}
 								$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";
 							}
 						}
 					// Otherwise none are being added so just go ahead and delete all
 					// the admins in the "delete list".
 					} else {
-						$code->delUser($_SESSION["AUTH"]->getId($current_admin));
+						try { 
+							$code->delUser($_SESSION["AUTH"]->getId($current_admin));
+						//if the user isn't found and the ID is passed, just use the id
+						} catch (Exception $e) {
+							$code->delUser($current_admin);
+						}
 						$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";
 					}
 				}
