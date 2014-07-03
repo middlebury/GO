@@ -51,7 +51,7 @@ if (isSuperAdmin($user->getName())) {
 // Get codes for all institutions
 foreach ($_POST['codes'] as $inst => $shortcuts) {
 	foreach ($shortcuts as $name => $value) {
-		$codes[] = $current_user->getCode($name, $inst);
+		$codes[] = $current_user->getCode((string) $name, $inst);
 	}
 }
 
