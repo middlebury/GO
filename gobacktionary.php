@@ -6,7 +6,7 @@ require_once "go.php";
 
 $letter = "a";
 
-if (isset($_GET["letter"]) && preg_match("/^[A-Za-z0-9]$/", $_GET["letter"]) === 1) {
+if (isset($_GET["letter"]) && preg_match("/^([A-Za-z0-9]|\[0-9\])$/", $_GET["letter"]) === 1) {
 	$letter = $_GET["letter"];
 }
 
