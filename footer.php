@@ -1,5 +1,2 @@
-			</div>
-		</div>
-		<?php include_once "analytics.php"; ?>
-	</body>
-</html>
+<?php
+  require_once $institutions[$institution]['footer'];

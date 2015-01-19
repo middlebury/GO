@@ -23,4 +23,3 @@ that you can edit its description and update its URL, if needed.</p>
 <a href="gotionary.php">The GOtionary</a>.</p>
 <?php
 require_once "footer.php";
-?>

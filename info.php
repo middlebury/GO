@@ -77,6 +77,7 @@ try {
 					<dd><?php print ($code->getPublic()? "yes":"no"); ?></dd>
 
 				</dl>
+				<div class="clear"></div>
 
 				<!-- form for submitting flag as inappropriate -->
 
@@ -153,7 +154,7 @@ try {
 					
 					//superadimin stuff
 					if (isAuditor()) {
-				 		print "<p>Admin:<br /><a class='history_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Show History' /></a>";
+				 		print "<p>Admin:<br /><a class='history_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=960,height=700,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='Show History' /></a>";
 				 	}
 				 	if (isSuperAdmin()) {
 						print "<a class='info_edit_button' href='update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'><input onclick='window.location=\"update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "\"' type='button' value='Edit this Code' /></a></p>";
@@ -165,4 +166,6 @@ try {
 				<?php 
 				} catch (Exception $e) { print "<div
 				class='error'>Error: ".htmlentities($e->getMessage())."</div>"; } ?>
-				</div> </div> </body> </html>
+				</div> </div>
+<?php
+require_once "footer.php";

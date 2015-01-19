@@ -88,6 +88,7 @@ if (isSuperAdmin($user->getName())) {
 			<td></td>
 			<td></td>
 			<td></td>
+			<td></td>
 		</tr>";
 		foreach ($codes as $code) {
 			$current_aliases = array();

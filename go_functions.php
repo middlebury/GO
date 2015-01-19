@@ -1,5 +1,7 @@
 <?php
-
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
 //copy pasted function to get IP address via client ip or x
 //forwarded first before falling back on remote addr
 function getRealIpAddr() {
