@@ -88,9 +88,9 @@ if (isset($_SESSION["AUTH"])) {
             //this is duplicated in gotionary.php
             if (!isset($_SESSION["AUTH"])) {
               if (AUTH_METHOD == 'cas') {
-                print " | <a href='login2.php?&amp;url=".urlencode(curPageURL()."&amp;destination=".curPageURL())."'>Log in</a>";
+                print "<a href='login2.php?&amp;url=".urlencode(curPageURL()."&amp;destination=".curPageURL())."'>Log in</a>";
               } else {
-                print " | <a href='login.php?r=".urlencode(curPageURL())."'>Log in</a>";
+                print "<a href='login.php?r=".urlencode(curPageURL())."'>Log in</a>";
               }
             } else {
               //print "<a href='https://login.middlebury.edu/cas/logout'>Log Out</a>";
