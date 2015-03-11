@@ -86,8 +86,8 @@ class Code {
 	 *
 	 * @since 10-07-2010
 	 */
-	const ALLOWED_URLS = "/^(http|ftp)s?:\/\/[A-Za-z0-9-_\?\/\.~\+\(\)\*\[\]%&=:;#@, ]+$/";
-	
+	const ALLOWED_URLS = "/^(http|ftp)s?:\/\/[A-Za-z0-9-_\?\/\.~\+\(\)\*\[\]%&=:;#@, !]+$/";
+
 	/**
 	 * Regular expression pattern to match allowed characters for descriptions.
 	 *
