@@ -25,6 +25,7 @@ $session_pages = array(
 	"gotionary.php",
 	"gobacktionary.php",
 	"login.php",
+	"logout.php",
 	"go_functions.php",
 	"process.php",
 	"all_codes.php",

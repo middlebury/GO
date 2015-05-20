@@ -209,8 +209,8 @@ if (isset($_SESSION["AUTH"])) {
                 print "<a href='login.php?r=".urlencode(curPageURL())."'>Log in</a>";
               }
             } else {
-              //print "<a href='https://login.middlebury.edu/cas/logout'>Log Out</a>";
               print "<a href='admin.php'>Manage GO</a>";
+              print " | <a href='logout.php'>Log Out</a>";
             }
           ?>
         </nav>
