@@ -93,6 +93,7 @@ define("GO_AUTH_CAS_ATTR_EMAIL", "EMail");
 
 // Directory lookup configuration
 define('DIRECTORY_ADMIN_ACCESS_KEY', 'passphrase');
+define('DIRECTORY_BASE_URL', 'https://login.example.edu/directory/');
 
 
 define('GET_USER_DISPLAY_NAME_CALLBACK', 'my_lookup_displayname');

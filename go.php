@@ -381,16 +381,34 @@ class GoAuthCas extends GoAuth {
    * @param string $queryValue The parameter value to pass in the query
    * @return SimpleXMLElement
    */
-  protected static function directoryFetch ($action, $queryKey, $queryValue) {
-  	$params = array(
-		'action'		=> $action,
-		'ADMIN_ACCESS'	=> DIRECTORY_ADMIN_ACCESS_KEY,
-		$queryKey		=> $queryValue,
-	);
-	$xmlString = file_get_contents('http://login.middlebury.edu/directory/?'.http_build_query($params));
-	if (!$xmlString)
-		throw new Exception("Couldn't fetch user for $queryKey '$queryValue'.");
-	return simplexml_load_string($xmlString);
+  public static function directoryFetch ($action, $queryKey, $queryValue) {
+    if (DIRECTORY_ADMIN_ACCESS_KEY) {
+      $opts = array(
+        'http' => array(
+          'header' =>
+            "ADMIN_ACCESS: ".DIRECTORY_ADMIN_ACCESS_KEY."\r\n".
+            "User-Agent: Drupal CAS-MM-Sync\r\n",
+        )
+      );
+      $context = stream_context_create($opts);
+    } else {
+      $context = null;
+    }
+
+    $params = array(
+      'action'    => $action,
+      $queryKey    => $queryValue,
+    );
+    if (!defined('DIRECTORY_BASE_URL'))
+      throw new Exception('DIRECTORY_BASE_URL is not defined');
+    $base = DIRECTORY_BASE_URL;
+    if (empty($base))
+      throw new Exception('DIRECTORY_BASE_URL is empty');
+    $url = $base . '?' . http_build_query($params, NULL, '&');
+    $xmlString = file_get_contents($url, false, $context);
+    if (!$xmlString)
+      throw new Exception("Couldn't fetch user for $queryKey '$queryValue'.");
+    return simplexml_load_string($xmlString);
   }
 
 }
