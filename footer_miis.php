@@ -9,8 +9,7 @@
 						460 Pierce St<br />
 						Monterey, CA 93940<br />
 						831.647.4100 (Main)<br />
-						831.647.4123 (Admissions)<br />
-						<a href="mailto:info@miis.edu">info@miis.edu</a></p>
+						831.647.4123 (Admissions)</p>
 					</div>
 				</div>
 				<div class="social">
