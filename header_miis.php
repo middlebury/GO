@@ -181,7 +181,8 @@ if (isset($_SESSION["AUTH"])) {
                 </ul>
               </div>
             </li>
-            <li class="navigation_giving"><a href="http://www.miis.edu/giving" class="tab">Giving</a>
+            <li class="navigation_giving">
+              <a href="http://www.miis.edu/giving" class="tab">Giving</a>
               <div class="nav_dropdown">
                 <ul>
                   <li class="main left"><a href="http://www.miis.edu/giving">Giving to MIIS</a></li>
@@ -189,10 +190,10 @@ if (isset($_SESSION["AUTH"])) {
                   <li class="left"><a href="http://www.miis.edu/giving/donor-recognition">Donor Recognition</a></li>
                   <li class="right"><a href="http://www.miis.edu/giving/ways">Ways to Give</a></li>
                   <li class="left"><a href="http://www.miis.edu/giving/legacy">Plan Your Legacy</a></li>
-                  <li class="right"><a href="http://www.miis.edu/giving/news">News &amp; Events</a></li>
+                  <li class="right"><a href="http://www.miis.edu/giving/news">News</a></li>
                   <li class="left"><a href="http://www.miis.edu/giving/contact">Contact Us</a></li>
-                </ul>
-              </div>
+               </ul>
+             </div>
             </li>
           </ul>
         </nav>
