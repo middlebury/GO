@@ -63,6 +63,7 @@ if (isset($_SESSION["AUTH"])) {
             <li class="right"><a href="https://secure.ethicspoint.com/domain/media/en/gui/28296/index.html">EthicsPoint</a></li>
             <li class="left"><a href="http://www.miis.edu/events">Events</a></li>
             <li class="right"><a href="http://www.middlebury.edu/about/handbook/lis/privacy ">Privacy Policy</a></li>
+            <li class="left"><a href="http://www.miis.edu/offices/security">Emergency</a></li>
           </ul>
         </nav>
         <nav class="languages">
