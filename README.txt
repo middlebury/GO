@@ -59,7 +59,7 @@ The GO application includes the phpCAS library. Please see go/phpcas/docs/README
 From Git:
 
 1. Clone the Git repository to a web-accessible directory:
-	git clone git://github.com/adamfranco/GO.git
+	git clone git://github.com/middlebury/GO.git
 	cd GO
 	git submodule init
 	git submodule update
