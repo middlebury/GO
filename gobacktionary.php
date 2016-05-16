@@ -52,7 +52,7 @@ if ($letter == "[0-9]") {
 	$where = "description LIKE '0%' OR description LIKE '1%' OR description LIKE '2%' OR description LIKE '3%' OR description LIKE '4%' OR description LIKE '5%' OR description LIKE '6%' OR description LIKE '7%' OR description LIKE '8%' OR description LIKE '9%'";
 }
 
-$select = $connection->prepare("SELECT code.name AS name, code.description AS description, code.url AS url, alias.name AS alias FROM code LEFT JOIN alias ON (code.name = alias.code AND alias.institution = :inst1) WHERE {$where} AND code.institution = :inst2 AND public = 1 ORDER BY code.description, code.url, code.name, alias.name");
+$select = $connection->prepare("SELECT code.name AS name, code.description AS description, code.url AS url, alias.name AS alias FROM code LEFT JOIN alias ON (code.name = alias.code AND alias.institution = :inst1) WHERE {$where} AND code.institution = :inst2 AND public = 1 ORDER BY code.url, alias.name, code.name, code.description");
 $select->bindValue(":inst1", $institution);
 $select->bindValue(":inst2", $institution);
 $select->execute();
@@ -77,7 +77,7 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 
     print htmlentities($row->description);
   
-  //add rel=nofollow and extrnal class to external links
+  //add rel=nofollow and external class to external links
 	$host_url = parse_url($row->url, PHP_URL_HOST);
 	$internal_host = false;  
 	foreach ($internal_hosts as $host) {
@@ -86,9 +86,9 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 		}
 	}
 	if (!$internal_host) {
-		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a> (". $row->url .")";
 	} else {
-		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a>";
+		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a> (". $row->url .")";
 	}
     
   }
