@@ -57,28 +57,48 @@ $select->bindValue(":inst1", $institution);
 $select->bindValue(":inst2", $institution);
 $select->execute();
 
+// Collect all the rows for manipulation
+$rows = $select->fetchAll(PDO::FETCH_ASSOC);
+
+$sort = array();
+
+// Strip the protocol and www from urls
+foreach ($rows as $key => &$row) {
+    $urlParts = parse_url($row['url']);
+    $url = preg_replace('/^www\./', '', $urlParts['host']);
+    if(isset($urlParts['path'])) {
+        $url = $url . $urlParts['path'];
+    }
+    if(isset($urlParts['query'])) {
+        $url = $url . $urlParts['query'];
+    }
+    $row['print_url'] = $url;
+    $sort[$key] = $row['print_url'];
+}
+
+array_multisort($sort, SORT_ASC, $rows);
 
 $lines = array();
 $current_url = "";
 print "<p>&nbsp;";
 
-while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
+foreach ($rows as $row) {
   
-  if ($current_url != $row->url) {
+  if ($current_url != $row['url']) {
     print "</p>";
     print "\n<p class='gobacktionary_info'>";
-    print "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
-	if (Code::isUrlValid($row->url))
+    print "<a href=\"info.php?code=".$row['name']."\" class='info_link' title='Show Shortcut Information'>";
+	if (Code::isUrlValid($row['url']))
 		print "<img src='icons/info.png' alt='info'/>";	
 	else
 		print "<img src='icons/alert.png' alt='alert'/>";	
 	print "</a> &nbsp; ";    
     print "</p>\n<p class='gobacktionary_shortcut'>";
 
-    print htmlentities($row->description);
+    print htmlentities($row['description']);
   
   //add rel=nofollow and external class to external links
-	$host_url = parse_url($row->url, PHP_URL_HOST);
+	$host_url = parse_url($row['url'], PHP_URL_HOST);
 	$internal_host = false;  
 	foreach ($internal_hosts as $host) {
 		if (preg_match($host, $host_url)) {
@@ -86,18 +106,18 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 		}
 	}
 	if (!$internal_host) {
-		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a> (". $row->url .")";
+		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/".htmlentities($row['name'])."</a> (". $row['print_url'] .")";
 	} else {
-		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/".htmlentities($row->name)."</a> (". $row->url .")";
+		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/".htmlentities($row['name'])."</a> (". $row['print_url'] .")";
 	}
     
   }
   
-  if ($row->alias) {
-    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row->name, $institution)."\">go/" . $row->alias . "</a>";
+  if ($row['alias']) {
+    print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/" . $row['alias'] . "</a>";
   }
 
-  $current_url = $row->url;
+  $current_url = $row['url'];
 }
 ?>
 				</p>
