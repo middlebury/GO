@@ -49,7 +49,14 @@ global $connection;
 
 $where = "url LIKE 'http://{$letter}%' OR url LIKE 'https://{$letter}%' OR url LIKE 'http://www.{$letter}%' OR url LIKE 'https://www.{$letter}%'";
 if ($letter == "[0-9]") {
-	$where = "description LIKE '0%' OR description LIKE '1%' OR description LIKE '2%' OR description LIKE '3%' OR description LIKE '4%' OR description LIKE '5%' OR description LIKE '6%' OR description LIKE '7%' OR description LIKE '8%' OR description LIKE '9%'";
+    $where = '';
+    for ($i = 0; $i < 10; $i++) {
+        $where .= "url LIKE 'http://{$i}%' OR url LIKE 'https://{$i}%' OR url LIKE 'http://www.{$i}%' OR url LIKE 'https://www.{$i}%' ";
+        if ($i != 9) {
+            $where .= 'OR ';
+        }
+    }
+}
 }
 
 $select = $connection->prepare("SELECT code.name AS name, code.description AS description, code.url AS url, alias.name AS alias FROM code LEFT JOIN alias ON (code.name = alias.code AND alias.institution = :inst1) WHERE {$where} AND code.institution = :inst2 AND public = 1 ORDER BY code.url, alias.name, code.name, code.description");
