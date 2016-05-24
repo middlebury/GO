@@ -47,7 +47,7 @@ if (isset($_GET["letter"]) && preg_match("/^([A-Za-z0-9]|\[0-9\])$/", $_GET["let
 
 global $connection;
 
-$where = "description LIKE '{$letter}%'";
+$where = "url LIKE 'http://{$letter}%' OR url LIKE 'https://{$letter}%' OR url LIKE 'http://www.{$letter}%' OR url LIKE 'https://www.{$letter}%'";
 if ($letter == "[0-9]") {
 	$where = "description LIKE '0%' OR description LIKE '1%' OR description LIKE '2%' OR description LIKE '3%' OR description LIKE '4%' OR description LIKE '5%' OR description LIKE '6%' OR description LIKE '7%' OR description LIKE '8%' OR description LIKE '9%'";
 }
