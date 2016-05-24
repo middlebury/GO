@@ -95,7 +95,9 @@ foreach ($rows as $row) {
 	print "</a> &nbsp; ";    
     print "</p>\n<p class='gobacktionary_shortcut'>";
 
-    print htmlentities($row['description']);
+    print htmlentities($row['print_url']);
+    print "<br />";
+    print "<em>&nbsp;&nbsp;&nbsp;".htmlentities($row['description'])."</em>";
   
   //add rel=nofollow and external class to external links
 	$host_url = parse_url($row['url'], PHP_URL_HOST);
@@ -106,9 +108,9 @@ foreach ($rows as $row) {
 		}
 	}
 	if (!$internal_host) {
-		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/".htmlentities($row['name'])."</a> (". $row['print_url'] .")";
+		print "<br />&nbsp;&nbsp;&nbsp;<a class='external' rel='nofollow' href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/".htmlentities($row['name'])."</a>";
 	} else {
-		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/".htmlentities($row['name'])."</a> (". $row['print_url'] .")";
+		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/".htmlentities($row['name'])."</a>";
 	}
     
   }
