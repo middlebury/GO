@@ -57,6 +57,9 @@ if ($letter == "[0-9]") {
         }
     }
 }
+// Special case when w is selected, to avoid listing out nearly all URLs.
+if ($letter == "w") {
+    $where = "url LIKE 'http://ww[!w]%' OR url LIKE 'http://www.{$letter}%' OR url LIKE 'https://ww[!w]%' OR url LIKE 'https://www.{$letter}%'";
 }
 
 $select = $connection->prepare("SELECT code.name AS name, code.description AS description, code.url AS url, alias.name AS alias FROM code LEFT JOIN alias ON (code.name = alias.code AND alias.institution = :inst1) WHERE {$where} AND code.institution = :inst2 AND public = 1 ORDER BY code.url, alias.name, code.name, code.description");
