@@ -113,6 +113,7 @@ if (isset($_SESSION["AUTH"])) {
                   <li class="left"><a href="http://www.miis.edu/about/monterey">Location</a></li>
                   <li class="right"><a href="http://www.miis.edu/about/newsroom">Newsroom</a></li>
                   <li class="left"><a href="http://www.miis.edu/about/contact">Contact Us</a></li>
+                  <li class="right"><a href="http://www.miis.edu/about/privacy">Privacy</a></li>
                 </ul>
               </div>
             </li>
@@ -120,17 +121,14 @@ if (isset($_SESSION["AUTH"])) {
               <div class="nav_dropdown">
                 <ul>
                   <li class="main left"><a href="http://www.miis.edu/admissions">Admissions</a></li>
-                  <li class="right"><a href="http://www.miis.edu/admissions/request-information">Request Information</a></li>
+                  <li class="right"><a href="http://www.miis.edu/admissions/request-information">Request Info</a></li>
                   <li class="left"><a href="http://www.miis.edu/admissions/apply">How to Apply</a></li>
-                  <li class="right"><a href="http://www.miis.edu/admissions/requirements">Requirements</a></li>
-                  <li class="left"><a href="http://www.miis.edu/admissions/financialaid">Finance Your Education</a></li>
-                  <li class="right"><a href="http://www.miis.edu/admissions/tuition">Tuition &amp; Fees</a></li>
+                  <li class="right"><a href="http://www.miis.edu/admissions/financialaid">Finance Your Education</a></li>
                   <li class="left"><a href="http://www.miis.edu/admissions/visit">Visit Campus</a></li>
-                  <li class="right"><a href="http://www.miis.edu/admissions/events">Worldwide Events</a></li>
-                  <li class="left"><a href="http://www.miis.edu/admissions/online-events">Online Events</a></li>
-                  <li class="right"><a href="http://www.miis.edu/admissions/contact">Contact Us</a></li>
-                  <li class="left"><a href="http://www.miis.edu/admissions/student-ambassadors">Meet Your Student Ambassadors</a></li>
-                  <li class="right"><a href="http://www.miis.edu/admissions/faqs">Frequently Asked Questions</a></li>
+                  <li class="right"><a href="http://www.miis.edu/admissions/student-ambassadors">Meet Our Students</a></li>
+                  <li class="left"><a href="http://www.miis.edu/admissions/military-veterans">Military and Veterans</a></li>
+                  <li class="right"><a href="http://www.miis.edu/admissions/online-events">Online Events</a></li>
+                  <li class="left"><a href="http://www.miis.edu/admissions/contact">Contact Us</a></li>
                 </ul>
               </div>
             </li>
@@ -154,18 +152,21 @@ if (isset($_SESSION["AUTH"])) {
               <div class="nav_dropdown">
                 <ul>
                   <li class="main left"><a href="http://www.miis.edu/student-life">Student Life</a></li>
+                  <li class="right"><a href="http://www.miis.edu/student-life/resources">Student Services Resources</a></li>
+                  <li class="left"><a href="http://www.miis.edu/student-life/in-case-of-illness-or-accident">In Case of Illness or Accident</a></li>
                   <li class="right"><a href="http://www.miis.edu/student-life/newstudent">New Student Info</a></li>
-                  <li class="left"><a href="http://www.miis.edu/student-life/housing">Housing</a></li>
-                  <li class="right"><a href="http://www.miis.edu/student-life/health-wellness">Health and Wellness</a></li>
                   <li class="left"><a href="http://www.miis.edu/student-life/policies">Student Life Policies</a></li>
-                  <li class="right"><a href="http://www.miis.edu/student-life/international">International Students</a></li>
-                  <li class="left"><a href="http://www.miis.edu/student-life/monterey">Life in Monterey</a></li>
-                  <li class="right"><a href="http://www.miis.edu/student-life/council">Student Council</a></li>
-                  <li class="left"><a href="http://www.miis.edu/student-life/clubs">Student Clubs</a></li>
-                  <li class="right"><a href="http://www.miis.edu/student-life/veterans">MIIS Veterans</a></li>
-                  <li class="left"><a href="http://www.miis.edu/student-life/commencement">Commencement</a></li>
-                  <li class="right"><a href="http://www.miis.edu/student-life/world">MIIS Around the World</a></li>
-                  <li class="left"><a href="http://www.miis.edu/student-life/contact">Contact Us</a></li>
+                  <li class="right"><a href="http://www.miis.edu/student-life/housing">Housing</a></li>
+                  <li class="left"><a href="http://www.miis.edu/student-life/health-wellness">Health and Wellness</a></li>
+                  <li class="right"><a href="http://www.miis.edu/student-life/diversity">Diversity and Inclusion</a></li>
+                  <li class="left"><a href="http://www.miis.edu/student-life/international">International Students</a></li>
+                  <li class="right"><a href="http://www.miis.edu/student-life/monterey">Life in Monterey</a></li>
+                  <li class="left"><a href="http://www.miis.edu/student-life/council">Student Council</a></li>
+                  <li class="right"><a href="http://www.miis.edu/student-life/clubs">Student Clubs</a></li>
+                  <li class="left"><a href="http://www.miis.edu/student-life/veterans">MIIS Veterans</a></li>
+                  <li class="right"><a href="http://www.miis.edu/student-life/commencement">Commencement</a></li>
+                  <li class="left"><a href="http://www.miis.edu/student-life/world">MIIS Around the World</a></li>
+                  <li class="right"><a href="http://www.miis.edu/student-life/contact">Contact Us</a></li>
                 </ul>
               </div>
             </li>
