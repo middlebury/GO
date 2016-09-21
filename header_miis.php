@@ -40,6 +40,15 @@ if (isset($_SESSION["AUTH"])) {
     <!--[if lt IE 9]><link rel="stylesheet" href="//cdn.middlebury.edu/miis.edu/2010/js/ieHTML5.css" /><![endif]-->
   </head>
   <body>
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WWN5QX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WWN5QX');</script>
+    <!-- End Google Tag Manager -->
     <a href="#miis_content" class="skiplink">Skip to content</a>
     <header class="header container">
       <div class="region region-banner">
