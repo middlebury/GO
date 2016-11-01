@@ -19,6 +19,45 @@ RewriteEngine On
 # Set this to the path of your GO instalation.
 RewriteBase /
 
+
+# If we don't have a full host-name, bump out the the full hostname for MIIS IP ranges.
+# If we don't do this now, then requests from MIIS IP ranges will use the default (Midd)
+# hostname or configuration.
+#
+# MIIS VPN to Midd: 172.16.
+# MIIS LAN IP range: ????
+RewriteCond %{HTTP_HOST}        ^go$ [NC]
+RewriteCond %{REMOTE_ADDR}      ^(172\.16\.|205\.155\.72\.)
+RewriteRule (.*)         http://go.miis.edu/$1 [L,R,QSA]
+
+# Custom host-names
+RewriteCond %{HTTP_HOST}        ^mcab [NC]
+RewriteRule .* http://go.middlebury.edu/mcab [L,R]
+
+
+# Custom regular expression rewrite rules:
+RewriteCond %{QUERY_STRING} ^([0-9]{6})/?$
+RewriteRule ^courses$ https://ssb.middlebury.edu/PNTR/saturn_midd.course_catalog_utlq.catalog_page_by_dept?p_term=%1 [L,R]
+
+RewriteCond %{QUERY_STRING} ^([0-9]{6})/?$
+RewriteRule ^allcourses$ https://ssb.middlebury.edu/PNTR/saturn_midd.course_catalog_utlq.catalog_page?p_term=%1  [L,R]
+
+RewriteCond %{QUERY_STRING} ^(.*)/?$
+RewriteRule ^classof$ http://www.middlebury.edu/alumni/reunion/years/%1 [L,R]
+
+RewriteCond %{QUERY_STRING} ^(.*)/?$
+RewriteRule ^forum$ http://lists.middlebury.edu/read/\?forum=%1 [L,R]
+
+RewriteCond %{QUERY_STRING} ^(.*)/?$
+RewriteRule ^list$ https://blm.middlebury.edu/subscriptions/FindMember.aspx?filter=%1 [L,R]
+
+RewriteCond %{QUERY_STRING} ^(.+)/?$
+RewriteRule ^users$ http://community.middlebury.edu/~%1 [L,R]
+
+RewriteCond %{QUERY_STRING} ^(.+)/?$
+RewriteRule ^(pt2?|ptrack|ptracker)$ https://web.middlebury.edu/development/projects/projecttracker/Reports/Pdr_detail.aspx?project_id=%1 [L,R]
+
+
 ##
 # mod_rewrite handles the query-string portion of requests separately from the
 # rest of the path. Since we need to include the query string directly in the
@@ -38,3 +77,11 @@ RewriteRule ^(.*)/? redirect.php?code=$1?%{QUERY_STRING} [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/? redirect.php?code=$1 [L]
+
+
+
+# If we don't have a full host-name, bump out the the full hostname. The first
+# rule would have already set the MIIS hostname for the MIIS IP range, so for
+# all other client IPs, expand to the middlebury version.
+RewriteCond %{HTTP_HOST}   ^go$ [NC]
+RewriteRule (.*)         http://go.middlebury.edu/$1 [L,R,QSA]
