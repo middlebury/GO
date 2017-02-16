@@ -405,7 +405,7 @@ class GoAuthCas extends GoAuth {
     if (empty($base))
       throw new Exception('DIRECTORY_BASE_URL is empty');
     $url = $base . '?' . http_build_query($params, NULL, '&');
-    $xmlString = file_get_contents($url, false, $context);
+    $xmlString = @file_get_contents($url, false, $context);
     if (!$xmlString)
       throw new Exception("Couldn't fetch user for $queryKey '$queryValue'.");
     return simplexml_load_string($xmlString);
