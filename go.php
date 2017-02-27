@@ -386,7 +386,7 @@ class GoAuthCas extends GoAuth {
       $opts = array(
         'http' => array(
           'header' =>
-            "ADMIN_ACCESS: ".DIRECTORY_ADMIN_ACCESS_KEY."\r\n".
+            "Admin-Access: ".DIRECTORY_ADMIN_ACCESS_KEY."\r\n".
             "User-Agent: Drupal CAS-MM-Sync\r\n",
         )
       );
