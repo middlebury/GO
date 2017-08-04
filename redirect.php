@@ -45,6 +45,18 @@ try {
 		// Pass through the Google Analytics Linker code.
 		else {
 			$url = $code->getUrl();
+
+			// Ignore patterns for GA:
+			$ga_ignore = array(
+				'/^https?:\/\/ssb-\w+\.ec\.middlebury.edu\//i', // Banner-Web
+			);
+			foreach($ga_ignore as $pattern) {
+				if (preg_match($pattern, $url)) {
+					header("Location: " . $url);
+					exit;
+				}
+			}
+
 			// There is already a query string...
 			if (preg_match('/\?/', $url)) {
 				$separator = '&';
