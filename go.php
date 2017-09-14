@@ -79,12 +79,16 @@ if (in_array($current_page, $admin_pages)) {
 }
 
 // Initialize database
-global $connection;
-$connection = new PDO(
-  "mysql:dbname=" . GO_DATABASE_NAME . ";host=" . GO_DATABASE_HOST . ";",
-  GO_DATABASE_USER, GO_DATABASE_PASS);
-$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+try {
+	global $connection;
+	$connection = new PDO(
+  		"mysql:dbname=" . GO_DATABASE_NAME . ";host=" . GO_DATABASE_HOST . ";",
+  		GO_DATABASE_USER, GO_DATABASE_PASS, array (PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+	$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+} catch (Exception $e) {
+	throw new Exception('Could not connect to the database.');
+}
 
 // Match the institution by URL.
 global $institutions;
