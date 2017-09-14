@@ -53,7 +53,7 @@ try {
 	}
 } catch (Exception $e) { 
 	print "<div
-class='error'>Error: ".htmlentities($e->getMessage())."</div>"; 
+class='error'>Error. Please contact ".GO_HELP_HTML."</div>"; 
 }
 
 function print_codes_table(array $codes, $exists = true) {

@@ -165,7 +165,7 @@ try {
 
 				<?php 
 				} catch (Exception $e) { print "<div
-				class='error'>Error: ".htmlentities($e->getMessage())."</div>"; } ?>
+				class='error'>Error. Please contact ".GO_HELP_HTML."</div>"; } ?>
 				</div> </div>
 <?php
 require_once "footer.php";

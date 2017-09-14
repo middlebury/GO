@@ -11,5 +11,5 @@ try {
 	QRcode::png('http://go.'.$institution.'/' . $code->getName());
 
 } catch (Exception $e) { print "<div
-	class='error'>Error: ".htmlentities($e->getMessage())."</div>";
+	class='error'>Error. Please contact ".GO_HELP_HTML."</div>";
 }
