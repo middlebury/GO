@@ -164,8 +164,10 @@ try {
 				</form>
 
 				<?php 
-				} catch (Exception $e) { print "<div
-				class='error'>Error. Please contact ".GO_HELP_HTML."</div>"; } ?>
+				} catch (Exception $e) {
+					error_log($e->getMessage(), 3);
+					print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>";
+				} ?>
 				</div> </div>
 <?php
 require_once "footer.php";

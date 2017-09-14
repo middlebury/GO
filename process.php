@@ -126,6 +126,7 @@ if (isset($_SESSION['AUTH'])) {
 			if (!empty($showCreateMessage))
 				$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut ".$_POST['code']." was created.</p>";
 		} catch (Exception $e) {
+			error_log($e->getMessage(), 3);
 			$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding code failed. Please try again and contact ".GO_HELP_HTML." if you encounter an error.</p>";
 			header("location: " . $_POST['form_url']);
 			exit;
@@ -210,6 +211,7 @@ if (isset($_SESSION['AUTH'])) {
 							$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
 							$_SESSION['update_message'][] = "<p class='update_message_success'>Alias ".$current_alias." was added to '".$code->getName()."'.</p>";
 						} catch (Exception $e) {
+							error_log($e->getMessage(), 3);
 							$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding alias ".$current_alias." failed. Please try again and contact  ".GO_HELP_HTML."  if you encounter an error.</p>";
 						}
 					}

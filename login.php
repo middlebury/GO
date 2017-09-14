@@ -6,8 +6,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
   try {
     $_SESSION["AUTH"] = new GoAuthLdap($_POST["username"], $_POST["password"]);
     header("Location: " . $_POST["r"]);
-  } catch(Exception $ex) {
-    $error = $ex->getMessage();
+  } catch(Exception $e) {
+		error_log($e->getMessage(), 3);
+    $error = TRUE;
   }
 }
 

@@ -51,9 +51,9 @@ try {
 			print_codes_table($codes, false);
 		}
 	}
-} catch (Exception $e) { 
-	print "<div
-class='error'>Error. Please contact ".GO_HELP_HTML."</div>"; 
+} catch (Exception $e) {
+	error_log($e->getMessage(), 3);
+	print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>"; 
 }
 
 function print_codes_table(array $codes, $exists = true) {
