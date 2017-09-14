@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `code` (
   `description` text,
   `institution` varchar(255) NOT NULL DEFAULT 'middlebury.edu',
   `public` tinyint(1) NOT NULL DEFAULT '1',
-  `url2` text NOT NULL,
+  `url2` text,
   `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`name`,`institution`),
   KEY `updated` (`updated`)
