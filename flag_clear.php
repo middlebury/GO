@@ -1,13 +1,13 @@
 <?php
-//go_functions.php gives us access to the isSuperAdmin function
+//go_functions.php gives us access to the isSuperAdmin function 
 require_once "go_functions.php";
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
 require_once "go.php";
 //Mail.php is the PEAR script that includes the mail class for sending mail
-//require_once "Mail.php";
+require_once "Mail.php";
 //mime.php includes support for mime mail
-//require_once "Mail/mime.php";
+require_once "Mail/mime.php";
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -35,14 +35,13 @@ try {
   $update->bindValue(3, $_POST['code']);
   $update->bindValue(4, $_POST['institution']);
 	$update->execute();
-
+		
 	//log completion
 	Go::log("Flag as inappropriate flag was completed", $_POST['code']);
-
-	//send mail to each go superadmin indicating that this
+	
+	//send mail to each go superadmin indicating that this 
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
-	/*
   foreach ($goAdmin as $current_admin) {
   $to[] = GoAuthCas::getEmail($current_admin);
   }
@@ -52,11 +51,11 @@ try {
   $mime = new Mail_mime;
   if (isset($_SESSION["AUTH"])) {
     $text = 'The flagged GO code (aka. link) "'.$_POST["code"].'" was completed by '.$_SESSION["AUTH"]->getName().'. History may be viewed via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
-
+    
     '.$_SESSION["AUTH"]->getName().'\'s notes: '.$_POST['notes'];
 	  $html = 'The flagged GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was completed by '.$_SESSION["AUTH"]->getName().'. History may be viewed via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
-
-	  '.$_SESSION["AUTH"]->getName().'\'s notes: '.$_POST['notes'];
+	  
+	  '.$_SESSION["AUTH"]->getName().'\'s notes: '.$_POST['notes'];	
 	}
 	$mime->setTXTBody($text);
 	$mime->setHTMLBody($html);
@@ -66,8 +65,7 @@ try {
   $message = Mail::factory('mail');
   //foreach ($to as $current_address) {
   $message->send($to, $headers, $body);
-	*/
-
+	
 //now catch any exceptions
 } catch (Exception $e) {
 	throw $e;
