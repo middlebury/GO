@@ -1098,7 +1098,7 @@
                 $this->bstream = $bs;
                 return 0;
                 
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -1128,7 +1128,7 @@
                 $this->bstream = $bs;
                 return 0;
             
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -1149,7 +1149,7 @@
                 $this->bstream = $bs;
                 return 0;
             
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -1181,7 +1181,7 @@
                 $this->bstream = $bs;
                 return 0;
             
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -1200,7 +1200,7 @@
                 $this->bstream = $bs;
                 return 0;
             
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -1276,7 +1276,7 @@
 
                 return $this->bstream->size();
             
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -1354,7 +1354,7 @@
                 $entry = new QRinputItem($mode, $size, $data);
                 $this->items[] = $entry;
                 return 0;
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -1377,7 +1377,7 @@
                 $entry = new QRinputItem(QR_MODE_STRUCTURE, 3, buf);
                 array_unshift($this->items, $entry);
                 return 0;
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 return -1;
             }
         }
@@ -3301,7 +3301,7 @@
                 
                 QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$saveandprint);
             
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
             
                 QRtools::log($outfile, $e->getMessage());
             

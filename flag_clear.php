@@ -67,9 +67,9 @@ try {
   $message->send($to, $headers, $body);
 	
 //now catch any exceptions
-} catch (Exception $e) {
+} catch (Throwable $e) {
 	throw $e;
-} //end catch (Exception $e) {
+} //end catch (Throwable $e) {
 
 //redirect on completion
 header("location: flag_admin.php?code=".$_POST['code']);

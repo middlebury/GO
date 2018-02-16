@@ -128,7 +128,7 @@ try {
   $message->send($to, $headers, $body);
   //}
 //now catch any exceptions
-} catch (Exception $e) {
+} catch (Throwable $e) {
 	throw $e;
 }
 

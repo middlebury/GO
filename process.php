@@ -5,10 +5,6 @@ require_once "go_functions.php";
 //pages and pages where a session is necessary
 require_once "go.php";
 
-// Debugging code
-//var_dump($_POST);
-//die();
-
 // Add the results of $_POST to $_SESSION. We'll use
 // this to repopulate values in the form if it fails
 // validation
@@ -125,9 +121,9 @@ if (isset($_SESSION['AUTH'])) {
 			$code = new Code($_POST['code'], $_POST['institution']);
 			if (!empty($showCreateMessage))
 				$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut ".$_POST['code']." was created.</p>";
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			error_log($e->getMessage(), 3);
-			$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding code failed. Please try again and contact ".GO_HELP_HTML." if you encounter an error.</p>";
+			$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding code failed." . $e->getMessage() . " Please try again and contact ".GO_HELP_HTML." if you encounter an error.</p>";
 			header("location: " . $_POST['form_url']);
 			exit;
 		}
@@ -210,7 +206,7 @@ if (isset($_SESSION['AUTH'])) {
 							// Otherwise make a new alias and set a message
 							$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
 							$_SESSION['update_message'][] = "<p class='update_message_success'>Alias ".$current_alias." was added to '".$code->getName()."'.</p>";
-						} catch (Exception $e) {
+						} catch (Throwable $e) {
 							error_log($e->getMessage(), 3);
 							$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding alias ".$current_alias." failed. Please try again and contact  ".GO_HELP_HTML."  if you encounter an error.</p>";
 						}
@@ -298,7 +294,7 @@ if (isset($_SESSION['AUTH'])) {
 								try {
 									$code->delUser($_SESSION["AUTH"]->getId($current_admin));
 								//if the user isn't found and the ID is passed, just use the id
-								} catch (Exception $e) {
+								} catch (Throwable $e) {
 									$code->delUser($current_admin);
 								}
 								$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";
@@ -310,7 +306,7 @@ if (isset($_SESSION['AUTH'])) {
 						try { 
 							$code->delUser($_SESSION["AUTH"]->getId($current_admin));
 						//if the user isn't found and the ID is passed, just use the id
-						} catch (Exception $e) {
+						} catch (Throwable $e) {
 							$code->delUser($current_admin);
 						}
 						$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$current_admin." was removed as an admin of '".$code->getName()."'.</p>";

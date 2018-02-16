@@ -199,7 +199,7 @@ try {
   </table>
   
   <?php //now catch any exceptions
-} catch (Exception $e) {
+} catch (Throwable $e) {
 	throw $e;
 }
 

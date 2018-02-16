@@ -293,7 +293,7 @@ class Code {
 					$insert->execute();
 					
 					Go::log("Created code $name via Code::__construct().", $name, $institution);
-				} catch(Exception $e) {
+				} catch(Throwable $e) {
 					throw $e;
 				}
 			} else {
@@ -306,7 +306,7 @@ class Code {
 				$this->setUnsearchable(($row->unsearchable == "1"));
 				$this->setUpdated($row->updated);
 			}
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw $e;
 		}
 	}
@@ -407,7 +407,7 @@ class Code {
 			} else {
 				throw new Exception("The user {$user} does not have access to code {$this->name}");
 			}
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 	}
@@ -435,7 +435,7 @@ class Code {
 			}
 			
 			$select->closeCursor();
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 		
@@ -510,7 +510,7 @@ class Code {
 				
 				Go::log("Updated code name from '".$this->name."' to '$name' via Code::setName(). 1 of 2.", $this->name, $this->institution);
 				Go::log("Updated code name from '".$this->name."' to '$name' via Code::setName(). 2 of 2.", $name, $this->institution);
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -550,7 +550,7 @@ class Code {
 				if ($select->rowCount() > 0) {
 					throw new Exception("The code " . $this->name . " already exists.");
 				}
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
 				throw $e;
 			}
 		}
@@ -567,7 +567,7 @@ class Code {
 				
 				Go::log("Updated code institution from '".$this->institution."' to '$institution' via Code::setInstitution(). 1 of 2.", $this->name, $this->institution);
 				Go::log("Updated code institution from '".$this->institution."' to '$institution' via Code::setName(). 2 of 2.", $this->name, $institution);
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
 				throw $e;
 			}
 		}
@@ -606,7 +606,7 @@ class Code {
 				$update->execute();
 				
 				Go::log("Updated code url to '$url' via Code::setUrl().", $this->name, $this->institution);
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -691,7 +691,7 @@ class Code {
 				
 				Go::log("Updated code description to '$description' via Code::setDescription().", $this->name, $this->institution);
 
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -730,7 +730,7 @@ class Code {
 				$update->execute();
 				
 				Go::log("Updated code publicity to '".($public ? "1" : "0")."' via Code::setPublic().", $this->name, $this->institution);
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -769,7 +769,7 @@ class Code {
 				$update->execute();
 				
 				Go::log("Updated code unsearchablity to '".($unsearchable ? "1" : "0")."' via Code::setUnsearchable().", $this->name, $this->institution);
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -831,7 +831,7 @@ class Code {
 			$code->execute();
 			
 			Go::log("Deleted code via Code::delete().", $this->name, $this->institution);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw $e;
 		}
 	}
@@ -856,7 +856,7 @@ class Code {
 			if (isset($code)) {
 				throw new Exception("User {$name} already has access to {$this->name}");
 			}
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 			
@@ -868,7 +868,7 @@ class Code {
 			$insert->execute();
 			
 			Go::log("Added user '".$name."' to code via Code::addUser().", $this->name, $this->institution);
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 	}
@@ -897,7 +897,7 @@ class Code {
 			if (!isset($code)) {
 				throw new Exception("User {$name} does not have access to {$this->name}");
 			} 
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 			
@@ -910,7 +910,7 @@ class Code {
 			
 			Go::log("Removed user '".$name."' from code via Code::addUser().", $this->name, $this->institution);
 
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 	}
@@ -938,7 +938,7 @@ class Code {
 			}
 			
 			$select->closeCursor();
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 		
@@ -1013,7 +1013,7 @@ ORDER BY tstamp ASC
 					$users[] = new User($m[2]);
 				}
 			}
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 		
@@ -1285,7 +1285,7 @@ ORDER BY alias
 			foreach ($select->fetchAll(PDO::FETCH_OBJ) as $row) {
 				$aliases[$row->name] = new DeletedAlias($row->alias, $this->name, $this->institution);
 			}
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 		

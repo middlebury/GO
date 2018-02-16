@@ -100,8 +100,8 @@ try {
   <?php
 
 //now catch any exceptions
-} catch (Exception $e) {
+} catch (Throwable $e) {
 	throw $e;
-} //end catch (Exception $e) {
+} //end catch (Throwable $e) {
 
 require_once "footer.php";

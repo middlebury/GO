@@ -51,7 +51,7 @@ try {
 			print_codes_table($codes, false);
 		}
 	}
-} catch (Exception $e) {
+} catch (Throwable $e) {
 	error_log($e->getMessage(), 3);
 	print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>"; 
 }

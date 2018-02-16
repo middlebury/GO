@@ -78,14 +78,14 @@ class User {
 					$insert = $connection->prepare("INSERT INTO user (name, notify) VALUES (:name, 1)");
 					$insert->bindValue(":name", $name);
 					$insert->execute();
-				} catch (Exception $e) {
+				} catch (Throwable $e) {
 					throw $e;
 				}
 			} else {
 				$row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT);
 				$this->setNotify(($row->notify == "1"));
 			}
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 	}
@@ -149,7 +149,7 @@ class User {
 				$this->codes[$institution . "/" . $code] = new Code($code, $institution);
 				return $this->codes[$institution . "/" . $code];
 			}
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 	}
@@ -176,7 +176,7 @@ class User {
 			}
 			
 			$select->closeCursor();
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 		
@@ -213,7 +213,7 @@ ORDER BY log.code ASC, log.tstamp DESC");
 			}
 			
 			$select->closeCursor();
-		} catch(Exception $e) {
+		} catch(Throwable $e) {
 			throw $e;
 		}
 		
@@ -243,7 +243,7 @@ ORDER BY log.code ASC, log.tstamp DESC");
 				$update->bindValue(":name", $name);
 				$update->bindValue(":oldname", $this->name);
 				$update->execute();
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -279,7 +279,7 @@ ORDER BY log.code ASC, log.tstamp DESC");
 				$update->bindValue(":notify", ($notify ? "1" : "0"));
 				$update->bindValue(":name", $this->name);
 				$update->execute();
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}

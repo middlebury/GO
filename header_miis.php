@@ -8,7 +8,7 @@ $name = "";
 if (isset($_SESSION["AUTH"])) {
   try {
     $name = $_SESSION["AUTH"]->getName();
-  } catch (Exception $e) {
+  } catch (Throwable $e) {
     // We may have an expired proxy-ticket kept around. If so, regenerate the session
     // and log-in again.
     if ($e->getCode() == PHPCAS_SERVICE_PT_FAILURE) {

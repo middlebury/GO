@@ -104,7 +104,7 @@ class Alias {
 					$insert->execute();
 					
 					Go::log("Created alias via Alias::__construct().", $code, $institution, $name);
-				} catch(Exception $e) {
+				} catch(Throwable $e) {
 					throw $e;
 				}
 			} else {
@@ -113,7 +113,7 @@ class Alias {
 				$this->setInstitution($row->institution);
 				$this->setCode($row->code);
 			}
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw $e;
 		}
 	}
@@ -211,7 +211,7 @@ class Alias {
 				
 				Go::log("Updated alias name from '".$this->name."' to '$name' via Alias::setName(). 1 of 2.", $this->code, $this->institution, $this->name);
 				Go::log("Updated alias name from '".$this->name."' to '$name' via Alias::setName(). 2 of 2.", $this->code, $this->institution, $name);
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -247,7 +247,7 @@ class Alias {
 			if ($select->rowCount() == 0) {
 				throw new Exception("There is no code " . $code);
 			}
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw $e;
 		}
 			
@@ -265,7 +265,7 @@ class Alias {
 				
 				Go::log("Updated alias code from '".$this->code."' to '$code' via Alias::setCode(). 1 of 2.", $this->code, $this->institution, $this->name);
 				Go::log("Updated alias code from '".$this->code."' to '$code' via Alias::setCode(). 2 of 2.", $code, $this->institution, $this->name);
-			} catch(Exception $e) {
+			} catch(Throwable $e) {
 				throw $e;
 			}
 		}
@@ -306,7 +306,7 @@ class Alias {
 				
 				Go::log("Updated alias institution from '".$this->institution."' to '$institution' via Alias::setInstitution(). 1 of 2.", $this->code, $this->institution, $this->name);
 				Go::log("Updated alias institution from '".$this->institution."' to '$institution' via Alias::setInstitution(). 2 of 2.", $this->code, $institution, $this->name);
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
 				throw $e;
 			}
 		}
@@ -331,7 +331,7 @@ class Alias {
 			$alias->execute();
 			
 			Go::log("Deleted alias via Alias::delete().", $this->code, $this->institution, $this->name);
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			throw $e;
 		}
 	}

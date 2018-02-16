@@ -28,7 +28,7 @@ try {
 
 	try {
 		$code = Code::get($name, $institution);
-	} catch (Exception $e) {
+	} catch (Throwable $e) {
 		// If not found, send to the gotionary.
 		header("Location: ".$basePath."gotionary.php?letter=" . substr($name, 0, 1));
 		exit;
@@ -68,7 +68,7 @@ try {
 		exit;
 	}
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
 	header("Location: ".$basePath."info.php?code=" . $name);
 	exit;
 }

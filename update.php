@@ -100,7 +100,7 @@ if (isset($_SESSION['AUTH'])) {
 								try {
 									$username = $_SESSION["AUTH"]->getName($cUser->getName());
 								//if there is an exception, use the id as the username
-								} catch (Exception $e) {
+								} catch (Throwable $e) {
 									$username = $cUser->getName();
 								}
 								print "<li id='" . $username . "'>". $username;
