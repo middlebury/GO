@@ -100,7 +100,7 @@ class Code {
 	 *
 	 * @since 10-08-2010
 	 */
-	const ALLOWED_ADMIN = "/^[A-Za-z]+$/";
+	const ALLOWED_ADMIN = "/^[A-Za-z0-9]+$/";
 	
 	/**
 	 * Answer true if name validates, false if not.
