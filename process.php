@@ -11,7 +11,7 @@ require_once "go.php";
 $_SESSION['form_values'] = $_POST;
 // Add the current code to form values for our check to see if we're
 // still editing the same code or have switched to editing a different one
-$_SESSION['form_values']['this_code'] = $_POST['code'];
+$_SESSION['form_values']['this_code'] = isset($_POST['code']) ? $_POST['code'] : NULL;
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -50,83 +50,83 @@ if (isset($_SESSION['AUTH'])) {
 		// We'll do something different in that case
 		if(isset($_POST['update'])) {
 		
-		// Check our input
-		if (!Code::isValidCode($_POST['code'])) {
-			// We add these to an array so that we can print out
-			// more than one message at a time
-			$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$_POST['code']."</p>";
-			// This tells us the ID of the field that is in error
-			// if this validation fails. Used to change the class
-			// of the failed field when redirected back to the
-			// original form
-			$_SESSION['field_id_in_error'] = 'code';
-			// Redirect to originating location
-			die(header("location: " . $_POST['form_url']));
-		}
-		if (!Code::isValidUrl($_POST['update_url'])) {
-			$_SESSION['update_message'][] = "<p class='update_message_failure'>The URL you are trying to set (".$_POST['update_url'].") is not valid. Please enter a properly formed URL.</p>";
-			$_SESSION['field_id_in_error'] = 'update_url';
-			// Redirect to originating location
-			die(header("location: " . $_POST['form_url']));
-		}
-		if (!Code::isValidDescription($_POST['update_description'])) {
-			$_SESSION['update_message'][] = "<p class='update_message_failure'>The description you are trying to set contains invalid characters. The characters allowed are letters, numbers, and common puntcuation. Please make adjustments and try again.</p>";
-			$_SESSION['field_id_in_error'] = 'update_description';
-			// Redirect to originating location
-			die(header("location: " . $_POST['form_url']));
-		}
-		if (isset($_POST['alias_list'])) {
-			foreach ($_POST['alias_list'] as $current_alias) {
-				if (!Code::isValidCode($current_alias)) {
-					$_SESSION['update_message'][] = "<p class='update_message_failure'>The alias you are trying to add contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$current_alias."</p>";
-					$_SESSION['field_id_in_error'] = 'add_alias_text';
-					// Redirect to originating location
-					die(header("location: " . $_POST['form_url']));
-				}
-			}
-		}
-		if (isset($_POST['admin_list'])) {
-			foreach ($_POST['admin_list'] as $current_admin) {
-				if (!Code::isValidAdmin($current_admin)) {
-					$_SESSION['update_message'][] = "<p class='update_message_failure'>The admin you are trying to add contains invalid characters. Admins may only contain letters and numbers. Given ".$current_admin."</p>";
-					$_SESSION['field_id_in_error'] = 'add_admin_text';
-					// Redirect to originating location
-					die(header("location: " . $_POST['form_url']));
-				}
-			}
-		}
-		
-		// Set messages for the create process (as opposed to the edit
-		// process. We're using this script for both).
-		// If the code is new then say it was created, otherwise it's
-		// being edited and we don't need to say that.
-		if (!Code::exists($_POST['code'], $_POST['institution'])) {
-			$showCreateMessage = true;
-		} else {
-		// If it does exist, we need to know if it's being edited or created
-		// Check the "udate" value (the value of the submit button). If it's
-		// 'Create Shortcut' then complain that it already exists (if we're editing
-		// then it should already exist and we don't need a message. We also
-		// should not run the rest of the script, we don't want the values being
-		// updated via the create screen
-			if ($_POST['update'] == 'Create Shortcut') {
-				$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut ".$_POST['code']." already exists. The shortcut was not created. Would you like to <a href='my_codes.php'>edit your codes</a>?</p>";
+			// Check our input
+			if (!Code::isValidCode($_POST['code'])) {
+				// We add these to an array so that we can print out
+				// more than one message at a time
+				$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut you are trying to make contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$_POST['code']."</p>";
+				// This tells us the ID of the field that is in error
+				// if this validation fails. Used to change the class
+				// of the failed field when redirected back to the
+				// original form
+				$_SESSION['field_id_in_error'] = 'code';
 				// Redirect to originating location
 				die(header("location: " . $_POST['form_url']));
 			}
-		}
-		
-		// Instantiate a code object using the submitted name/institution
-		try {
-			$code = new Code($_POST['code'], $_POST['institution']);
-			if (!empty($showCreateMessage))
-				$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut ".$_POST['code']." was created.</p>";
-		} catch (Throwable $e) {
-			error_log($e->getMessage(), 3);
-			$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding code failed." . $e->getMessage() . " Please try again and contact ".GO_HELP_HTML." if you encounter an error.</p>";
-			header("location: " . $_POST['form_url']);
-			exit;
-		}
+			if (!Code::isValidUrl($_POST['update_url'])) {
+				$_SESSION['update_message'][] = "<p class='update_message_failure'>The URL you are trying to set (".$_POST['update_url'].") is not valid. Please enter a properly formed URL.</p>";
+				$_SESSION['field_id_in_error'] = 'update_url';
+				// Redirect to originating location
+				die(header("location: " . $_POST['form_url']));
+			}
+			if (!Code::isValidDescription($_POST['update_description'])) {
+				$_SESSION['update_message'][] = "<p class='update_message_failure'>The description you are trying to set contains invalid characters. The characters allowed are letters, numbers, and common puntcuation. Please make adjustments and try again.</p>";
+				$_SESSION['field_id_in_error'] = 'update_description';
+				// Redirect to originating location
+				die(header("location: " . $_POST['form_url']));
+			}
+			if (isset($_POST['alias_list'])) {
+				foreach ($_POST['alias_list'] as $current_alias) {
+					if (!Code::isValidCode($current_alias)) {
+						$_SESSION['update_message'][] = "<p class='update_message_failure'>The alias you are trying to add contains invalid characters. Shortcuts may only contain letters, numbers, and the following punctuation; _, +, ?. Given ".$current_alias."</p>";
+						$_SESSION['field_id_in_error'] = 'add_alias_text';
+						// Redirect to originating location
+						die(header("location: " . $_POST['form_url']));
+					}
+				}
+			}
+			if (isset($_POST['admin_list'])) {
+				foreach ($_POST['admin_list'] as $current_admin) {
+					if (!Code::isValidAdmin($current_admin)) {
+						$_SESSION['update_message'][] = "<p class='update_message_failure'>The admin you are trying to add contains invalid characters. Admins may only contain letters and numbers. Given ".$current_admin."</p>";
+						$_SESSION['field_id_in_error'] = 'add_admin_text';
+						// Redirect to originating location
+						die(header("location: " . $_POST['form_url']));
+					}
+				}
+			}
+			
+			// Set messages for the create process (as opposed to the edit
+			// process. We're using this script for both).
+			// If the code is new then say it was created, otherwise it's
+			// being edited and we don't need to say that.
+			if (!Code::exists($_POST['code'], $_POST['institution'])) {
+				$showCreateMessage = true;
+			} else {
+			// If it does exist, we need to know if it's being edited or created
+			// Check the "udate" value (the value of the submit button). If it's
+			// 'Create Shortcut' then complain that it already exists (if we're editing
+			// then it should already exist and we don't need a message. We also
+			// should not run the rest of the script, we don't want the values being
+			// updated via the create screen
+				if ($_POST['update'] == 'Create Shortcut') {
+					$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut ".$_POST['code']." already exists. The shortcut was not created. Would you like to <a href='my_codes.php'>edit your codes</a>?</p>";
+					// Redirect to originating location
+					die(header("location: " . $_POST['form_url']));
+				}
+			}
+			
+			// Instantiate a code object using the submitted name/institution
+			try {
+				$code = new Code($_POST['code'], $_POST['institution']);
+				if (!empty($showCreateMessage))
+					$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut ".$_POST['code']." was created.</p>";
+			} catch (Throwable $e) {
+				error_log($e->getMessage(), 3);
+				$_SESSION['update_message'][] = "<p class='update_message_failure'>Adding code failed." . $e->getMessage() . " Please try again and contact ".GO_HELP_HTML." if you encounter an error.</p>";
+				header("location: " . $_POST['form_url']);
+				exit;
+			}
 			
 			//update url in database
 			if ($code->getUrl() != $_POST['update_url']) {
@@ -341,6 +341,22 @@ if (isset($_SESSION['AUTH'])) {
 			$_SESSION['update_message'][] = "<p class='update_message_success'>Changes on this form have been reverted to default.</p>";
 			unset($_SESSION['form_values']);
 			die(header("location: " . $_POST['form_url']));
+		}
+		elseif(isset($_POST['notify'])) {
+			try {
+				$user = new User($_SESSION["AUTH"]->getId());
+
+				$user->setNotify(($_POST["notify"] == "1"), true);
+
+				$_SESSION['update_message'][] = "<p class='update_message_success'>Changed your notification preferences.</p>";
+			} catch (Throwable $e) {
+				error_log($e->getMessage(), 3);
+
+				$_SESSION['update_message'][] = "<p class='update_message_failure'>Setting notification preferences failed." . $e->getMessage() . " Please try again and contact ".GO_HELP_HTML." if you encounter an error.</p>";
+
+				header("location: " . $_POST['form_url']);
+				exit;
+			}
 		}
 
 	} //end if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
