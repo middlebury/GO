@@ -21,7 +21,7 @@ if (isset($_SESSION['update_message'])) {
 ?>
 <div id="notify">
 	<h2>Notification</h2>
-	<p>We check all of our GO shortcuts every night to see whether there are problems. If you want, we can send you an email letting you know if we receive any errors trying to access the sites for which you've created GO shortcuts.</p>
+	<p>We check all of our GO shortcuts every week to see whether there are problems. If you want, we can send you an email letting you know if we receive any errors trying to access the sites for which you've created GO shortcuts.</p>
 	<form action="process.php" method="post">
 		<p>
 			<input id="notify_yes" name="notify" type="radio" value="1" <?php if ($user->getNotify()) echo "checked='checked'"; ?> />
