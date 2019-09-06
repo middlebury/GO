@@ -2,6 +2,7 @@
 				<ul>
 					<li><a href="create.php">Create</a></li>
 					<li><a href="my_codes.php">View / Update</a></li>
+					<li><a href="notify.php">Notify</a></li>
 					<?php
 						if (isSuperAdmin()) {
 							print"\n<li>";
