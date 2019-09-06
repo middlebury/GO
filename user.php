@@ -72,10 +72,10 @@ class User {
 			$select->execute();
 			
 			if ($select->rowCount() == 0) {
-				$this->setNotify(true);
+				$this->setNotify(false);
 
 				try {
-					$insert = $connection->prepare("INSERT INTO user (name, notify) VALUES (:name, 1)");
+					$insert = $connection->prepare("INSERT INTO user (name, notify) VALUES (:name, 0)");
 					$insert->bindValue(":name", $name);
 					$insert->execute();
 				} catch (Throwable $e) {
