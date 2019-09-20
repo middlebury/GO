@@ -56,7 +56,7 @@ if (isset($_SESSION['update_message'])) {
 // Superadmin may admin all codes so show a link to "show all" and
 // submit a user whose codes they'd like to see.
 if (isSuperAdmin($user->getName())) {
-	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a> or view/subscribe to a <a href='feed/'>feed of new codes <img src='icons/feed.png' alt='rss icon' /></a>.</p>
+	print "<p>As a superadmin you have the option to <a href='all_codes.php'>view a list of all codes</a> or view/subscribe to a <a href='feed/'>feed of new codes <img src='application-icons/feed.png' alt='rss icon' /></a>.</p>
 	
 	<form action='my_codes.php' method='post' id='other_users_codes'>
 	<p><strong>Edit Codes for User:</strong> username <input type='text' name='other_username' max='30' required='required' autocomplete='yes' /> <input type='submit' form='other_users_codes' name='show_users_codes' value=\"Show User's Codes\" /></p>

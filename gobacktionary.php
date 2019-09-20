@@ -99,9 +99,9 @@ foreach ($rows as $row) {
     print "\n<p class='gobacktionary_info'>";
     print "<a href=\"info.php?code=".$row['name']."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row['url']))
-		print "<img src='icons/info.png' alt='info'/>";	
+		print "<img src='application-icons/info.png' alt='info'/>";	
 	else
-		print "<img src='icons/alert.png' alt='alert'/>";	
+		print "<img src='application-icons/alert.png' alt='alert'/>";	
 	print "</a> &nbsp; ";    
     print "</p>\n<p class='gobacktionary_shortcut'>";
 

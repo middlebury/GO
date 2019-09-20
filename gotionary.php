@@ -101,9 +101,9 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
 	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		$line .= "<img src='icons/info.png' alt='info'/>";	
+		$line .= "<img src='application-icons/info.png' alt='info'/>";	
 	else
-		$line .= "<img src='icons/alert.png' alt='alert'/>";	
+		$line .= "<img src='application-icons/alert.png' alt='alert'/>";	
 	$line .= "</a> &nbsp; &nbsp; ";
 	//add rel=nofollow and extrnal class to external links
 	$host_url = parse_url($row->url, PHP_URL_HOST);
@@ -143,9 +143,9 @@ while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
 	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		$line .= "<img src='icons/info.png' alt='info'/>";	
+		$line .= "<img src='application-icons/info.png' alt='info'/>";	
 	else
-		$line .= "<img src='icons/alert.png' alt='alert'/>";	
+		$line .= "<img src='application-icons/alert.png' alt='alert'/>";	
 	$line .= "</a> &nbsp; &nbsp; ";
 	//add rel=nofollow and extrnal class to external links
 	$host_url = parse_url($row->url, PHP_URL_HOST);
