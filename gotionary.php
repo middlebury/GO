@@ -131,11 +131,11 @@ $where = str_replace("name", "alias.name", $where);
 // We need a different query for getting all codes and only the public
 // All
 if ($_SESSION['toggle_all'] == 'all') {
-	$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name) WHERE {$where} AND alias.institution = :institution ORDER BY alias.name");
+	$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name AND code.institution = alias.institution) WHERE {$where} AND alias.institution = :institution ORDER BY alias.name");
 }
 // Public
 else {
-	$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name) WHERE {$where} AND alias.institution = :institution AND code.public = 1 ORDER BY alias.name");
+	$alias = $connection->prepare("SELECT alias.name AS name, code.description AS description, code.url FROM alias JOIN code ON (alias.code = code.name AND code.institution = alias.institution) WHERE {$where} AND alias.institution = :institution AND code.public = 1 ORDER BY alias.name");
 }
 $alias->bindValue(":institution", $institution);
 $alias->execute();
