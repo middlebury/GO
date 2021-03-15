@@ -44,6 +44,12 @@ p.gobacktionary_shortcut { display: block; margin-left: 40px; }
 
 #flag_button_form input { float: left; }
 
+
+.logs_table { border: 1px solid #000; margin:0px; padding: 0px; width:100%; border-collapse: collapse; }
+.logs_table th { background-color: #000; color: #fff; padding: 2px; }
+.logs_table td { padding: 2px; border-right: 1px solid #000; border-bottom: 1px solid #000; }
+.logs_table th, .flag_admin_table td, .flag_admin_table a { word-wrap:break-word; }
+
 /* make sure the anchor surrounding
 the "details" button is not being
 underlined. Ditto with history
