@@ -13,6 +13,7 @@ $admin_pages = array(
 	"notify.php",
 	"functions.php",
 	"flag_admin.php",
+	"logs.php",
 	"login2.php",
 	"my_codes.php",
 	"user_codes.php",

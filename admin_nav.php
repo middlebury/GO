@@ -8,6 +8,9 @@
 							print"\n<li>";
 							print"\n<a href=\"flag_admin.php\">Flags</a>";
 							print"\n</li>";
+							print"\n<li>";
+							print"\n<a href=\"logs.php\">Logs</a>";
+							print"\n</li>";
 						}
 					?>
 					<li><a href="gotionary.php">GOtionary</a></li>
