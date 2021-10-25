@@ -4,4 +4,4 @@ Disallow: /edt
 Disallow: /info.php?code=penny
 
 User-agent: DataForSeoBot
-Crawl-delay: 5
+Crawl-delay: 15
