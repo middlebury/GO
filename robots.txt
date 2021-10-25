@@ -2,3 +2,6 @@ User-agent: *
 Crawl-Delay: 1
 Disallow: /edt
 Disallow: /info.php?code=penny
+
+User-agent: DataForSeoBot
+Crawl-delay: 5
