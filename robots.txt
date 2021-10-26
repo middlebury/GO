@@ -7,3 +7,5 @@ Disallow: /login2.php*
 
 User-agent: DataForSeoBot
 Crawl-delay: 15
+Disallow: /login.php*
+Disallow: /login2.php*
