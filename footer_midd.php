@@ -21,24 +21,24 @@
           <li class="quick_footer quick_go"><a href="http://go.middlebury.edu">Quick Links<span></span></a>
             <div class="contents">
               <ul class="quick_footer">
-                <li><a href="http://go.middlebury.edu/bannerweb">BannerWeb</a></li>
-                <li><a href="http://go.middlebury.edu/webmail">Webmail</a></li>
-                <li><a href="http://go.middlebury.edu/directory">Directory</a></li>
-                <li><a href="http://go.middlebury.edu/library">Library</a></li>
-                <li><a href="http://go.middlebury.edu/helpdesk">Technology Help</a></li>
+              <li><a href="http://go.middlebury.edu/er">Emergency</a></li>
                 <li><a href="http://go.middlebury.edu/calendar?academic">Academic Calendar</a></li>
-                <li><a href="http://go.middlebury.edu/web/about">About this Site</a></li>
-                <li><a href="http://go.middlebury.edu/er">Emergency</a></li>
-              </ul>
-              <ul class="quick_footer">
-                <li><a href="http://go.middlebury.edu/jobseekers">Job Seekers</a></li>
+                <li><a href="https://reg-prod.ec.middlebury.edu/StudentRegistrationSsb/ssb/registration">Banner9 Registration</a></li>
+                <li><a href="http://go.middlebury.edu/bannerweb">BannerWeb</a></li>
                 <li><a href="http://go.middlebury.edu/bookstore">Bookstore</a></li>
                 <li><a href="http://boxoffice.middlebury.edu">Box Office</a></li>
-                <li><a href="http://museum.middlebury.edu">Museum of Art</a></li>
-                <li><a href="http://go.middlebury.edu/presidential-search">Presidential Search</a></li>
-                <li><a href="http://go.middlebury.edu/privacy">Privacy</a></li>
+                <li><a href="http://map.middlebury.edu">Campus Map</a></li>
                 <li><a href="http://go.middlebury.edu/copyright">Copyright</a></li>
+              </ul>
+              <ul class="quick_footer">
                 <li><a href="https://secure.ethicspoint.com/domain/media/en/gui/28296/index.html">EthicsPoint</a></li>
+                <li><a href="http://go.middlebury.edu/jobseekers">Job Seekers</a></li>
+                <li><a href="http://go.middlebury.edu/library">Library</a></li>
+                <li><a href="http://museum.middlebury.edu">Museum of Art</a></li>
+                <li><a href="https://myapps.microsoft.com/gmhec.org">Oracle Cloud</a></li>
+                <li><a href="http://go.middlebury.edu/privacy">Privacy</a></li>
+                <li><a href="http://go.middlebury.edu/helpdesk">Technology Help</a></li>
+                <li><a href="http://go.middlebury.edu/webmail">Webmail</a></li>
               </ul>
             </div>
           </li>
