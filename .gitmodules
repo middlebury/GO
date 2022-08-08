@@ -1,3 +1,3 @@
 [submodule "phpcas"]
 	path = phpcas
-	url = git://github.com/adamfranco/phpcas.git
+	url = git@github.com:adamfranco/phpcas.git
