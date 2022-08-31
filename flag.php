@@ -4,10 +4,6 @@
 require_once "go.php";
 //go_functions.php gives us access to getRealIpAddr() function
 require_once "go_functions.php";
-//Mail.php is the PEAR script that includes the mail class for sending mail
-require_once "Mail.php";
-//mime.php includes support for mime mail
-require_once "Mail/mime.php";
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -96,13 +92,10 @@ try {
   //send mail to each go superadmin indicating that this 
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
-  foreach ($goAdmin as $current_admin) {
-  $to[] = GoAuthCas::getEmail($current_admin);
-  }
-  $to = implode(', ', $to);
-  $headers['From'] = GO_ALERTS_EMAIL_NAME . ' <' . GO_ALERTS_EMAIL_ADDRESS . '>';
-  $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
-  $mime = new Mail_mime;
+  $headers[] = 'MIME-Version: 1.0';
+  $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+  $headers[] = 'From: ' . GO_ALERTS_EMAIL_NAME . ' <' . GO_ALERTS_EMAIL_ADDRESS . '>';
+  $subject = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
   if (isset($_SESSION["AUTH"])) {
   $text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
 
@@ -118,15 +111,11 @@ try {
 
 - The GO application';	
 	}
-	$mime->setTXTBody($text);
-	$mime->setHTMLBody($html);
-	//get MIME formatted message headers and body
-	$body = $mime->get();
-	$headers = $mime->headers($headers);
-  $message = Mail::factory('mail');
-  //foreach ($to as $current_address) {
-  $message->send($to, $headers, $body);
-  //}
+
+  foreach ($goAdmin as $current_admin) {
+    $to = GoAuthCas::getEmail($current_admin);
+    mail($to, $subject, $html, implode("\r\n", $headers));
+ }
 //now catch any exceptions
 } catch (Throwable $e) {
 	throw $e;
