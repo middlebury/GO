@@ -627,7 +627,7 @@ class Code {
 		// Encode any spaces;
 		$url = str_replace(' ', '%20', $url);
 		
-		if (!filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED))
+		if (!filter_var($url, FILTER_VALIDATE_URL))
 			return false;
 		if (preg_match('/["\'<>]/i', $url))
 			return false;
@@ -650,7 +650,7 @@ class Code {
 		// Encode any spaces;
 		$url = str_replace(' ', '%20', $url);
 		
-		$url = filter_var($url, FILTER_SANITIZE_URL, FILTER_FLAG_SCHEME_REQUIRED);
+		$url = filter_var($url, FILTER_SANITIZE_URL);
 		$url = preg_replace('/["\'<>]/i', '', $url);
 		
 		// if it still isn't valid, give up.
