@@ -57,9 +57,9 @@ foreach ($_POST['codes'] as $inst => $shortcuts) {
 
 // Bulk adding admin behavior
 if (isset($_POST['bulk_admin_add'])) {
-	
-	foreach ($codes as $code) {						
-		
+
+	foreach ($codes as $code) {
+
 		// Check to see if user is already an admin
 		if ($code->isAdmin($_SESSION["AUTH"]->getId($bulk_admin))) {
 			// Set a message saying the user is already an admin
@@ -69,14 +69,14 @@ if (isset($_POST['bulk_admin_add'])) {
 			$code->addUser($_SESSION["AUTH"]->getId($bulk_admin));
 			$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$bulk_admin." was added as an admin of '".$code->getName()."'.</p>";
 		}
-	
+
 	}
 
-// Bulk removing admin behavior				
+// Bulk removing admin behavior
 } elseif (isset($_POST['bulk_admin_remove'])) {
 
 	foreach ($codes as $code) {
-		
+
 		// Check to see if user is already an admin
 		if ($code->isAdmin($_SESSION["AUTH"]->getId($bulk_admin))) {
 			if(count($code->getUsers()) <= 1) {
@@ -91,7 +91,7 @@ if (isset($_POST['bulk_admin_add'])) {
 			// Set a message saying the user is not an admin
 			$_SESSION['update_message'][] = "<p class='update_message_failure'>User ".$bulk_admin." is not an admin of '".$code->getName()."'.</p>";
 		}
-		
+
 	}
 }
 

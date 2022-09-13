@@ -12,26 +12,26 @@ require_once "admin_nav.php";
 <?php
 $code = new Code(str_replace(' ', '+', $_GET['code']), $_GET['institution']);
 
-// This form should only be available to authenticated users 
+// This form should only be available to authenticated users
 if (isset($_SESSION['AUTH'])) {
-	
+
 	// Check to see if current user is admin of code
 	$is_admin = isAdmin($_GET['code'], $_GET['institution']);
-	
+
 	// This form is only available if user is a superadmin or admin
 	if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
-		
+
 		// Check to see if we're in the midst of editing this code
 		if (isset($_SESSION['form_values'])) {
 			if ($_SESSION['form_values']['this_code'] != $_GET['code']) {
 				unset($_SESSION['form_values']);
 			}
 		}
-		
+
 		?>
 		<div class="content">
 			<div id="response"></div>
-				
+
 				<form action="process.php" method="post">
 					<div>
 					<input type="hidden" name="xsrfkey" value="<?php print $_SESSION['xsrfkey'] ?>" />
@@ -39,7 +39,7 @@ if (isset($_SESSION['AUTH'])) {
 					<input type="hidden" name="institution" value="<?php print $code->getInstitution() ?>" />
 					<input type="hidden" name="url" value="<?php print htmlspecialchars(urldecode($_GET['url'])) ?>" />
 					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
-					
+
 					<?php
 						// If an update message was set prior to a redirect
 						// to this page display it and clear the message.
@@ -50,7 +50,7 @@ if (isset($_SESSION['AUTH'])) {
 							unset($_SESSION['update_message']);
 						}
 					?>
-					
+
 						<h2><?php print $code->getName() ?> (<?php print $code->getInstitution() ?>)</h2>
 						<p>
 					URL: <input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_url'); } ?>" name="update_url" type="text" size="<?php print strlen($code->getUrl()); ?>" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_url']); } else { print htmlspecialchars($code->getUrl()); } ?>" />
@@ -80,7 +80,7 @@ if (isset($_SESSION['AUTH'])) {
 						?>
 						<!--This is required by doctype-->
 						<li style="display: none;">This space is intentionally left blank</li>
-						<?php 
+						<?php
 						// If we've submitted the form with values but it was not yet
 						// processed, repopulate the aliases if needed
 						if (isset($_SESSION['form_values']['alias_list'])) {
@@ -95,7 +95,7 @@ if (isset($_SESSION['AUTH'])) {
 						<h3>Admins</h3>
 						<ul id="admin_list">
 						<?php
-						
+
 							foreach($code->getUsers() as $cUser) {
 								try {
 									$username = $_SESSION["AUTH"]->getName($cUser->getName());
@@ -106,11 +106,11 @@ if (isset($_SESSION['AUTH'])) {
 								print "<li id='" . $username . "'>". $username;
 								print " <input type='button' value='Delete' /></li>";
 							}
-						
+
 						?>
 						<!--This is required by doctype-->
 						<li style="display: none;">This space is intentionally left blank</li>
-						<?php 
+						<?php
 						// If we've submitted the form with values but it was not yet
 						// processed, repopulate the admins if needed
 						if (isset($_SESSION['form_values']['admin_list'])) {
@@ -131,7 +131,7 @@ if (isset($_SESSION['AUTH'])) {
 						} ?>
 						</p>
 					</div>
-				</form> 
+				</form>
 		<?php
 
 	}

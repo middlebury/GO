@@ -1,5 +1,5 @@
 <?php
-//go_functions.php gives us access to the isSuperAdmin function 
+//go_functions.php gives us access to the isSuperAdmin function
 require_once "go_functions.php";
 require_once "config.php";
 require_once "go.php";
@@ -42,7 +42,7 @@ if (isset($_GET["letter"]) && preg_match("/^([A-Za-z0-9]|\[0-9\])$/", $_GET["let
 			</nav>
 			<div class="content">
 				<p><b>GO needs your help!</b> Find out how you can help by logging in to our <a href="admin.php">self-service shortcut creation interface</a>!</p>
-				<p>You can also <a href="gobacktionary.php">view this list, sorted by the destination</a> 
+				<p>You can also <a href="gobacktionary.php">view this list, sorted by the destination</a>
 				<?php
 				// Let users determine if they see all codes or only public codes
 				// basically show a different link depending on if the user has chosen
@@ -63,7 +63,7 @@ if (isset($_GET["letter"]) && preg_match("/^([A-Za-z0-9]|\[0-9\])$/", $_GET["let
 							$_SESSION['toggle_all'] = 'all';
 						}
 					}
-				
+
 					// Show the appropriate link (include letter so it stays on the right page)
 					if ($_SESSION['toggle_all'] == 'public') {
 						print " or <a href=\"gotionary.php?display=all&amp;letter=".$letter."\">include all hidden codes</a>.";
@@ -77,7 +77,7 @@ if (isset($_GET["letter"]) && preg_match("/^([A-Za-z0-9]|\[0-9\])$/", $_GET["let
 <?php
 
 global $connection;
- 
+
 $where = "name LIKE '{$letter}%'";
 if ($letter == "[0-9]") {
 	$where = "(name LIKE '0%' OR name LIKE '1%' OR name LIKE '2%' OR name LIKE '3%' OR name LIKE '4%' OR name LIKE '5%' OR name LIKE '6%' OR name LIKE '7%' OR name LIKE '8%' OR name LIKE '9%')";
@@ -101,9 +101,9 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
 	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		$line .= "<img src='application-icons/info.png' alt='info'/>";	
+		$line .= "<img src='application-icons/info.png' alt='info'/>";
 	else
-		$line .= "<img src='application-icons/alert.png' alt='alert'/>";	
+		$line .= "<img src='application-icons/alert.png' alt='alert'/>";
 	$line .= "</a> &nbsp; &nbsp; ";
 	//add rel=nofollow and extrnal class to external links
 	$host_url = parse_url($row->url, PHP_URL_HOST);
@@ -122,7 +122,7 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	if($row->description != "") {
 		$line .= " - ".htmlentities($row->description);
 	}
-		
+
 	$line .= "</p>";
 	$lines[$row->name] = $line;
 }
@@ -143,9 +143,9 @@ while($row = $alias->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 	$line = "\n\t<p>";
 	$line .= "<a href=\"info.php?code=".$row->name."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row->url))
-		$line .= "<img src='application-icons/info.png' alt='info'/>";	
+		$line .= "<img src='application-icons/info.png' alt='info'/>";
 	else
-		$line .= "<img src='application-icons/alert.png' alt='alert'/>";	
+		$line .= "<img src='application-icons/alert.png' alt='alert'/>";
 	$line .= "</a> &nbsp; &nbsp; ";
 	//add rel=nofollow and extrnal class to external links
 	$host_url = parse_url($row->url, PHP_URL_HOST);

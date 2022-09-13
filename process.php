@@ -18,16 +18,16 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
-// This should only be available to authenticated users 
+// This should only be available to authenticated users
 if (isset($_SESSION['AUTH'])) {
-	
+
 	// Is logged in user an admin?
 	//$is_admin = isAdmin($_POST['code'], $_POST['institution']);
 
 	// This is only available to authenticated users
 	if (isset($_SESSION['AUTH'])) {
 	//if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
-		
+
 		//make the following check only if we are trying to create a code (not update)
 		if(isset($_POST['create'])) {
 			//if the code is already being used as an alias, throw an error.
@@ -42,14 +42,14 @@ if (isset($_SESSION['AUTH'])) {
 				die(header("location: " . $_POST['form_url']));
 			}
 		}
-		
+
 		// We have two submit buttons on the edit form (the one on the create for is still
 		// named "update" in order to trigger the same behavior as the button on edit).
 		// We want to do the following when "Apply" aka. "update" is pressed
 		// if delete was pressed then delete would be set and update would not.
 		// We'll do something different in that case
 		if(isset($_POST['update'])) {
-		
+
 			// Check our input
 			if (!Code::isValidCode($_POST['code'])) {
 				// We add these to an array so that we can print out
@@ -95,7 +95,7 @@ if (isset($_SESSION['AUTH'])) {
 					}
 				}
 			}
-			
+
 			// Set messages for the create process (as opposed to the edit
 			// process. We're using this script for both).
 			// If the code is new then say it was created, otherwise it's
@@ -115,7 +115,7 @@ if (isset($_SESSION['AUTH'])) {
 					die(header("location: " . $_POST['form_url']));
 				}
 			}
-			
+
 			// Instantiate a code object using the submitted name/institution
 			try {
 				$code = new Code($_POST['code'], $_POST['institution']);
@@ -127,7 +127,7 @@ if (isset($_SESSION['AUTH'])) {
 				header("location: " . $_POST['form_url']);
 				exit;
 			}
-			
+
 			//update url in database
 			if ($code->getUrl() != $_POST['update_url']) {
 				$code->setUrl($_POST['update_url'], true);
@@ -160,9 +160,9 @@ if (isset($_SESSION['AUTH'])) {
 					}
 				}
 			}
-			
+
 			// ADD ALIAS STUFF
-			
+
 			if (isset($_POST['alias_list'])) {
 				foreach ($_POST['alias_list'] as $current_alias) {
 					// Trim in case there is extra whitespace
@@ -193,7 +193,7 @@ if (isset($_SESSION['AUTH'])) {
 					$results = $select->fetchAll();
 					$match = 0;
 					if ($results[0][0] == $current_alias) {
-						$match = 1;	
+						$match = 1;
 					}
 					if(count($results)) {
 						if ($match == 1) {
@@ -213,9 +213,9 @@ if (isset($_SESSION['AUTH'])) {
 					}
 				}
 			}
-			
+
 			// ADD ADMIN STUFF
-			
+
 			if (isset($_POST['admin_list'])) {
 				foreach ($_POST['admin_list'] as $current_admin) {
 					// Trim in case there is extra whitespace
@@ -241,9 +241,9 @@ if (isset($_SESSION['AUTH'])) {
 					}
 				}
 			}
-			
+
 			// DELETE ALIAS STUFF
-			
+
 			if (isset($_POST['alias_list_del'])) {
 				foreach ($_POST['alias_list_del'] as $current_alias) {
 					// Trim in case there is extra whitespace
@@ -263,7 +263,7 @@ if (isset($_SESSION['AUTH'])) {
 							// Don't keep the alias
 							if (!$dont_delete_current_alias) {
 								$alias = new Alias($current_alias, $_POST['code'], $_POST['institution']);
-								$alias->delete();	
+								$alias->delete();
 								$_SESSION['update_message'][] = "<p class='update_message_success'>Alias ".$current_alias." was removed from '".$code->getName()."'.</p>";
 							}
 						}
@@ -276,9 +276,9 @@ if (isset($_SESSION['AUTH'])) {
 					}
 				}
 			}
-			
+
 			// DELETE ADMIN STUFF
-			
+
 			if (isset($_POST['admin_list_del'])) {
 				foreach ($_POST['admin_list_del'] as $current_admin) {
 					// Trim in case there is extra whitespace
@@ -303,7 +303,7 @@ if (isset($_SESSION['AUTH'])) {
 					// Otherwise none are being added so just go ahead and delete all
 					// the admins in the "delete list".
 					} else {
-						try { 
+						try {
 							$code->delUser($_SESSION["AUTH"]->getId($current_admin));
 						//if the user isn't found and the ID is passed, just use the id
 						} catch (Throwable $e) {
@@ -313,27 +313,27 @@ if (isset($_SESSION['AUTH'])) {
 					}
 				}
 			}
-			
+
 		}
 		// If delete was pressed just delete the code and set a message.
 		elseif(isset($_POST['delete'])) {
-			
+
 			// Instantiate a code object using the submitted name/institution
 			$code = new Code($_POST['code'], $_POST['institution']);
-			
+
 			$code->delete();
-			
+
 			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut " . $code->getName() . " was deleted.</p>";
 		}
 		// If delete_and_ban was pressed just delete the code and set a message.
 		elseif(isset($_POST['delete_and_ban']) && isSuperAdmin($_SESSION['AUTH']->getId())) {
-			
+
 			// Instantiate a code object using the submitted name/institution
 			$code = new Code($_POST['code'], $_POST['institution']);
 			$code->delete();
-			
+
 			Code::banCode($_POST['code']);
-			
+
 			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut " . $code->getName() . " was deleted and banned from future usage.</p>";
 		}
 		// If revert changes was pressed

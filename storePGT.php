@@ -2,7 +2,7 @@
 require_once "go.php";
 
 //
-// phpCAS proxied proxy 
+// phpCAS proxied proxy
 //
 
 GoAuthCAS::configurePhpCas();
@@ -11,4 +11,3 @@ GoAuthCAS::configurePhpCas();
 phpCAS::isAuthenticated();
 
 echo "Success";
-

@@ -5,7 +5,7 @@ require_once "header.php";
 ?>
 			<div class="content">
 				<div id="response"></div>
-				
+
 				<?php // If an update message was set prior to a redirect
 				// to this page display it and clear the message.
 				if (isset($_SESSION['update_message'])) {
@@ -14,7 +14,7 @@ require_once "header.php";
 					}
 					unset($_SESSION['update_message']);
 				}?>
-			
+
 				<p>&laquo; <a href="gotionary.php">GOtionary</a></p>
 <?php
 
@@ -32,17 +32,17 @@ try {
 		$select->closeCursor();
 		if (!$userRow)
 			throw new Exception("Unknown user or user has no codes.");
-		
+
 		$user = new User($userName);
 		print "<h2>Codes for user ".Go::getUserDisplayName($userName)."</h2>";
-		
+
 		// Get the codes the user can edit
 		$codes = $user->getCodes();
 		// If there are any, put them in a table with editing options
 		if (count($codes) > 0) {
 			print_codes_table($codes);
 		}
-		
+
 		// Get the deleted codes the user created
 		$codes = $user->getDeletedCodes();
 		// If there are any, put them in a table with editing options
@@ -53,7 +53,7 @@ try {
 	}
 } catch (Throwable $e) {
 	error_log($e->getMessage(), 3);
-	print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>"; 
+	print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>";
 }
 
 function print_codes_table(array $codes, $exists = true) {
@@ -102,9 +102,9 @@ function print_codes_table(array $codes, $exists = true) {
 			print "<a class='edit_button' href='update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'>";
 			print "<input onclick='window.location=\"update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "\"' type='button' value='Edit Shortcut' /></a>";
 		}
-		
+
 		if ($exists) {
-			print "	
+			print "
 				<a class='edit_button' href='info.php?code=".$code->getName()."'><input type='button' onclick='window.location=\"info.php?code=".$code->getName()."\"' value='Info' /></a>";
 		}
 		print "\n\t\t\t\t<a class='edit_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";
@@ -114,7 +114,7 @@ function print_codes_table(array $codes, $exists = true) {
 	}
 	print "\n</table>";
 }
-		
+
 ?>
 
 </div> </div> </body> </html>

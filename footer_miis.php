@@ -24,7 +24,7 @@
 					<a class="blogs" href="http://go.miis.edu/blogs" title="Join our blogging community"></a>
 				</div>
 			</div>
-			<div class="clear"></div>  
+			<div class="clear"></div>
 		</footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="//cdn.middlebury.edu/miis.edu/2010/js/miis.js"></script>

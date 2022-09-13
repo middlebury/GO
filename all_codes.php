@@ -77,12 +77,12 @@ if (isSuperAdmin($user->getName())) {
 				" . $row['institution'] . "
 			</td>
 			<td>
-				
+
 				<a class='edit_button' href='update.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "&amp;url=" . urlencode(curPageURL()) . "'><input type='button' value='Edit Shortcut' /></a>
-				
+
 				<a class='edit_button' href='info.php?code=".$row['name']."'><input type='button' value='Info' /></a>
 				<a class='edit_button' href='details.php?code=".$row['name']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' />
-				
+
 				</a>
 			</td>
 		</tr>

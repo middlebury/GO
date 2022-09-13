@@ -1,7 +1,7 @@
 =====================================
  About
 =====================================
-GO is a shortcut and redirection application that allows users to maintain the 
+GO is a shortcut and redirection application that allows users to maintain the
 destination of links to resources.
 
 For example, lets say that an important page lives at:
@@ -9,17 +9,17 @@ For example, lets say that an important page lives at:
 
 Rather than making links to that URL, a user can create a go shortcut, 'thing',
 for this resource. This allows people to link to the resource via:
-	http://go.example.edu/thing 
-which will redirect them to the full URL. 
+	http://go.example.edu/thing
+which will redirect them to the full URL.
 
-If users are on the LAN and have their DNS search path set correctly, entering 
+If users are on the LAN and have their DNS search path set correctly, entering
 'go/thing' in their address bar will redirect them to the resource as well.
 
-Now, lets say it is several years later and we want to move this resource to a 
+Now, lets say it is several years later and we want to move this resource to a
 new home:
 	http://blogs.example.edu/this/thing
 
-The user who moved the resource can go to the GO self-service admin screens and 
+The user who moved the resource can go to the GO self-service admin screens and
 update the GO shortcut for 'thing' to redirect to the new URL. Users clicking on
 other GO links in websites or email will be redirected to the new location of the
 resource.
@@ -37,7 +37,7 @@ resource.
  History
 =====================================
 The first version of GO was proposed by Chris Norris (Middlebury College Webmaster
-at the time) and written by Ian McBride in 2004. Ian rewrote GO in 2008 and added 
+at the time) and written by Ian McBride in 2004. Ian rewrote GO in 2008 and added
 the self-service administration screens in 2009.
 
 In April 2010 Adam Franco took over development of GO and has refactored portions
@@ -63,17 +63,17 @@ From Git:
 	cd GO
 	git submodule init
 	git submodule update
-	
+
 2. Create a database for GO and import the database schema:
 	mysql -u username -p -D go < database.sql
 
-3. Copy the config.php.defaults to config.php and edit the values to match your 
+3. Copy the config.php.defaults to config.php and edit the values to match your
    database username and password.
 
 4. Edit config.php and configure 1 or more institution base URLs.
 
 5. Edit config.php and configure an authentication scheme.
-   
+
    Note, Middlebury College uses CAS authentication currently, so this method is
    the most tested. We used LDAP authentication in the past, so this should work,
    but hasn't received testing recently.

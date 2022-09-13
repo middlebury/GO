@@ -112,4 +112,4 @@ if (isset($_SESSION["AUTH"])) {
         <a class="noborder" href="#"><img src="//cdn.middlebury.edu/middlebury.edu/2010/images/headers/go.png" alt="GO" /></a>
       </section>
       <section class="page">
-        <section class="body">			
+        <section class="body">

@@ -59,12 +59,12 @@ if (REASON_FOR_FLAGGING_REQUIRED == true) {
 try {
 	//get the statement object for this insert statement
   $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress, institution, url, comment) VALUES (?, ?, ?, ?, ?, ?)");
-  
+
   //we want to add the current code to the session array
   //"flagged" so we know the user has flagged this code
   $_SESSION['flagged'][] = $_POST["code"];
-  
-  
+
+
   //bind the values represented by the "?" in the statement
   //first bind code
   $insert->bindValue(1, $_POST["code"]);
@@ -77,23 +77,23 @@ try {
   }
   //bind the ipaddress
   $insert->bindValue(3, getRealIpAddr());
-  
+
   //bind the institution
   $insert->bindValue(4, $_POST["institution"]);
-  
+
   //bind the url
   $insert->bindValue(5, $_POST["url"]);
-  
+
   //bind the comment
   $insert->bindValue(6, $_POST["flag_comment"]);
-  
+
   //finally execute the statement
   $insert->execute();
-  
+
   //log completion
 	Go::log("Flag as inappropriate flag was created", $_POST['code']);
-  
-  //send mail to each go superadmin indicating that this 
+
+  //send mail to each go superadmin indicating that this
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
   foreach ($goAdmin as $current_admin) {
@@ -116,7 +116,7 @@ try {
 - The GO application';
 	$html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
 
-- The GO application';	
+- The GO application';
 	}
 	$mime->setTXTBody($text);
 	$mime->setHTMLBody($html);
@@ -136,7 +136,3 @@ unset($_SESSION['form_values']);
 
 //redirect on completion
 header("location: info.php?code=".$_POST['code']);
-?>
-
-
-

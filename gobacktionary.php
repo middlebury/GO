@@ -93,25 +93,25 @@ $current_url = "";
 print "<p>&nbsp;";
 
 foreach ($rows as $row) {
-  
+
   if ($current_url != $row['url']) {
     print "</p>";
     print "\n<p class='gobacktionary_info'>";
     print "<a href=\"info.php?code=".$row['name']."\" class='info_link' title='Show Shortcut Information'>";
 	if (Code::isUrlValid($row['url']))
-		print "<img src='application-icons/info.png' alt='info'/>";	
+		print "<img src='application-icons/info.png' alt='info'/>";
 	else
-		print "<img src='application-icons/alert.png' alt='alert'/>";	
-	print "</a> &nbsp; ";    
+		print "<img src='application-icons/alert.png' alt='alert'/>";
+	print "</a> &nbsp; ";
     print "</p>\n<p class='gobacktionary_shortcut'>";
 
     print htmlentities($row['print_url']);
     print "<br />";
     print "<em>&nbsp;&nbsp;&nbsp;".htmlentities($row['description'])."</em>";
-  
+
   //add rel=nofollow and external class to external links
 	$host_url = parse_url($row['url'], PHP_URL_HOST);
-	$internal_host = false;  
+	$internal_host = false;
 	foreach ($internal_hosts as $host) {
 		if (preg_match($host, $host_url)) {
 			$internal_host = true;
@@ -122,9 +122,9 @@ foreach ($rows as $row) {
 	} else {
 		print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/".htmlentities($row['name'])."</a>";
 	}
-    
+
   }
-  
+
   if ($row['alias']) {
     print "<br />&nbsp;&nbsp;&nbsp;<a href=\"".Go::getShortcutUrl($row['name'], $institution)."\">go/" . $row['alias'] . "</a>";
   }

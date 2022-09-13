@@ -31,7 +31,7 @@ if (isset($_SESSION['update_message'])) {
 		</p>
 		<p>
 			<input id="notify_action" name="action" type="hidden" value="notify" />
-			<!-- Pass the current URL --> 
+			<!-- Pass the current URL -->
 			<input type="hidden" name="url" value="<?php echo htmlentities(curPageURL()); ?>" />
 			<input type="hidden" name="xsrfkey" value="<?php echo $_SESSION['xsrfkey']; ?>" />
 			<input id="notify_submit" type="submit" value="Submit" />
@@ -40,4 +40,3 @@ if (isset($_SESSION['update_message'])) {
 </div>
 <?php
 require_once "footer.php";
-?>

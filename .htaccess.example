@@ -2,7 +2,7 @@
 # Requires Apache2 with mod_rewrite
 #
 # The general idea with re-writing GO URLs is that for files and directories
-# that exist (such as scripts.js, styles.css, update.php, etc) we want to 
+# that exist (such as scripts.js, styles.css, update.php, etc) we want to
 # respond with the file at that path. For all other cases (where no file or
 # directory exists) we assume that the requested path is a GO shortcut and
 # internally rewrite the path to go to redirect.php which will then lookup the
@@ -22,9 +22,9 @@ RewriteBase /
 ##
 # mod_rewrite handles the query-string portion of requests separately from the
 # rest of the path. Since we need to include the query string directly in the
-# 'code' parameter that we are passing to redirect.php, we need have slightly 
+# 'code' parameter that we are passing to redirect.php, we need have slightly
 # different handling if the path includes a query string so as to not include a
-# bogus '?' in the code if no query is present, and to include it if there is a 
+# bogus '?' in the code if no query is present, and to include it if there is a
 # query present.
 ##
 

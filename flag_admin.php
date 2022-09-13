@@ -1,5 +1,5 @@
 <?php
-//go_functions.php gives us access to the isSuperAdmin function 
+//go_functions.php gives us access to the isSuperAdmin function
 require_once "go_functions.php";
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
@@ -31,7 +31,7 @@ try {
 	if (!isSuperAdmin()) {
 		die("You do not have permission to view this page");
 	}
-	
+
 	//We want to know the code, the number of times flagged
 	//the destination, any aliases, and any comments
   $select = $connection->prepare("
@@ -57,16 +57,16 @@ try {
   				code)
   		AS
   	grouped_alias
-  		ON flag.code = grouped_alias.code 
+  		ON flag.code = grouped_alias.code
  	WHERE
  		completed = '0'
   GROUP BY
-  	code 
+  	code
   ORDER BY
   	num_flags
   DESC;");
   $select->execute();
-	
+
 	//We want to know the code, the number of times flagged
 	//the destination, any aliases, and any comments
   $select2 = $connection->prepare("
@@ -95,22 +95,22 @@ try {
   				code)
   		AS
   	grouped_alias
-  		ON flag.code = grouped_alias.code 
+  		ON flag.code = grouped_alias.code
  	WHERE
  		completed != '0'
   GROUP BY
-  	code 
+  	code
   ORDER BY
   	flag.completed_on
   DESC
   LIMIT
   	20;");
   $select2->execute();
-	
+
   ?>
-	
+
 	<p>Flags in need of moderation</p>
-	
+
 	<!-- Here is the table -->
   <table class="flag_admin_table">
   	<tr>
@@ -158,9 +158,9 @@ try {
   	</tr>
   <?php } /*end foreach ($select->fetchAll() as $row) { */ ?>
   </table>
-  
+
   <p class="completed" >Completed Flags</p>
-  
+
   <table class="flag_admin_table completed">
   	<tr>
   		<th>Code</th>
@@ -197,7 +197,7 @@ try {
   	</tr>
   <?php } /*end foreach ($select->fetchAll() as $row) { */ ?>
   </table>
-  
+
   <?php //now catch any exceptions
 } catch (Throwable $e) {
 	throw $e;

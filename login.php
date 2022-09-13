@@ -13,7 +13,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 }
 
 require_once "header.php";
-?>  
+?>
 <form action="login.php" method="post">
     <?php if (isset($error)) { print "<p>Error. Please contact " . GO_HELP_HTML . "</p>"; } ?>
 	<p>
@@ -31,4 +31,3 @@ require_once "header.php";
 </form>
 <?php
 require_once "footer.php";
-?>
