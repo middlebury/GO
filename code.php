@@ -627,6 +627,9 @@ class Code {
 	 * @since 6/28/10
 	 */
 	public static function isUrlValid ($url) {
+		if (empty($url)) {
+			return false;
+		}
 		$url = trim($url);
 		// Encode any spaces;
 		$url = str_replace(' ', '%20', $url);

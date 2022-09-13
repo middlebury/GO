@@ -106,11 +106,13 @@ while($row = $select->fetch(PDO::FETCH_LAZY, PDO::FETCH_ORI_NEXT)) {
 		$line .= "<img src='application-icons/alert.png' alt='alert'/>";
 	$line .= "</a> &nbsp; &nbsp; ";
 	//add rel=nofollow and extrnal class to external links
-	$host_url = parse_url($row->url, PHP_URL_HOST);
-	$internal_host = false;
-	foreach ($internal_hosts as $host) {
-		if (preg_match($host, $host_url)) {
-			$internal_host = true;
+	if ($row->url) {
+		$host_url = parse_url($row->url, PHP_URL_HOST);
+		$internal_host = false;
+		foreach ($internal_hosts as $host) {
+			if (preg_match($host, $host_url)) {
+				$internal_host = true;
+			}
 		}
 	}
 	if (!$internal_host) {

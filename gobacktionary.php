@@ -107,7 +107,7 @@ foreach ($rows as $row) {
 
     print htmlentities($row['print_url']);
     print "<br />";
-    print "<em>&nbsp;&nbsp;&nbsp;".htmlentities($row['description'])."</em>";
+    print "<em>&nbsp;&nbsp;&nbsp;".(empty($row['description'])?'':htmlentities($row['description']))."</em>";
 
   //add rel=nofollow and external class to external links
 	$host_url = parse_url($row['url'], PHP_URL_HOST);
