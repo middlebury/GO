@@ -61,8 +61,7 @@ From Git:
 1. Clone the Git repository to a web-accessible directory:
 	git clone git://github.com/middlebury/GO.git
 	cd GO
-	git submodule init
-	git submodule update
+	composer install
 
 2. Create a database for GO and import the database schema:
 	mysql -u username -p -D go < database.sql

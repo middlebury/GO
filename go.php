@@ -1,5 +1,6 @@
 <?php
 
+require_once(dirname(__FILE__).'/vendor/autoload.php');
 require_once "config.php";
 require_once "user.php";
 require_once "code.php";
@@ -50,10 +51,6 @@ if (in_array($current_page, $session_pages)) {
 	if (!isset($_SESSION['flagged'])) {
 		$_SESSION['flagged'] = array();
 	}
-}
-
-if (AUTH_METHOD == 'cas') {
-	require_once(dirname(__FILE__).'/phpcas/source/CAS.php');
 }
 
 class AuthorizationFailedException extends Exception { }
@@ -274,6 +271,10 @@ class GoAuthLdap extends GoAuth {
 
 }
 
+use Monolog\Level;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 class GoAuthCas extends GoAuth {
   /**
    * Configure phpCAS
@@ -285,8 +286,11 @@ class GoAuthCas extends GoAuth {
    */
   public static function configurePhpCas () {
 
-    if (defined('GO_AUTH_CAS_LOG'))
-	    phpCAS::setDebug(GO_AUTH_CAS_LOG);
+    if (defined('GO_AUTH_CAS_LOG')) {
+      $logger = new Logger('phpcas');
+      $logger->pushHandler(new StreamHandler(GO_AUTH_CAS_LOG, Level::Debug));
+      phpCAS::setLogger($logger);
+    }
 
     phpCAS::client(CAS_VERSION_2_0, GO_AUTH_CAS_HOST, GO_AUTH_CAS_PORT, GO_AUTH_CAS_PATH, false);
 
