@@ -109,9 +109,14 @@ if (isSuperAdmin($user->getName())) {
 				<td>
 					<input type='checkbox' class='code_checkbox' name='codes[".$code->getInstitution()."][".$code->getName()."]'>
 				</td>
-				<td>
-					<a href='" . htmlspecialchars($code->getUrl()) . "'>" . $code->getName() . "</a>
-				</td>
+				<td>";
+			if ($code->getUrl()) {
+				print "<a href='" . htmlspecialchars($code->getUrl()) . "'>" . $code->getName() . "</a>";
+			} else {
+				print $code->getName();
+			}
+
+			print "</td>
 				<td>
 					" . htmlspecialchars($code->getDescription()) . "
 				</td>

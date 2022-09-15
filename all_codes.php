@@ -64,9 +64,14 @@ if (isSuperAdmin($user->getName())) {
 		//$codes[$row['institution'] . "/" . $row['name']] = new Code($row['name'], $row['institution']);
 		print "
 		<tr>
-			<td>
-				<a href='" . htmlentities($row['url']) . "'>" . $row['name'] . "</a>
-			</td>
+			<td>";
+		if ($row['url']) {
+			print "<a href='" . htmlentities($row['url']) . "'>" . $row['name'] . "</a>";
+		} else {
+			print $row['name'];
+		}
+
+		print "</td>
 			<td>
 				" . $row['description'] . "
 			</td>
