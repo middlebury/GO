@@ -185,7 +185,7 @@ $lines = $tempLines;
 				<table border="0" width="100%" class="gotionary">
 <?php
 $i = 0;
-$count = count($lines) / 2;
+$count = intval(count($lines) / 2);
 
 for ($i = 0; $i <= $count; $i++) {
 	$left = !empty($lines[$i]) ? $lines[$i] : '';
