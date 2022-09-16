@@ -7,5 +7,10 @@
     "require": {
         "apereo/phpcas": "^1.5",
         "monolog/monolog": "^3.2"
+    },
+    "autoload": {
+      "psr-4": {
+        "": "src/"
+      }
     }
 }
