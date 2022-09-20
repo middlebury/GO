@@ -356,6 +356,9 @@ class Code {
 	 * @since 02-27-2009
 	 */
 	public function getDescription() {
+		if (empty($this->description)) {
+			return '';
+		}
 		return htmlentities($this->description);
 	}
 
@@ -653,6 +656,9 @@ class Code {
 	 * @since 6/28/10
 	 */
 	public static function filterUrl ($url) {
+		if (empty($url)) {
+			return '';
+		}
 		$url = trim($url);
 		// Encode any spaces;
 		$url = str_replace(' ', '%20', $url);
