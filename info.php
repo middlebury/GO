@@ -163,7 +163,7 @@ try {
 
 				<?php
 				} catch (Throwable $e) {
-					error_log($e->getMessage(), 3);
+					error_log($e->getMessage());
 					print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>";
 				} ?>
 				</div> </div>
