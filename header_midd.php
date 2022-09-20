@@ -33,8 +33,8 @@ if (isset($_SESSION["AUTH"])) {
     <link rel="apple-touch-icon" sizes="76x76" href="//cdn.middlebury.edu/middlebury.edu/2010/images/apple-touch-icon/icon-ipad.png">
     <link rel="apple-touch-icon" sizes="120x120" href="//cdn.middlebury.edu/middlebury.edu/2010/images/apple-touch-icon/icon-retina.png">
     <link rel="apple-touch-icon" sizes="152x152" href="//cdn.middlebury.edu/middlebury.edu/2010/images/apple-touch-icon/icon-ipad-retina.png">
-    <!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js"></script><![endif]-->
-    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!--[if lt IE 8]><script src="https://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   </head>
   <body class="fullwidth">
     <!-- Google Tag Manager -->
