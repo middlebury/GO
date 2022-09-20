@@ -99,7 +99,7 @@ try {
 						//in the flag table for this user
   					$select = $connection->prepare("SELECT COUNT(*) FROM flag WHERE code = ? AND user = ?");
   					$select->bindValue(1, $code->getName());
-  					$select->bindValue(2, $_SESSION["AUTH"]->getId());
+  					$select->bindValue(2, $_SESSION["AUTH"]->getCurrentUserId());
   					$select->execute();
   					//place the results into count
   					if (intval($select->fetchColumn()) > 0) {

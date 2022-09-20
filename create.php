@@ -8,7 +8,7 @@ require_once "admin_nav.php";
 ?>
 
 <!-- Include jQuery/JS to apply add remove behavior to the admin and alias lists -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script src="addremove.js" type="text/javascript"></script>
 <script src="md5.js" type="text/javascript"></script>
 
@@ -24,7 +24,7 @@ require_once "admin_nav.php";
 					<!-- Since the currently logged in user is creating a new code
 					set them as an admin of this code, but only if the form hasn't been submitted -->
 					<?php if (!isset($_SESSION['form_values']['admin_list'])) { ?>
-						<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getName() ?>" />
+						<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getCurrentUserName() ?>" />
 					<?php } ?>
 					<!-- Pass the current URL -->
 					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
@@ -78,7 +78,7 @@ require_once "admin_nav.php";
 							Description<br />
 							<textarea class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_description'); } ?>" cols="50" rows="3" name="update_description" id="update_description"><?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_description']); } ?></textarea>
 						</p>
-						<?php if (isSuperAdmin($_SESSION['AUTH']->getId())) { ?>
+						<?php if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId())) { ?>
 						<p>
 							<input value="1" name="public" type="radio" checked="checked" /> Show on GOtionary
 							<input value="0" name="public" type="radio" /> Hide from GOtionary

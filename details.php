@@ -45,7 +45,7 @@ try {
   			print "\n<tr>";
   			print "\n<td>".$row['code']."</td>";
   			if ($row['user']) {
-  				print "\n<td>".GoAuthCas::getName($row['user'])."</td>";
+  				print "\n<td>".GoAuthCas::getNameByUserId($row['user'])."</td>";
   			} else {
   				print "\n<td></td>";
   			}

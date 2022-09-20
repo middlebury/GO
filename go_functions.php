@@ -18,7 +18,7 @@ function isSuperAdmin() {
 	//this var is not passed to this function, use the global
 	global $goAdmin;
 	//if the current user is logged in, check it they are in the admin array
-	if(isset($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getId(), $goAdmin)) {
+	if(isset($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getCurrentUserId(), $goAdmin)) {
 		return true;
 	} else {
 		return false;
@@ -32,7 +32,7 @@ function isAuditor() {
 
 	//if the current user is logged in, check it they are in the auditors array
 	global $goAuditors;
-	if(!empty($goAuditors) && !empty($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getId(), $goAuditors))
+	if(!empty($goAuditors) && !empty($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getCurrentUserId(), $goAuditors))
 		return true;
 
 	return false;
@@ -67,7 +67,7 @@ function isAdmin($code, $institution) {
 
   // If authenticated user is admin of code then set $is_admin
   foreach ($select->fetchAll() as $row) {
-		if ($row['user'] == $_SESSION['AUTH']->getId()) {
+		if ($row['user'] == $_SESSION['AUTH']->getCurrentUserId()) {
 			$is_admin = true;
 		}
 	}

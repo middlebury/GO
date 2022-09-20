@@ -1,64 +1,55 @@
 <?php
 
 /**
- * Handle Authentication and attribute lookups.
- *
- * @author Ian McBride <imcbride@middlebury.edu>
- * @category GO
- * @copyright 2009 The President and Fellows of Middlebury College
- * @license GNU General Public License (GPL) version 3 or later
- * @package GO
- * @version 06-08-2009
- * @link http://go.middlebury.edu/
+ * Access to the static methods of the current authentication implementation.
  */
-abstract class GoAuth {
+abstract class GoAuth implements GoAuthLookupInterface {
 
   /**
-   * Store the logged in user and their attributes.
+   * Answer the currently configured implementation class.
    *
-   * @access protected
-   * @since 06-08-2009
-   * @var The currently logged in user.
    */
-  protected $user;
+  public static function authClass() {
+    if (AUTH_METHOD == 'ldap') {
+      return 'GoAuthLdap';
+    } elseif (AUTH_METHOD == 'cas') {
+      return 'GoAuthCas';
+    } else {
+      throw new Exception('Unknown Auth Method');
+    }
+  }
 
   /**
    * Get the internal ID of a user.
    *
-   * If the username parameter is set, the returned ID will be that of the input
-   * user, otherwise the ID of the currently logged in user will be returned.
-   *
    * @access public
    * @param string $username A username to find the ID of.
    * @return string The ID of the requested user.
-   * @since 06-08-2009
    */
-  abstract public function getId($username = null);
+  public static function getIdForUser($username) {
+    return self::authClass()::getIdForUser($username);
+  }
 
   /**
    * Get the username of a user.
    *
-   * If the ID parameter is set, the returned username will be that of the input
-   * user, otherwise the username of the currently logged in user will be returned.
-   *
    * @access public
    * @param string $id A user ID to find the username of.
    * @return string The username of the requested user.
-   * @since 06-08-2009
    */
-  abstract public function getName($id = null);
+  public static function getNameByUserId($id) {
+    return self::authClass()::getNameByUserId($id);
+  }
 
   /**
    * Get the email address of a user.
    *
-   * If the ID parameter is set, the returned email will be that of the input
-   * user, otherwise the email of the currently logged in user will be returned.
-   *
    * @access public
    * @param string $id A user ID to find the email of.
    * @return string The email address of the requested user.
-   * @since 06-08-2009
    */
-  abstract public function getEmail($id = null);
+  public static function getEmailByUserId($id) {
+    return self::authClass()::getEmailByUserId($id);
+  }
 
 }

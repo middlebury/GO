@@ -69,8 +69,8 @@ try {
   //first bind code
   $insert->bindValue(1, $_POST["code"]);
   if (isset($_SESSION["AUTH"])) {
-  	//bind the logged in user
-  	$insert->bindValue(2, $_SESSION["AUTH"]->getId());
+    //bind the logged in user
+    $insert->bindValue(2, $_SESSION["AUTH"]->getCurrentUserId());
   } else {
   	//otherwise just leave the user field blank
   	$insert->bindValue(2, '');
@@ -97,17 +97,21 @@ try {
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
   foreach ($goAdmin as $current_admin) {
-  $to[] = GoAuthCas::getEmail($current_admin);
+    try {
+      $to[] = GoAuth::getEmailByUserId($current_admin);
+    } catch (Exception $e) {
+      // Ignore old admins that aren't in our database anymore.
+    }
   }
   $to = implode(', ', $to);
   $headers['From'] = GO_ALERTS_EMAIL_NAME . ' <' . GO_ALERTS_EMAIL_ADDRESS . '>';
   $headers['Subject'] = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
   $mime = new Mail_mime;
   if (isset($_SESSION["AUTH"])) {
-  $text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
+    $text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getCurrentUserName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
 
 - The GO application';
-	$html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
+    $html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by '.$_SESSION["AUTH"]->getCurrentUserName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
 
 - The GO application';
 } else {

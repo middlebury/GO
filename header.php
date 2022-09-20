@@ -7,7 +7,7 @@ $name = "";
 
 if (isset($_SESSION["AUTH"])) {
   try {
-    $name = $_SESSION["AUTH"]->getName();
+    $name = $_SESSION["AUTH"]->getCurrentUserName();
   } catch (Throwable $e) {
     // We may have an expired proxy-ticket kept around. If so, regenerate the session
     // and log-in again.

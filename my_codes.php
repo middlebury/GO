@@ -16,14 +16,14 @@ require_once "admin_nav.php";
 
 //validation
 if ($_POST != array()) {
-	if (!$_SESSION["AUTH"]->getId($_POST['other_username'])) {
+	if (!GoAuth::getIdForUser($_POST['other_username'])) {
 		$_SESSION['update_message'][] = "<p class='update_message_failure'>User is not a valid user. Check that the user name is correct.</p>";
 		unset($_POST['other_username']);
 	}
 }
 
 // Show all codes the currently logged in user may admin
-$user = new User($_SESSION["AUTH"]->getId());
+$user = new User($_SESSION["AUTH"]->getCurrentUserId());
 
 //current user is the user whose codes we will see
 $current_user = $user;
@@ -33,11 +33,11 @@ $current_user_id = '';
 if (isSuperAdmin($user->getName())) {
 	if(isset($_POST['other_username'])) {
 		$current_user_id = trim($_POST['other_username']);
-		$current_user = new User($_SESSION["AUTH"]->getId($current_user_id));
+		$current_user = new User(GoAuth::getIdForUser($current_user_id));
 		unset($_POST['other_username']);
 	} elseif (isset($_SESSION['current_user_id'])) {
 		$current_user_id = $_SESSION['current_user_id'];
-		$current_user = new User($_SESSION["AUTH"]->getId($current_user_id));
+		$current_user = new User(GoAuth::getIdForUser($current_user_id));
 		unset($_SESSION['current_user_id']);
 	}
 }
@@ -134,7 +134,7 @@ if (isSuperAdmin($user->getName())) {
 					<a class='edit_button' href='update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "'><input onclick='window.location=\"update.php?code=" . $code->getName() . "&amp;institution=" . $code->getInstitution() . "&amp;url=" . urlencode(curPageURL()) . "\"' type='button' value='Edit Shortcut' /></a>
 
 					<a class='edit_button' href='info.php?code=".$code->getName()."'><input type='button' onclick='window.location=\"info.php?code=".$code->getName()."\"' value='Info' /></a>";
-					if (isSuperAdmin($_SESSION["AUTH"]->getId())) {
+					if (isSuperAdmin($_SESSION["AUTH"]->getCurrentUserId())) {
 						print "\n\t\t\t\t<a class='edit_button' href='details.php?code=".$code->getName()."&amp;institution=".$code->getInstitution()."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' /></a>";
 					}
 					print

@@ -4,7 +4,7 @@ use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
-class GoAuthCas extends GoAuth {
+class GoAuthCas implements GoAuthAuthenticatedSessionInterface, GoAuthLookupInterface {
   /**
    * Configure phpCAS
    *
@@ -53,11 +53,25 @@ class GoAuthCas extends GoAuth {
     }
   }
 
-  public function getId($username = null) {
-    if(is_null($username)) {
-      return $_SESSION["phpCAS"]["user"];
-    }
+  /**
+   * Get the internal ID of the current user.
+   *
+   * @access public
+   * @return string The ID of the requested user.
+   * @since 06-08-2009
+   */
+  public function getCurrentUserId() {
+    return $_SESSION["phpCAS"]["user"];
+  }
 
+  /**
+   * Get the internal ID of a user.
+   *
+   * @access public
+   * @param string $username A username to find the ID of.
+   * @return string The ID of the requested user.
+   */
+  public static function getIdForUser($username) {
     if (!Go::cache_get('user_id-'.$username)) {
       $xml = self::directoryFetch('search_users_by_attributes', GO_AUTH_CAS_ATTR_NAME, $username);
       $elements = $xml->xpath("/cas:results/cas:entry/cas:user");
@@ -72,24 +86,50 @@ class GoAuthCas extends GoAuth {
     return Go::cache_get('user_id-'.$username);
   }
 
-  public function getName($id = null) {
-    if (is_null($id)) {
-      $id = $_SESSION["phpCAS"]["user"];
-    }
+  /**
+   * Get the username of the current user.
+   *
+   * @access public
+   * @return string The username of the requested user.
+   */
+  public function getCurrentUserName() {
+    return self::getNameByUserId($_SESSION["phpCAS"]["user"]);
+  }
 
+  /**
+   * Get the username of a user.
+   *
+   * @access public
+   * @param string $id A user ID to find the username of.
+   * @return string The username of the requested user.
+   */
+  public static function getNameByUserId($id) {
     if (!Go::cache_get('user_name-'.$id)) {
       $name = self::directoryLookupById($id, GO_AUTH_CAS_ATTR_NAME);
       Go::cache_set('user_name-'.$id, $name);
     }
-
     return Go::cache_get('user_name-'.$id);
   }
 
-  public function getEmail($id = null) {
-    if (is_null($id)) {
-      $id = $_SESSION["phpCAS"]["user"];
-    }
+  /**
+   * Get the email address of a user.
+   *
+   * @access public
+   * @return string The email address of the requested user.
+   * @since 06-08-2009
+   */
+  public function getCurrentUserEmail() {
+    return self::getEmailByUserId($_SESSION["phpCAS"]["user"]);
+  }
 
+  /**
+   * Get the email address of a user.
+   *
+   * @access public
+   * @param string $id A user ID to find the email of.
+   * @return string The email address of the requested user.
+   */
+  public static function getEmailByUserId($id) {
     if (!Go::cache_get('user_email-'.$id)) {
       $email = self::directoryLookupById($id, GO_AUTH_CAS_ATTR_EMAIL);
       Go::cache_set('user_email-'.$id, $email);

@@ -19,7 +19,7 @@ if (isset($_SESSION['AUTH'])) {
 	$is_admin = isAdmin($_GET['code'], $_GET['institution']);
 
 	// This form is only available if user is a superadmin or admin
-	if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
+	if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId()) || $is_admin) {
 
 		// Check to see if we're in the midst of editing this code
 		if (isset($_SESSION['form_values'])) {
@@ -60,7 +60,7 @@ if (isset($_SESSION['AUTH'])) {
 							Description<br />
 							<textarea class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_description'); } ?>" cols="50" rows="3" name="update_description"><?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_description']); } else { echo $code->getDescription(); } ?></textarea>
 						</p>
-						<?php if (!$code->getPublic() || isSuperAdmin($_SESSION['AUTH']->getId())) { ?>
+						<?php if (!$code->getPublic() || isSuperAdmin($_SESSION['AUTH']->getCurrentUserId())) { ?>
 							<p>
 								<input value="1" name="public" type="radio" <?php if($code->getPublic()) echo "checked=\"checked\""; ?> /> Show on GOtionary
 								<input value="0" name="public" type="radio" <?php if(!$code->getPublic()) echo "checked=\"checked\""; ?> /> Hide from GOtionary
@@ -98,7 +98,7 @@ if (isset($_SESSION['AUTH'])) {
 
 							foreach($code->getUsers() as $cUser) {
 								try {
-									$username = $_SESSION["AUTH"]->getName($cUser->getName());
+									$username = GoAuth::getNameByUserId($cUser->getName());
 								//if there is an exception, use the id as the username
 								} catch (Throwable $e) {
 									$username = $cUser->getName();
@@ -126,7 +126,7 @@ if (isset($_SESSION['AUTH'])) {
 						<p><input type="submit" name="revert" value="Revert These Changes" /></p>
 						<p>
 						<input type="submit" name="delete" value="Delete Shortcut"  />
-						<?php	if (isSuperAdmin($_SESSION['AUTH']->getId())) {
+						<?php	if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId())) {
 							print ' <input type="submit" name="delete_and_ban" value="Delete and Ban Shortcut" title="Ban this shortcut from future usage."/>';
 						} ?>
 						</p>

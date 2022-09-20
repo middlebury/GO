@@ -30,7 +30,7 @@ try {
 	//get the statement object for this update statement
 	//set who completed the flag and when it was completed
 	$update = $connection->prepare("UPDATE flag SET completed = ?, completed_on = NOW(), notes = ? WHERE code = ? AND institution = ? AND completed = '0'");
-	$update->bindValue(1, $_SESSION["AUTH"]->getName());
+	$update->bindValue(1, $_SESSION["AUTH"]->getCurrentUserName());
 	$update->bindValue(2, $_POST['notes']);
   $update->bindValue(3, $_POST['code']);
   $update->bindValue(4, $_POST['institution']);
@@ -43,19 +43,23 @@ try {
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
   foreach ($goAdmin as $current_admin) {
-  $to[] = GoAuthCas::getEmail($current_admin);
+    try {
+      $to[] = GoAuth::getEmailByUserId($current_admin);
+    } catch (Exception $e) {
+      // Ignore old admins that aren't in our database anymore.
+    }
   }
   $to = implode(', ', $to);
   $headers['From'] = GO_ALERTS_EMAIL_NAME . ' <' . GO_ALERTS_EMAIL_ADDRESS . '>';
-  $headers['Subject'] = 'The flagged GO code '.$_POST["code"].' was administered by '.$_SESSION["AUTH"]->getName().'.';
+  $headers['Subject'] = 'The flagged GO code '.$_POST["code"].' was administered by '.$_SESSION["AUTH"]->getCurrentUserName().'.';
   $mime = new Mail_mime;
   if (isset($_SESSION["AUTH"])) {
-    $text = 'The flagged GO code (aka. link) "'.$_POST["code"].'" was completed by '.$_SESSION["AUTH"]->getName().'. History may be viewed via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
+    $text = 'The flagged GO code (aka. link) "'.$_POST["code"].'" was completed by '.$_SESSION["AUTH"]->getCurrentUserName().'. History may be viewed via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
 
-    '.$_SESSION["AUTH"]->getName().'\'s notes: '.$_POST['notes'];
-	  $html = 'The flagged GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was completed by '.$_SESSION["AUTH"]->getName().'. History may be viewed via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
+    '.$_SESSION["AUTH"]->getCurrentUserName().'\'s notes: '.$_POST['notes'];
+	  $html = 'The flagged GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was completed by '.$_SESSION["AUTH"]->getCurrentUserName().'. History may be viewed via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
 
-	  '.$_SESSION["AUTH"]->getName().'\'s notes: '.$_POST['notes'];
+	  '.$_SESSION["AUTH"]->getCurrentUserName().'\'s notes: '.$_POST['notes'];
 	}
 	$mime->setTXTBody($text);
 	$mime->setHTMLBody($html);

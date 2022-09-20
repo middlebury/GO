@@ -145,7 +145,7 @@ class Code {
 	public static function banCode ($name) {
 		global $connection;
 		$insert = $connection->prepare("INSERT INTO banned_codes (code, banned_by, banned_by_display_name) VALUES (?, ?, ?)");
-		$insert->execute(array(strtolower($name), $_SESSION["AUTH"]->getId(), $_SESSION["AUTH"]->getName()));
+		$insert->execute(array(strtolower($name), $_SESSION["AUTH"]->getCurrentUserId(), $_SESSION["AUTH"]->getCurrentUserName()));
 	}
 
 	/**

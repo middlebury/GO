@@ -26,7 +26,7 @@ if (isset($_SESSION['AUTH'])) {
 
 	// This is only available to authenticated users
 	if (isset($_SESSION['AUTH'])) {
-	//if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
+	//if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId()) || $is_admin) {
 
 		//make the following check only if we are trying to create a code (not update)
 		if(isset($_POST['create'])) {
@@ -139,7 +139,7 @@ if (isset($_SESSION['AUTH'])) {
 				$_SESSION['update_message'][] = "<p class='update_message_success'>The description was set to '".$_POST['update_description']."' for shortcut ".$_POST['code'].".</p>";
 			}
 			//update show in gotionary in database
-			if (isSuperAdmin($_SESSION['AUTH']->getId())) {
+			if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId())) {
 				if ($code->getPublic() != $_POST['public']) {
 					$code->setPublic((bool) $_POST['public'], true);
 					if ($_POST['public']) {
@@ -150,7 +150,7 @@ if (isset($_SESSION['AUTH'])) {
 				}
 			}
 			//update unsearchable on main site in database
-			if (isSuperAdmin($_SESSION['AUTH']->getId())) {
+			if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId())) {
 				if ($code->getUnsearchable() != $_POST['unsearchable']) {
 					$code->setUnsearchable((bool) $_POST['unsearchable'], true);
 					if ($_POST['unsearchable']) {
@@ -220,10 +220,10 @@ if (isset($_SESSION['AUTH'])) {
 				foreach ($_POST['admin_list'] as $current_admin) {
 					// Trim in case there is extra whitespace
 					$current_admin = trim($current_admin);
-					if ($_SESSION["AUTH"]->getId($current_admin)) {
+					if (GoAuth::getIdForUser($current_admin)) {
 						// Check to see if user is already an admin
 						$select = $connection->prepare("SELECT user FROM user_to_code WHERE user = ? AND code = ? AND institution = ?");
-  					$select->bindValue(1, $_SESSION["AUTH"]->getId($current_admin));
+  					$select->bindValue(1, GoAuth::getIdForUser($current_admin));
   					$select->bindValue(2, $_POST['code']);
   					$select->bindValue(3, $_POST['institution']);
 						$select->execute();
@@ -231,7 +231,7 @@ if (isset($_SESSION['AUTH'])) {
 						// If they aren't already an admin
 						if (!count($result)) {
 							// Add the user to the code and set a message
-							$code->addUser($_SESSION["AUTH"]->getId($current_admin));
+							$code->addUser(GoAuth::getIdForUser($current_admin));
 							$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$current_admin." was added as an admin of '".$code->getName()."'.</p>";
 						}
 						else {
@@ -292,7 +292,7 @@ if (isset($_SESSION['AUTH'])) {
 							}
 							if (!$dont_delete_current_admin) {
 								try {
-									$code->delUser($_SESSION["AUTH"]->getId($current_admin));
+									$code->delUser(GoAuth::getIdForUser($current_admin));
 								//if the user isn't found and the ID is passed, just use the id
 								} catch (Throwable $e) {
 									$code->delUser($current_admin);
@@ -304,7 +304,7 @@ if (isset($_SESSION['AUTH'])) {
 					// the admins in the "delete list".
 					} else {
 						try {
-							$code->delUser($_SESSION["AUTH"]->getId($current_admin));
+							$code->delUser(GoAuth::getIdForUser($current_admin));
 						//if the user isn't found and the ID is passed, just use the id
 						} catch (Throwable $e) {
 							$code->delUser($current_admin);
@@ -326,7 +326,7 @@ if (isset($_SESSION['AUTH'])) {
 			$_SESSION['update_message'][] = "<p class='update_message_success'>The shortcut " . $code->getName() . " was deleted.</p>";
 		}
 		// If delete_and_ban was pressed just delete the code and set a message.
-		elseif(isset($_POST['delete_and_ban']) && isSuperAdmin($_SESSION['AUTH']->getId())) {
+		elseif(isset($_POST['delete_and_ban']) && isSuperAdmin($_SESSION['AUTH']->getCurrentUserId())) {
 
 			// Instantiate a code object using the submitted name/institution
 			$code = new Code($_POST['code'], $_POST['institution']);
@@ -344,7 +344,7 @@ if (isset($_SESSION['AUTH'])) {
 		}
 		elseif(isset($_POST['notify'])) {
 			try {
-				$user = new User($_SESSION["AUTH"]->getId());
+				$user = new User($_SESSION["AUTH"]->getCurrentUserId());
 
 				$user->setNotify(($_POST["notify"] == "1"), true);
 
@@ -359,7 +359,7 @@ if (isset($_SESSION['AUTH'])) {
 			}
 		}
 
-	} //end if (isSuperAdmin($_SESSION['AUTH']->getId()) || $is_admin) {
+	} //end if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId()) || $is_admin) {
 
 } //end if (isset($_SESSION['AUTH'])) {
 

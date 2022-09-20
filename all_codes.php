@@ -10,7 +10,7 @@ require_once "admin_nav.php";
 
 <?php
 
-$user = new User($_SESSION["AUTH"]->getId());
+$user = new User($_SESSION["AUTH"]->getCurrentUserId());
 
 // If an update message was set prior to a redirect
 // to this page display it and clear the message.

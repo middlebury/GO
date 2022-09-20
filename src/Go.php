@@ -228,8 +228,8 @@ class Go {
 	global $connection;
 
   	if (isset($_SESSION["AUTH"])) {
-  		$user_id = $_SESSION["AUTH"]->getId();
-  		$user_display_name = $_SESSION["AUTH"]->getName();
+  		$user_id = $_SESSION["AUTH"]->getCurrentUserId();
+  		$user_display_name = $_SESSION["AUTH"]->getCurrentUserName();
   	} else {
   		$user_id = '0';
   		$user_display_name = 'anonymous';
