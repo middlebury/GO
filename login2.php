@@ -7,4 +7,4 @@ require_once "go.php";
 // it then redirects back to.
 
 //redirect on completion
-header("location: ".$_GET['url']);
+header("location: admin.php");

@@ -24,6 +24,8 @@ try {
 	$name = str_replace(" ", "+", $_GET["code"]);
 
 	$code = Code::get($name, $institution);
+
+	if ($code->getPublic() || isset($_SESSION['AUTH'])) {
 ?>
 				<dl>
 					<dt>Code</dt>
@@ -162,10 +164,13 @@ try {
 				</form>
 
 				<?php
-				} catch (Throwable $e) {
-					error_log($e->getMessage());
-					print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>";
-				} ?>
+	} else {
+		print "<div class='error'>You must be logged in to view the details of this code.</div>";
+	}
+} catch (Throwable $e) {
+	error_log($e->getMessage());
+	print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>";
+} ?>
 				</div> </div>
 <?php
 require_once "footer.php";

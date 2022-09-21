@@ -6,7 +6,7 @@ require_once "admin_nav.php";
 ?>
 
 <!-- Include jQuery/JS -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script src="my_codes.js" type="text/javascript"></script>
 
 <div class="content">
