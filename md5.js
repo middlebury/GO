@@ -9,7 +9,7 @@
 
 var hexcase = 0;
 var b64pad  = "";
-var chrsz   = 8; 
+var chrsz   = 8;
 
 function hex_md5(s){ return binl2hex(core_md5(str2binl(s), s.length * chrsz));}
 function b64_md5(s){ return binl2b64(core_md5(str2binl(s), s.length * chrsz));}

@@ -23,7 +23,7 @@ if (!isset($_SESSION['AUTH']) || !isset($_POST['admin_name']) || !isset($_POST['
 $bulk_admin = trim($_POST['admin_name']);
 
 //Check if admin is valid
-if (!$_SESSION["AUTH"]->getId($bulk_admin)) {
+if (!GoAuth::getIdForUser($bulk_admin)) {
 	$_SESSION['update_message'][] = "<p class='update_message_failure'>User ".$bulk_admin." is not a valid user. Check that the user name is correct.</p>";
 	die(header("location: " . $_POST['form_url']));
 }
@@ -37,13 +37,13 @@ if (!Code::isValidAdmin($bulk_admin)) {
 }
 
 // Instantiate user(s)
-$user = new User($_SESSION["AUTH"]->getId());
+$user = new User($_SESSION["AUTH"]->getCurrentUserId());
 $current_user = $user;
 
 //super admins can work with a user that is not themselves
 if (isSuperAdmin($user->getName())) {
 	if($_POST['current_user_id'] != null) {
-		$current_user = new User($_SESSION["AUTH"]->getId($_POST['current_user_id']));
+		$current_user = new User(GoAuth::getIdForUser($_POST['current_user_id']));
 		$_SESSION['current_user_id'] = $_POST['current_user_id'];
 	}
 }
@@ -57,41 +57,41 @@ foreach ($_POST['codes'] as $inst => $shortcuts) {
 
 // Bulk adding admin behavior
 if (isset($_POST['bulk_admin_add'])) {
-	
-	foreach ($codes as $code) {						
-		
+
+	foreach ($codes as $code) {
+
 		// Check to see if user is already an admin
-		if ($code->isAdmin($_SESSION["AUTH"]->getId($bulk_admin))) {
+		if ($code->isAdmin(GoAuth::getIdForUser($bulk_admin))) {
 			// Set a message saying the user is already an admin
 			$_SESSION['update_message'][] = "<p class='update_message_failure'>User ".$bulk_admin." is already an admin of '".$code->getName()."'.</p>";
 		} else {
 			// Add the user to the code and set a message
-			$code->addUser($_SESSION["AUTH"]->getId($bulk_admin));
+			$code->addUser(GoAuth::getIdForUser($bulk_admin));
 			$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$bulk_admin." was added as an admin of '".$code->getName()."'.</p>";
 		}
-	
+
 	}
 
-// Bulk removing admin behavior				
+// Bulk removing admin behavior
 } elseif (isset($_POST['bulk_admin_remove'])) {
 
 	foreach ($codes as $code) {
-		
+
 		// Check to see if user is already an admin
-		if ($code->isAdmin($_SESSION["AUTH"]->getId($bulk_admin))) {
+		if ($code->isAdmin(GoAuth::getIdForUser($bulk_admin))) {
 			if(count($code->getUsers()) <= 1) {
 				// Don't allow removal if there is only one admin
 				$_SESSION['update_message'][] = "<p class='update_message_failure'>You are the only admin of code ".$code->getName()." and were not removed as admin. Please add another admin before removing ".$bulk_admin." as admin.</p>";
 			} else {
 				// Remove the user to the code and set a message
-				$code->delUser($_SESSION["AUTH"]->getId($bulk_admin));
+				$code->delUser(GoAuth::getIdForUser($bulk_admin));
 				$_SESSION['update_message'][] = "<p class='update_message_success'>User ".$bulk_admin." was removed as an admin of '".$code->getName()."'.</p>";
 			}
 		} else {
 			// Set a message saying the user is not an admin
 			$_SESSION['update_message'][] = "<p class='update_message_failure'>User ".$bulk_admin." is not an admin of '".$code->getName()."'.</p>";
 		}
-		
+
 	}
 }
 

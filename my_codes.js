@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+
 	// Check/Uncheck all
 	$('#check_all').click( function() {
 		if ($('#check_all').attr('checked')) {
@@ -8,5 +8,5 @@ $(document).ready(function(){
 			$('.code_checkbox').attr('checked', false);
 		}
 	});
-	
+
 }); // End $(document).ready(function(){

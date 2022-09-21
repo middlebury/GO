@@ -14,7 +14,7 @@ require_once "admin_nav.php";
 
 		<div class="content">
 			<div id="response"></div>
-				
+
 				<form action="process.php" method="post">
 					<div> <!-- a block level element to hold the contents of the form -->
 					<!-- Pass the current xss check value -->
@@ -24,11 +24,11 @@ require_once "admin_nav.php";
 					<!-- Since the currently logged in user is creating a new code
 					set them as an admin of this code, but only if the form hasn't been submitted -->
 					<?php if (!isset($_SESSION['form_values']['admin_list'])) { ?>
-						<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getName() ?>" />
+						<input type="hidden" name="admin_list[]" value="<?php print $_SESSION['AUTH']->getCurrentUserName() ?>" />
 					<?php } ?>
-					<!-- Pass the current URL --> 
+					<!-- Pass the current URL -->
 					<input type="hidden" name="form_url" value="<?php print htmlentities(curPageURL()) ?>" />
-					
+
 					<?php
 						// If an update message was set prior to a redirect
 						// to this page display it and clear the message.
@@ -51,14 +51,14 @@ require_once "admin_nav.php";
 								<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'code'); } ?>" id="code" name="code" type="text" size="50" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['code']); } ?>" />
 							<br />example: go/<b>shortcut</b> - don't start the shortcut with 'go/'
 						</p>
-						
+
 						<!-- ADD URL -->
 						<p>
 							<label for="update_url">URL</label>
 							<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_url'); } ?>" id="update_url" name="update_url" type="text" size="62" value="<?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_url']); } ?>" />
 							<br />example: http://www.google.com - be sure to include http:// or https://
 						</p>
-						
+
 						<!-- ADD INSTITUTION -->
 						<p>
 						<?php
@@ -72,29 +72,29 @@ require_once "admin_nav.php";
 				  		}
 						?>
 						</p>
-						
+
 						<!-- ADD DESCRIPTION -->
 						<p>
 							Description<br />
 							<textarea class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'update_description'); } ?>" cols="50" rows="3" name="update_description" id="update_description"><?php if (isset($_SESSION['form_values'])) { print htmlentities($_SESSION['form_values']['update_description']); } ?></textarea>
 						</p>
-						<?php if (isSuperAdmin($_SESSION['AUTH']->getId())) { ?>
+						<?php if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId())) { ?>
 						<p>
-							<input value="1" name="public" type="radio" checked="checked" /> Show on GOtionary 
+							<input value="1" name="public" type="radio" checked="checked" /> Show on GOtionary
 							<input value="0" name="public" type="radio" /> Hide from GOtionary
 						</p>
 						<p>
-							<input value="0" name="unsearchable" type="radio" checked="checked" /> Searchable on website 
+							<input value="0" name="unsearchable" type="radio" checked="checked" /> Searchable on website
 							<input value="1" name="unsearchable" type="radio" /> Unsearchable on webiste
 						</p>
 						<?php } ?>
-						
+
 						<!-- ADD ALIASES -->
 						<h3>Aliases</h3>
 						<ul id="alias_list">
 						<!--This is required by doctype-->
 						<li style="display: none;">This space is intentionally left blank</li>
-						<?php 
+						<?php
 						// If we've submitted the form with values but it was not yet
 						// processed, repopulate the aliases if needed
 						if (isset($_SESSION['form_values']['alias_list'])) {
@@ -106,12 +106,12 @@ require_once "admin_nav.php";
 						?>
 						</ul>
 						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_alias_text'); } ?>" type="text" id="add_alias_text" maxlength="150" name="alias" /><input type="button" id="add_alias_button" name="add_alias" value="Add Alias"/>
-						
+
 						<!-- ADD ADMINS -->
 						<h3>Admins</h3>
 						<ul id="admin_list">
 						<li style="display: none;">This space is intentionally left blank</li>
-						<?php 
+						<?php
 						// If we've submitted the form with values but it was not yet
 						// processed, repopulate the admins if needed
 						if (isset($_SESSION['form_values']['admin_list'])) {
@@ -125,9 +125,9 @@ require_once "admin_nav.php";
 						<input name="create" style="display: none;"/> <!-- hiddent input to allow process.php to know this came from "create" -->
 						<input class="<?php if (isset($_SESSION['field_id_in_error'])) { print errorCase($_SESSION['field_id_in_error'], 'add_admin_text'); } ?>" type="text" id="add_admin_text"  maxlength="150" name="admin" /><input type="button" id="add_admin_button" name="add_admin" value="Add Admin"/>
 						<p><input type="submit" name="update" value="Create Shortcut" /><input type="submit" name="revert" value="Start Over" /></p>
-						
+
 					</div> <!-- end the block level element to hold the contents of the form -->
-				</form> 
+				</form>
 		<?php
 		unset($_SESSION['field_id_in_error']);
 

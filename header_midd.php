@@ -7,10 +7,11 @@ $name = "";
 
 if (isset($_SESSION["AUTH"])) {
   try {
-    $name = $_SESSION["AUTH"]->getName();
+    $name = $_SESSION["AUTH"]->getCurrentUserName();
   } catch (Throwable $e) {
     // We may have an expired proxy-ticket kept around. If so, regenerate the session
     // and log-in again.
+    require_once "vendor/apereo/phpcas/source/CAS.php"; // Ensure our constant is loaded.
     if ($e->getCode() == PHPCAS_SERVICE_PT_FAILURE) {
       session_destroy();
       header('Location: '.$_SERVER['REQUEST_URI']);
@@ -33,8 +34,8 @@ if (isset($_SESSION["AUTH"])) {
     <link rel="apple-touch-icon" sizes="76x76" href="//cdn.middlebury.edu/middlebury.edu/2010/images/apple-touch-icon/icon-ipad.png">
     <link rel="apple-touch-icon" sizes="120x120" href="//cdn.middlebury.edu/middlebury.edu/2010/images/apple-touch-icon/icon-retina.png">
     <link rel="apple-touch-icon" sizes="152x152" href="//cdn.middlebury.edu/middlebury.edu/2010/images/apple-touch-icon/icon-ipad-retina.png">
-    <!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js"></script><![endif]-->
-    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!--[if lt IE 8]><script src="https://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   </head>
   <body class="fullwidth">
     <!-- Google Tag Manager -->
@@ -112,4 +113,4 @@ if (isset($_SESSION["AUTH"])) {
         <a class="noborder" href="#"><img src="//cdn.middlebury.edu/middlebury.edu/2010/images/headers/go.png" alt="GO" /></a>
       </section>
       <section class="page">
-        <section class="body">			
+        <section class="body">

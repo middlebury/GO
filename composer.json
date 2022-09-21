@@ -1,0 +1,16 @@
+{
+    "name": "middlebury/go",
+    "description": "GO is a shortcut and redirection application that allows users to maintain the destination of links to resources.",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "minimum-stability": "stable",
+    "require": {
+        "apereo/phpcas": "^1.5",
+        "monolog/monolog": "^2.8"
+    },
+    "autoload": {
+      "psr-4": {
+        "": "src/"
+      }
+    }
+}

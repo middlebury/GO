@@ -10,7 +10,7 @@ require_once "admin_nav.php";
 
 <?php
 
-$user = new User($_SESSION["AUTH"]->getId());
+$user = new User($_SESSION["AUTH"]->getCurrentUserId());
 
 // If an update message was set prior to a redirect
 // to this page display it and clear the message.
@@ -64,9 +64,14 @@ if (isSuperAdmin($user->getName())) {
 		//$codes[$row['institution'] . "/" . $row['name']] = new Code($row['name'], $row['institution']);
 		print "
 		<tr>
-			<td>
-				<a href='" . htmlentities($row['url']) . "'>" . $row['name'] . "</a>
-			</td>
+			<td>";
+		if ($row['url']) {
+			print "<a href='" . htmlentities($row['url']) . "'>" . $row['name'] . "</a>";
+		} else {
+			print $row['name'];
+		}
+
+		print "</td>
 			<td>
 				" . $row['description'] . "
 			</td>
@@ -77,12 +82,12 @@ if (isSuperAdmin($user->getName())) {
 				" . $row['institution'] . "
 			</td>
 			<td>
-				
+
 				<a class='edit_button' href='update.php?code=" . $row['name'] . "&amp;institution=" . $row['institution'] . "&amp;url=" . urlencode(curPageURL()) . "'><input type='button' value='Edit Shortcut' /></a>
-				
+
 				<a class='edit_button' href='info.php?code=".$row['name']."'><input type='button' value='Info' /></a>
 				<a class='edit_button' href='details.php?code=".$row['name']."&amp;institution=".$row['institution']."' onclick=\"var details=window.open(this.href, 'details', 'width=700,height=400,scrollbars=yes,resizable=yes'); details.focus(); return false;\"><input type='button' value='History' />
-				
+
 				</a>
 			</td>
 		</tr>

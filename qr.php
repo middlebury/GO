@@ -7,7 +7,7 @@ try {
 	$name = str_replace(" ", "+", $_GET["code"]);
 	$institution = $_GET["institution"];
 	$code = Code::get($name, $institution);
-	
+
 	QRcode::png('http://go.'.$institution.'/' . $code->getName());
 
 } catch (Throwable $e) {

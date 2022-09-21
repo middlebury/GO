@@ -54,42 +54,42 @@ if (REASON_FOR_FLAGGING_REQUIRED == true) {
 //try to do this and catch the error if there is an issue
 try {
 	//get the statement object for this insert statement
-  $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress, institution, url, comment) VALUES (?, ?, ?, ?, ?, ?)");
-  
+  $insert = $connection->prepare("INSERT INTO flag (code, user, ipaddress, institution, url, comment, notes) VALUES (?, ?, ?, ?, ?, ?, '')");
+
   //we want to add the current code to the session array
   //"flagged" so we know the user has flagged this code
   $_SESSION['flagged'][] = $_POST["code"];
-  
-  
+
+
   //bind the values represented by the "?" in the statement
   //first bind code
   $insert->bindValue(1, $_POST["code"]);
   if (isset($_SESSION["AUTH"])) {
-  	//bind the logged in user
-  	$insert->bindValue(2, $_SESSION["AUTH"]->getId());
+    //bind the logged in user
+    $insert->bindValue(2, $_SESSION["AUTH"]->getCurrentUserId());
   } else {
-  	//otherwise just leave the user field blank
-  	$insert->bindValue(2, '');
+    //otherwise just leave the user field blank
+    $insert->bindValue(2, '');
   }
   //bind the ipaddress
   $insert->bindValue(3, getRealIpAddr());
-  
+
   //bind the institution
   $insert->bindValue(4, $_POST["institution"]);
-  
+
   //bind the url
   $insert->bindValue(5, $_POST["url"]);
-  
+
   //bind the comment
   $insert->bindValue(6, $_POST["flag_comment"]);
-  
+
   //finally execute the statement
   $insert->execute();
-  
+
   //log completion
 	Go::log("Flag as inappropriate flag was created", $_POST['code']);
-  
-  //send mail to each go superadmin indicating that this 
+
+  //send mail to each go superadmin indicating that this
   //code has been flagged using the goAdmin array
   //from config.php to get the emails of each admin
   $headers[] = 'MIME-Version: 1.0';
@@ -97,10 +97,10 @@ try {
   $headers[] = 'From: ' . GO_ALERTS_EMAIL_NAME . ' <' . GO_ALERTS_EMAIL_ADDRESS . '>';
   $subject = 'The go code '.$_POST["code"].' was flagged as linking to inappropriate content.';
   if (isset($_SESSION["AUTH"])) {
-  $text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
+    $text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getCurrentUserName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
 
 - The GO application';
-	$html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by '.$_SESSION["AUTH"]->getName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
+    $html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by '.$_SESSION["AUTH"]->getCurrentUserName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
 
 - The GO application';
 } else {
@@ -109,13 +109,17 @@ try {
 - The GO application';
 	$html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
 
-- The GO application';	
+- The GO application';
 	}
 
   foreach ($goAdmin as $current_admin) {
-    $to = GoAuthCas::getEmail($current_admin);
-    mail($to, $subject, $html, implode("\r\n", $headers));
- }
+    try {
+      $to = GoAuth::getEmailByUserId($current_admin);
+      mail($to, $subject, $html, implode("\r\n", $headers));
+    } catch (Exception $e) {
+      // Ignore old admins that aren't in our database anymore.
+    }
+  }
 //now catch any exceptions
 } catch (Throwable $e) {
 	throw $e;
@@ -125,7 +129,3 @@ unset($_SESSION['form_values']);
 
 //redirect on completion
 header("location: info.php?code=".$_POST['code']);
-?>
-
-
-

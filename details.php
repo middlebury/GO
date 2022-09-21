@@ -2,7 +2,7 @@
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
 require_once "go.php";
-//go_functions.php gives us access to the isSuperAdmin function 
+//go_functions.php gives us access to the isSuperAdmin function
 require_once "go_functions.php";
 require_once "header.php";
 ?>
@@ -24,7 +24,7 @@ try {
   $select->bindValue(2, $_GET["institution"]);
 	$select->execute();
 	?>
-	
+
 	<!-- this is our table of flags -->
 	<?php if (count($select->fetchAll())) { ?>
   	<h2 class="flag_detail_header">Flags for go/<?php print htmlentities($_GET["code"]); ?></h2>
@@ -45,7 +45,7 @@ try {
   			print "\n<tr>";
   			print "\n<td>".$row['code']."</td>";
   			if ($row['user']) {
-  				print "\n<td>".GoAuthCas::getName($row['user'])."</td>";
+  				print "\n<td>".GoAuthCas::getNameByUserId($row['user'])."</td>";
   			} else {
   				print "\n<td></td>";
   			}
@@ -53,7 +53,7 @@ try {
   			print "\n<td>".$row['ipaddress']."</td>";
   			print "\n<td>".$row['timestamp']."</td>";
   			print "\n</tr>";
-  		} //end foreach ($select->fetchAll() as $row) { 
+  		} //end foreach ($select->fetchAll() as $row) {
   		?>
   	</table>
   <?php } //end if (count($select->fetchAll()) { ?>
@@ -67,7 +67,7 @@ try {
   $select->bindValue(2, $_GET["institution"]);
 	$select->execute();
   ?>
-  	
+
   <!-- this is our table of logs -->
   <h2 class="flag_detail_header">Logs for go/<?php print htmlentities($_GET["code"]); ?></h2>
   <table class="flag_admin_table">
@@ -96,7 +96,7 @@ try {
   		}
   	?>
   	</table>
-  	
+
   <?php
 
 //now catch any exceptions

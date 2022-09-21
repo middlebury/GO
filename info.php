@@ -101,7 +101,7 @@ try {
 						//in the flag table for this user
   					$select = $connection->prepare("SELECT COUNT(*) FROM flag WHERE code = ? AND user = ?");
   					$select->bindValue(1, $code->getName());
-  					$select->bindValue(2, $_SESSION["AUTH"]->getId());
+  					$select->bindValue(2, $_SESSION["AUTH"]->getCurrentUserId());
   					$select->execute();
   					//place the results into count
   					if (intval($select->fetchColumn()) > 0) {
@@ -168,7 +168,7 @@ try {
 		print "<div class='error'>You must be logged in to view the details of this code.</div>";
 	}
 } catch (Throwable $e) {
-	error_log($e->getMessage(), 3);
+	error_log($e->getMessage());
 	print "<div class='error'>Error. Please contact ".GO_HELP_HTML."</div>";
 } ?>
 				</div> </div>

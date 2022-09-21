@@ -16,10 +16,10 @@ require_once "admin_nav.php";
 re-appropriate a shortcut for a critical need of the College, but we will contact you in this event.</p>
 <p>Also is no longer possible to hide GO links. GO by its nature is a public application and shortcuts in GO are publicly accessible whether they are "hidden" or not. If you feel you have a legitimate reason to hide GO links from the Gotionary and you are concerned about this please feel free to contact <?php print GO_HELP_HTML;?>.</p>
 <h2>GO needs your help!</h2>
-<p>There are several thousand existing GO shortcuts with noone to take care of them! If you requested one 
-of these, or believe that you are the best person to manage the shortcut, please contact <?php print GO_HELP_HTML;?>. We'll set you up as the manager of that shortcut so 
+<p>There are several thousand existing GO shortcuts with noone to take care of them! If you requested one
+of these, or believe that you are the best person to manage the shortcut, please contact <?php print GO_HELP_HTML;?>. We'll set you up as the manager of that shortcut so
 that you can edit its description and update its URL, if needed.</p>
-<p>To see the list of shortcuts that desperately need your help, visit 
+<p>To see the list of shortcuts that desperately need your help, visit
 <a href="gotionary.php">The GOtionary</a>.</p>
 <?php
 require_once "footer.php";

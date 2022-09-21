@@ -1,11 +1,11 @@
 
 $(document).ready(function(){
-	
+
 	// Apply the "add/remove behavior" to the list of Aliases
 	addRemoveBehavior('#alias_list','#add_alias_button','#add_alias_text');
 	// Apply the "add/remove behavior" to the list of Admins
 	addRemoveBehavior('#admin_list','#add_admin_button','#add_admin_text');
-	
+
 	// A function to apply "add/remove" behavior to a list of items
 	// that can have items added to it, each with a delete button
 	// next to it that will delete it from the list. There is also
@@ -13,7 +13,7 @@ $(document).ready(function(){
 	// Is passed the ID of the list, the ID of the input textfield,
 	// and the id of the add button
 	function addRemoveBehavior(ul_id, button_id, text_id) {
-		
+
 		// STUFF THAT HAPPENS TO ITEMS THAT ALREADY EXIST
 
 		// Do the following for each list element
@@ -31,9 +31,9 @@ $(document).ready(function(){
 				$("<input type='hidden' class='" + unique_identifier + "' name='" + ul_id.slice(1) + "_del[]' value='" + current_value + "' />").prependTo('form');
 			}) // End $(ul_id + ' li>input').bind("click", function(){
 		}); // End $(ul_id + " li").each(function(){
-		
+
 		// STUFF THAT HAPPENS TO ITEMS THAT ARE CREATED ON THE FLY
-		
+
 		// Do all this stuff when the "add" button is clicked
 		$(button_id).bind("click", function(){
 			// The value the user wants to add (trim it to ignore trailing/leading spaces)
@@ -41,12 +41,12 @@ $(document).ready(function(){
 			//alert(value_to_add.trim());
 			// a flag to be set if the input is not valid
 			var invalid_value = 0;
-			
+
 			if (value_to_add.match(/[^A-Za-z0-9-_\?\/\.~\+%]/)) {
 				alert('Invalid characters.');
 				return false;
 			}
-			
+
 			// Check to see if it's valid
 			// If the value is already in the list then it's invalid
 			$(ul_id + " li").each(function(){
@@ -55,7 +55,7 @@ $(document).ready(function(){
 					invalid_value = 1;
 				}
 			})
-			
+
 			// If the value IS valid
 			if (value_to_add.length > 0 & invalid_value != 1) {
 				// This var is how we identify each element, by its list name with its value

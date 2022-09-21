@@ -18,7 +18,7 @@ function isSuperAdmin() {
 	//this var is not passed to this function, use the global
 	global $goAdmin;
 	//if the current user is logged in, check it they are in the admin array
-	if(isset($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getId(), $goAdmin)) {
+	if(isset($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getCurrentUserId(), $goAdmin)) {
 		return true;
 	} else {
 		return false;
@@ -29,16 +29,16 @@ function isSuperAdmin() {
 function isAuditor() {
 	if (isSuperAdmin())
 		return true;
-	
+
 	//if the current user is logged in, check it they are in the auditors array
 	global $goAuditors;
-	if(!empty($goAuditors) && !empty($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getId(), $goAuditors))
+	if(!empty($goAuditors) && !empty($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getCurrentUserId(), $goAuditors))
 		return true;
-	
+
 	return false;
 }
 
-// This is copy pasted function to get URL from current page 
+// This is copy pasted function to get URL from current page
 function curPageURL() {
 	$isHTTPS = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on");
 	$port = (isset($_SERVER["SERVER_PORT"]) && ((!$isHTTPS && $_SERVER["SERVER_PORT"] != "80") || ($isHTTPS && $_SERVER["SERVER_PORT"] != "443")));
@@ -64,17 +64,17 @@ function isAdmin($code, $institution) {
   $select->bindValue(1, $code);
   $select->bindValue(2, $institution);
   $select->execute();
-  
+
   // If authenticated user is admin of code then set $is_admin
   foreach ($select->fetchAll() as $row) {
-		if ($row['user'] == $_SESSION['AUTH']->getId()) {
+		if ($row['user'] == $_SESSION['AUTH']->getCurrentUserId()) {
 			$is_admin = true;
 		}
 	}
 	return $is_admin;
 }
 // Check passed field type against error type and return
-// "failed_validation" (the class name that flags and 
+// "failed_validation" (the class name that flags and
 // field has having failed validation) if true. This
 // lets us add this to all fields to check if they are
 // in error or not
