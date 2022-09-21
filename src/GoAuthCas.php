@@ -1,6 +1,5 @@
 <?php
 
-use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -17,7 +16,7 @@ class GoAuthCas implements GoAuthAuthenticatedSessionInterface, GoAuthLookupInte
 
     if (defined('GO_AUTH_CAS_LOG')) {
       $logger = new Logger('phpcas');
-      $logger->pushHandler(new StreamHandler(GO_AUTH_CAS_LOG, Level::Debug));
+      $logger->pushHandler(new StreamHandler(GO_AUTH_CAS_LOG, Logger::DEBUG));
       phpCAS::setLogger($logger);
     }
 

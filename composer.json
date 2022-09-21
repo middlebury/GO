@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "require": {
         "apereo/phpcas": "^1.5",
-        "monolog/monolog": "^3.2"
+        "monolog/monolog": "^2.8"
     },
     "autoload": {
       "psr-4": {
