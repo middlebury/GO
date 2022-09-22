@@ -1,8 +1,5 @@
 <?php
 
-require_once "go.php";
-require_once "user.php";
-
 /**
  * Alias Class for GO Application
  *

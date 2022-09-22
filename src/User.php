@@ -1,7 +1,5 @@
 <?php
 
-require_once "go.php";
-
 /**
  * User Class for GO Application.
  *

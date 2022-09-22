@@ -1,7 +1,5 @@
 <?php
 
-require_once "go.php";
-
 /**
  * Code Class for GO Application.
  *

@@ -1,6 +1,5 @@
 <?php
 require_once "go.php";
-require_once "code.php";
 
 // Trim off and store any trailing Google Analytics "Linker" suffix for later pass-through.
 // This looks like the following:

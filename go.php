@@ -2,9 +2,6 @@
 
 require_once(dirname(__FILE__).'/vendor/autoload.php');
 require_once "config.php";
-require_once "user.php";
-require_once "code.php";
-require_once "alias.php";
 
 // Define admin pages and non-admin pages that need session
 $admin_pages = array(
