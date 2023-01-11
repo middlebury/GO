@@ -22,7 +22,7 @@ $basePath = dirname($_SERVER['SCRIPT_NAME']);
 if ($basePath != '/')
 	$basePath .= '/';
 
-$name = str_replace(" ", "+", rtrim($_GET["code"]));
+$name = str_replace(" ", "+", $_GET["code"]);
 try {
 
 	try {
