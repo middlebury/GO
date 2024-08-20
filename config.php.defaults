@@ -94,6 +94,12 @@ define("GO_AUTH_CAS_ATTR_NAME", "Login");
 // CAS attribute you will use for the email
 define("GO_AUTH_CAS_ATTR_EMAIL", "EMail");
 
+/* SAML AUTHENTICATION */
+define("SAML_IDP_ENTITY_ID", "https://sts.windows.net/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/");
+define("SAML_IDP_SINGLE_SIGNON_SERVICE_URL", "https://login.microsoftonline.com/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/saml2");
+define("SAML_IDP_SINGLE_LOGOUT_SERVICE_URL", "https://login.microsoftonline.com/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/saml2");
+define("SAML_IDP_X509_CERT", "");
+
 
 // Directory lookup configuration
 define('DIRECTORY_ADMIN_ACCESS_KEY', 'passphrase');

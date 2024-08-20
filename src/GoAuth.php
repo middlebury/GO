@@ -14,6 +14,8 @@ abstract class GoAuth implements GoAuthLookupInterface {
       return 'GoAuthLdap';
     } elseif (AUTH_METHOD == 'cas') {
       return 'GoAuthCas';
+    } elseif (AUTH_METHOD == 'saml') {
+      return 'GoAuthSaml';
     } else {
       throw new Exception('Unknown Auth Method');
     }

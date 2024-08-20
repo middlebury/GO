@@ -21,6 +21,9 @@ $dest = $institutions[$institution]['base_uri'];
 if (AUTH_METHOD == 'cas') {
 	GoAuthCas::configurePhpCas();
 	phpCAS::logoutWithRedirectServiceAndUrl($dest, $dest);
+} elseif (AUTH_METHOD == 'saml') {
+	$auth = new GoAuthSaml();
+	$auth->logout($dest);
 }
 
 //redirect on completion
