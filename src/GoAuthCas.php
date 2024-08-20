@@ -138,6 +138,28 @@ class GoAuthCas implements GoAuthAuthenticatedSessionInterface, GoAuthLookupInte
   }
 
   /**
+   * Get the display of a user.
+   *
+   * @access public
+   * @param string $id A user ID to find the username of.
+   * @return string The display name of the requested user.
+   */
+  public static function getDisplayNameByUserId($id) {
+    if (!Go::cache_get('user_display_name-'.$id)) {
+      $xml = self::directoryFetch('get_user', 'id', $id);
+      $firstName = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='FirstName']");
+      $firstName = (string)$firstName[0]["value"];
+      $lastName = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='LastName']");
+      $lastName = (string)$lastName[0]["value"];
+      $email = $xml->xpath("/cas:results/cas:entry/cas:attribute[@name='EMail']");
+      $email = (string)$email[0]["value"];
+      Go::cache_set('user_display_name-'.$id, $firstName.' '.$lastName.' (<a href="mailto:'.$email.'">'.$email.'</a>)');
+    }
+
+    return Go::cache_get('user_display_name-'.$id);
+  }
+
+  /**
    * Lookup a value in a directory
    *
    * @param string $id The user's Id.

@@ -41,4 +41,13 @@ interface GoAuthLookupInterface {
    */
   public static function getEmailByUserId($id);
 
+  /**
+   * Get the display of a user.
+   *
+   * @access public
+   * @param string $id A user ID to find the username of.
+   * @return string The display name of the requested user.
+   */
+  public static function getDisplayNameByUserId($id);
+
 }

@@ -38,7 +38,7 @@ define("GO_DATABASE_USER", "testuser");
 // Password for the Database user
 define("GO_DATABASE_PASS", "testpassword");
 
-// Authentication method
+// Authentication method: ldap, cas, or saml
 define("AUTH_METHOD", "cas");
 
 /* LDAP AUTHENTICATION */
@@ -101,15 +101,12 @@ define("SAML_IDP_SINGLE_LOGOUT_SERVICE_URL", "https://login.microsoftonline.com/
 define("SAML_IDP_X509_CERT", "");
 
 
-// Directory lookup configuration
+// Directory lookup configuration: ldap, cas
+define('USER_LOOKUP_METHOD', 'cas');
+
+// CAS Directory config
 define('DIRECTORY_ADMIN_ACCESS_KEY', 'passphrase');
 define('DIRECTORY_BASE_URL', 'https://login.example.edu/directory/');
-
-
-define('GET_USER_DISPLAY_NAME_CALLBACK', 'my_lookup_displayname');
-function my_lookup_displayname($id) {
-	return $id;
-}
 
 //AD groups allowed to authenticate against GO.
 $allowedGroups = array();

@@ -22,6 +22,20 @@ abstract class GoAuth implements GoAuthLookupInterface {
   }
 
   /**
+   * Answer the currently configured lookup class.
+   *
+   */
+  public static function userLookupClass() {
+    if (USER_LOOKUP_METHOD == 'ldap') {
+      return 'GoAuthLdap';
+    } elseif (USER_LOOKUP_METHOD == 'cas') {
+      return 'GoAuthCas';
+    } else {
+      throw new Exception('Unknown USER_LOOKUP_METHOD');
+    }
+  }
+
+  /**
    * Get the internal ID of a user.
    *
    * @access public

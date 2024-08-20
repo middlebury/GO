@@ -266,16 +266,15 @@ class Go {
     }
 
     if (!Go::cache_get('user_displayname-'.$id)) {
-      if (!defined('GET_USER_DISPLAY_NAME_CALLBACK'))
-        throw new Exception('You must configure GO with a GET_USER_DISPLAY_NAME_CALLBACK function to fetch user names for user-ids.');
+      $userLookupClass = GoAuth::userLookupClass();
 
       try {
-	    $displayName = call_user_func(GET_USER_DISPLAY_NAME_CALLBACK, $id);
-	  } catch (Exception $e) {
-	    // Log the problem, but fall back to the id.
-	  	error_log($e->getMessage());
-	  	return $id;
-	  }
+        $displayName = $userLookupClass::getDisplayNameByUserId($id);
+      } catch (Exception $e) {
+        // Log the problem, but fall back to the id.
+        error_log($e->getMessage());
+        return $id;
+      }
 
       // Fall back to the id if we get no results, but don't cache it.
       if (!$displayName)
