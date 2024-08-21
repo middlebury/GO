@@ -151,11 +151,12 @@ class GoAuthSaml implements GoAuthAuthenticatedSessionInterface {
    *   The authentication provider.
    */
   public function getAuth () {
-    if (empty($this->auth)) {
+    static $auth;
+    if (empty($auth)) {
       require_once(dirname(dirname(__FILE__)) . '/vendor/onelogin/php-saml/_toolkit_loader.php');
-      $this->auth = new SamlAuth($this->getSamlConfig());
+      $auth = new SamlAuth($this->getSamlConfig());
     }
-    return $this->auth;
+    return $auth;
   }
 
   /**
