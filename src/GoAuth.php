@@ -30,6 +30,8 @@ abstract class GoAuth implements GoAuthLookupInterface {
       return 'GoAuthLdap';
     } elseif (USER_LOOKUP_METHOD == 'cas') {
       return 'GoAuthCas';
+    } elseif (USER_LOOKUP_METHOD == 'microsoft_graph') {
+      return 'GoAuthLookupMicrosoftGraph';
     } else {
       throw new Exception('Unknown USER_LOOKUP_METHOD');
     }
@@ -43,7 +45,7 @@ abstract class GoAuth implements GoAuthLookupInterface {
    * @return string The ID of the requested user.
    */
   public static function getIdForUser($username) {
-    return self::authClass()::getIdForUser($username);
+    return self::userLookupClass()::getIdForUser($username);
   }
 
   /**
@@ -54,7 +56,7 @@ abstract class GoAuth implements GoAuthLookupInterface {
    * @return string The username of the requested user.
    */
   public static function getNameByUserId($id) {
-    return self::authClass()::getNameByUserId($id);
+    return self::userLookupClass()::getNameByUserId($id);
   }
 
   /**
@@ -65,7 +67,7 @@ abstract class GoAuth implements GoAuthLookupInterface {
    * @return string The email address of the requested user.
    */
   public static function getEmailByUserId($id) {
-    return self::authClass()::getEmailByUserId($id);
+    return self::userLookupClass()::getEmailByUserId($id);
   }
 
 }

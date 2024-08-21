@@ -101,12 +101,18 @@ define("SAML_IDP_SINGLE_LOGOUT_SERVICE_URL", "https://login.microsoftonline.com/
 define("SAML_IDP_X509_CERT", "");
 
 
-// Directory lookup configuration: ldap, cas
+// Directory lookup configuration: ldap, cas, or microsoft_graph
 define('USER_LOOKUP_METHOD', 'cas');
 
-// CAS Directory config
+// CAS Directory lookup config
 define('DIRECTORY_ADMIN_ACCESS_KEY', 'passphrase');
 define('DIRECTORY_BASE_URL', 'https://login.example.edu/directory/');
+
+// Microsoft Graph lookup config
+define('MICROSOFT_GRAPH_TENANT_ID', '');
+define('MICROSOFT_GRAPH_APP_ID', '');
+define('MICROSOFT_GRAPH_APP_SECRET', '');
+define('MICROSOFT_GRAPH_UNIQUE_ID_PROPERTY', 'userPrincipalName');
 
 //AD groups allowed to authenticate against GO.
 $allowedGroups = array();
