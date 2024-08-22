@@ -65,7 +65,15 @@ if (in_array($current_page, $admin_pages)) {
 			header("Location: authfail.php");
 			exit();
 		}
-
+	} else if (AUTH_METHOD == 'saml') {
+		try {
+			$_SESSION["AUTH"] = new GoAuthSaml();
+			$_SESSION["AUTH"]->authenticate();
+		}
+		catch (AuthorizationFailedException $e) {
+			header("Location: authfail.php");
+			exit();
+		}
 	} else {
 		throw new Exception('Unknown Auth Method');
 	}

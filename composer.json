@@ -6,11 +6,18 @@
     "minimum-stability": "stable",
     "require": {
         "apereo/phpcas": "^1.5",
-        "monolog/monolog": "^2.8"
+        "monolog/monolog": "^2.8",
+        "onelogin/php-saml": "^4.2",
+        "microsoft/microsoft-graph": "^2.12"
     },
     "autoload": {
       "psr-4": {
         "": "src/"
       }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }

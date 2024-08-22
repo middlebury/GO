@@ -128,4 +128,16 @@ class GoAuthLdap implements GoAuthAuthenticatedSessionInterface, GoAuthLookupInt
     return $entries[0][GO_AUTH_LDAP_ATTR_EMAIL][0];
   }
 
+
+  /**
+   * Get the display of a user.
+   *
+   * @access public
+   * @param string $id A user ID to find the username of.
+   * @return string The display name of the requested user.
+   */
+  public static function getDisplayNameByUserId($id) {
+    return self::getEmailByUserId($id);
+  }
+
 }

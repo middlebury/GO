@@ -38,7 +38,7 @@ define("GO_DATABASE_USER", "testuser");
 // Password for the Database user
 define("GO_DATABASE_PASS", "testpassword");
 
-// Authentication method
+// Authentication method: ldap, cas, or saml
 define("AUTH_METHOD", "cas");
 
 /* LDAP AUTHENTICATION */
@@ -94,16 +94,25 @@ define("GO_AUTH_CAS_ATTR_NAME", "Login");
 // CAS attribute you will use for the email
 define("GO_AUTH_CAS_ATTR_EMAIL", "EMail");
 
+/* SAML AUTHENTICATION */
+define("SAML_IDP_ENTITY_ID", "https://sts.windows.net/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/");
+define("SAML_IDP_SINGLE_SIGNON_SERVICE_URL", "https://login.microsoftonline.com/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/saml2");
+define("SAML_IDP_SINGLE_LOGOUT_SERVICE_URL", "https://login.microsoftonline.com/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/saml2");
+define("SAML_IDP_X509_CERT", "");
 
-// Directory lookup configuration
+
+// Directory lookup configuration: ldap, cas, or microsoft_graph
+define('USER_LOOKUP_METHOD', 'cas');
+
+// CAS Directory lookup config
 define('DIRECTORY_ADMIN_ACCESS_KEY', 'passphrase');
 define('DIRECTORY_BASE_URL', 'https://login.example.edu/directory/');
 
-
-define('GET_USER_DISPLAY_NAME_CALLBACK', 'my_lookup_displayname');
-function my_lookup_displayname($id) {
-	return $id;
-}
+// Microsoft Graph lookup config
+define('MICROSOFT_GRAPH_TENANT_ID', '');
+define('MICROSOFT_GRAPH_APP_ID', '');
+define('MICROSOFT_GRAPH_APP_SECRET', '');
+define('MICROSOFT_GRAPH_UNIQUE_ID_PROPERTY', 'userPrincipalName');
 
 //AD groups allowed to authenticate against GO.
 $allowedGroups = array();

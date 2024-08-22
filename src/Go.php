@@ -147,8 +147,8 @@ class Go {
    */
   public static function cache_set ($key, $value) {
     // Use APC if available
-    if (function_exists('apc_store')) {
-      return apc_store('go_cache_'.$key, $value, 86400); // TTL = 1 day
+    if (function_exists('apcu_store')) {
+      return apcu_store('go_cache_'.$key, $value, 86400); // TTL = 1 day
     }
     // Fall back to caching in the session
     else {
@@ -167,8 +167,8 @@ class Go {
    */
   public static function cache_get ($key) {
     // Use APC if available
-    if (function_exists('apc_fetch')) {
-      return apc_fetch('go_cache_'.$key);
+    if (function_exists('apcu_fetch')) {
+      return apcu_fetch('go_cache_'.$key);
     }
     // Fall back to caching in the session
     else {
@@ -189,8 +189,8 @@ class Go {
    */
   public static function cache_delete ($key) {
     // Use APC if available
-    if (function_exists('apc_delete')) {
-      return apc_delete('go_cache_'.$key);
+    if (function_exists('apcu_delete')) {
+      return apcu_delete('go_cache_'.$key);
     }
     // Fall back to caching in the session
     else {
@@ -266,16 +266,15 @@ class Go {
     }
 
     if (!Go::cache_get('user_displayname-'.$id)) {
-      if (!defined('GET_USER_DISPLAY_NAME_CALLBACK'))
-        throw new Exception('You must configure GO with a GET_USER_DISPLAY_NAME_CALLBACK function to fetch user names for user-ids.');
+      $userLookupClass = GoAuth::userLookupClass();
 
       try {
-	    $displayName = call_user_func(GET_USER_DISPLAY_NAME_CALLBACK, $id);
-	  } catch (Exception $e) {
-	    // Log the problem, but fall back to the id.
-	  	error_log($e->getMessage());
-	  	return $id;
-	  }
+        $displayName = $userLookupClass::getDisplayNameByUserId($id);
+      } catch (Exception $e) {
+        // Log the problem, but fall back to the id.
+        error_log($e->getMessage());
+        return $id;
+      }
 
       // Fall back to the id if we get no results, but don't cache it.
       if (!$displayName)
