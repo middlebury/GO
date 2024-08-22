@@ -284,6 +284,15 @@ class GoAuthSaml implements GoAuthAuthenticatedSessionInterface {
         //     0 => '<cert2-string>',
         //   ],
       ],
+
+      // Security settings
+      'security' => [
+        // Authentication context.
+        // Set to false and no AuthContext will be sent in the AuthNRequest.
+        // Set true or don't present this parameter and you will get an AuthContext 'exact' 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'.
+        // Set an array with the possible auth context values: array('urn:oasis:names:tc:SAML:2.0:ac:classes:Password', 'urn:oasis:names:tc:SAML:2.0:ac:classes:X509').
+        'requestedAuthnContext' => false,
+      ],
     ];
   }
 
