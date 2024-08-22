@@ -5,21 +5,8 @@ require_once "go.php";
 
 $name = "";
 
-if (isset($_SESSION["AUTH"])) {
-  try {
-    $name = $_SESSION["AUTH"]->getCurrentUserName();
-  } catch (Throwable $e) {
-    // We may have an expired proxy-ticket kept around. If so, regenerate the session
-    // and log-in again.
-    require_once "vendor/apereo/phpcas/source/CAS.php"; // Ensure our constant is loaded.
-    if ($e->getCode() == PHPCAS_SERVICE_PT_FAILURE) {
-      session_destroy();
-      header('Location: '.$_SERVER['REQUEST_URI']);
-      exit;
-    } else {
-    	throw $e;
-    }
-  }
+if (isset($_SESSION["AUTH"]) && $_SESSION["AUTH"]->isAuthenticated()) {
+  $name = $_SESSION["AUTH"]->getCurrentUserName();
 }
 
 require_once $institutions[$institution]['header'];

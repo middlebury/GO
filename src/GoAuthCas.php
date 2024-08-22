@@ -53,6 +53,16 @@ class GoAuthCas implements GoAuthAuthenticatedSessionInterface, GoAuthLookupInte
   }
 
   /**
+   * Answer true if a user is currently authenticated.
+   *
+   * @return boolean
+   * @access public
+   */
+  public function isAuthenticated() {
+    return true;
+  }
+
+  /**
    * Get the internal ID of the current user.
    *
    * @access public

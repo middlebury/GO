@@ -16,6 +16,14 @@
 interface GoAuthAuthenticatedSessionInterface {
 
   /**
+   * Answer true if a user is currently authenticated.
+   *
+   * @return boolean
+   * @access public
+   */
+  public function isAuthenticated();
+
+  /**
    * Get the internal ID of the current user.
    *
    * @access public
