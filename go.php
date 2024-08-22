@@ -79,6 +79,11 @@ if (in_array($current_page, $admin_pages)) {
 	}
 }
 
+// Verify that we are authenticated properly if we have an authenticated session
+if (isset($_SESSION["AUTH"]) && !$_SESSION["AUTH"]->isAuthenticated()) {
+	$_SESSION["AUTH"]->authenticate();
+}
+
 // Initialize database
 try {
 	global $connection;
