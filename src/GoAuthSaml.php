@@ -111,13 +111,10 @@ class GoAuthSaml implements GoAuthAuthenticatedSessionInterface {
       global $allowedGroups;
       if (isset($allowedGroups) && !empty($allowedGroups)) {
         $groups = $this->getCurrentUserGroups();
-        if (!is_array($groups) && !in_array($groups, $allowedGroups)) {
-          throw new AuthorizationFailedException();
-        } else {
-          foreach ($groups as $group) {
-            if (in_array($group, $allowedGroups))
-              return;
-          }
+        if (!is_array($groups)) {
+          $groups = [$groups];
+        }
+        if (!$this->userGroupsInAllowedGroups($groups, $allowedGroups)) {
           throw new AuthorizationFailedException();
         }
       }
@@ -334,6 +331,25 @@ class GoAuthSaml implements GoAuthAuthenticatedSessionInterface {
         throw new Exception("No user is authenticated, cannot provide a $name attribute.");
       }
     }
+  }
+
+  /**
+   * Verify that a user's groups are in the allowed groups.
+   *
+   * @var array $usersGroups
+   *   The user's groups.
+   * @var array $allowedGroups
+   *   The allowed groups.
+   * @return bool
+   *   True if the user has a group in the allowed groups, false otherwise.
+   */
+  protected function userGroupsInAllowedGroups(array $usersGroups, array $allowedGroups) {
+    foreach ($usersGroups as $group) {
+      if (in_array($group, $allowedGroups)) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

@@ -7,4 +7,9 @@ require_once "go.php";
 // it then redirects back to.
 
 //redirect on completion
-header("location: admin.php");
+
+if (!empty($_GET['r']) && strpos($_GET['r'], 'https://' . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/') === 0) {
+  header("location: " . $_GET['r']);
+} else {
+  header("location: admin.php");
+}
