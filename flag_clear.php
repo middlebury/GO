@@ -4,10 +4,6 @@ require_once "go_functions.php";
 //go.php handles the session and xss check for admin
 //pages and pages where a session is necessary
 require_once "go.php";
-//Mail.php is the PEAR script that includes the mail class for sending mail
-require_once "Mail.php";
-//mime.php includes support for mime mail
-require_once "Mail/mime.php";
 
 //check for xss attempt
 if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
@@ -38,6 +34,11 @@ try {
 
 	//log completion
 	Go::log("Flag as inappropriate flag was completed", $_POST['code']);
+
+	//Mail.php is the PEAR script that includes the mail class for sending mail
+	require_once "Mail.php";
+	//mime.php includes support for mime mail
+	require_once "Mail/mime.php";
 
 	//send mail to each go superadmin indicating that this
   //code has been flagged using the goAdmin array
