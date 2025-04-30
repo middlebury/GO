@@ -52,7 +52,15 @@ class GoAuthLookupMicrosoftGraph implements GoAuthLookupInterface {
    */
   public static function getIdForUser($username) {
     $lookup = self::getInstance();
-    $user = $lookup->fetchUserByProperty('userPrincipalName', $username . '@middlebury.edu');
+    try {
+      $user = $lookup->fetchUserByProperty('userPrincipalName', $username . '@middlebury.edu');
+    } catch (\Exception $e) {
+      if ($e->getCode() == 404) {
+        $user = $lookup->fetchUserByProperty('mail', $username . '@middlebury.edu');
+      } else {
+        throw $e;
+      }
+    }
     return $lookup->getUserProperty($user, $lookup->getUniqueIdProperty());
   }
 
