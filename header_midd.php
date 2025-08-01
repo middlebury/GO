@@ -14,6 +14,8 @@ if (isset($_SESSION["AUTH"]) && $_SESSION["AUTH"]->isAuthenticated()) {
   <head>
     <title>Middlebury</title>
     <meta charset="utf-8">
+    <script async defer data-domain="middlebury.edu" src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
+    <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
     <link rel="stylesheet" href="//cdn.middlebury.edu/middlebury.edu/2010/css/midd.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="//cdn.middlebury.edu/middlebury.edu/2010/images/midd_favicon.ico">
