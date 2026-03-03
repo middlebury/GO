@@ -17,8 +17,8 @@ function getRealIpAddr() {
 function isSuperAdmin() {
 	//this var is not passed to this function, use the global
 	global $goAdmin;
-	//if the current user is logged in, check it they are in the admin array
-	if(isset($_SESSION["AUTH"]) && in_array($_SESSION["AUTH"]->getCurrentUserId(), $goAdmin)) {
+	//if the current user is logged in, check it they are in the admin array as a key or value
+	if(isset($_SESSION["AUTH"]) && (isset($goAdmin[$_SESSION["AUTH"]->getCurrentUserId()]) || in_array($_SESSION["AUTH"]->getCurrentUserId(), $goAdmin))) {
 		return true;
 	} else {
 		return false;
