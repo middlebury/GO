@@ -21,12 +21,26 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 // This should only be available to authenticated users
 if (isset($_SESSION['AUTH'])) {
 
-	// Is logged in user an admin?
-	//$is_admin = isAdmin($_POST['code'], $_POST['institution']);
+	// Only superadmins and admins of a code may update or delete it
+	if (isset($_POST['update']) || isset($_POST['delete']) || isset($_POST['delete_and_ban'])) {
+		// Is logged in user an admin?
+		$is_admin = isAdmin($_POST['code'], $_POST['institution']);
+		// Anyone can create a code that doesn't exist yet
+		$is_new_code = isset($_POST['update']) && !Code::exists($_POST['code'], $_POST['institution']);
 
-	// This is only available to authenticated users
+		if (!isSuperAdmin($_SESSION['AUTH']->getCurrentUserId()) && !$is_admin && !$is_new_code) {
+			if (isset($_POST['update']) && $_POST['update'] == 'Create Shortcut') {
+				$_SESSION['update_message'][] = "<p class='update_message_failure'>The shortcut ".htmlentities($_POST['code'])." already exists. The shortcut was not created.</p>";
+				$_SESSION['field_id_in_error'] = 'code';
+			} else {
+				$_SESSION['update_message'][] = "<p class='update_message_failure'>You do not have permission to modify the shortcut ".htmlentities($_POST['code']).".</p>";
+			}
+			// Redirect to originating location
+			die(header("location: " . (isset($_POST['form_url']) ? $_POST['form_url'] : $_POST['url'])));
+		}
+	}
+
 	if (isset($_SESSION['AUTH'])) {
-	//if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId()) || $is_admin) {
 
 		//make the following check only if we are trying to create a code (not update)
 		if(isset($_POST['create'])) {
@@ -359,7 +373,7 @@ if (isset($_SESSION['AUTH'])) {
 			}
 		}
 
-	} //end if (isSuperAdmin($_SESSION['AUTH']->getCurrentUserId()) || $is_admin) {
+	} //end if (isset($_SESSION['AUTH'])) {
 
 } //end if (isset($_SESSION['AUTH'])) {
 
