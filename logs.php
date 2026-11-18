@@ -162,13 +162,13 @@ try {
   	foreach ($select2->fetchAll() as $row) {?>
   	<tr>
 			<td><?php print $row['tstamp']; ?></td>
-			<td><?php print $row['institution']; ?></td>
+			<td><?php print htmlentities($row['institution']); ?></td>
 			<!-- the code -->
-  		<td><?php print"<a href='info.php?code=".$row['code']."'>".$row['code']."</a>";?></td>
-			<td><?php print $row['alias']; ?></td>
+		<td><?php print"<a href='info.php?code=".urlencode($row['code'])."'>".htmlentities($row['code'])."</a>";?></td>
+			<td><?php print htmlentities($row['alias']); ?></td>
   		<!-- the # of flags -->
-			<td><?php print $row['user_display_name']; ?></td>
-  		<td><?php print $row['description'];?></td>
+			<td><?php print htmlentities($row['user_display_name']); ?></td>
+		<td><?php print htmlentities($row['description']);?></td>
   	</tr>
   <?php } /*end foreach ($select->fetchAll() as $row) { */ ?>
   </table>

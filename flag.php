@@ -100,14 +100,14 @@ try {
     $text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by '.$_SESSION["AUTH"]->getCurrentUserName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
 
 - The GO application';
-    $html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by '.$_SESSION["AUTH"]->getCurrentUserName().' from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
+    $html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.urlencode($_POST["code"]).'">'.htmlentities($_POST["code"]).'</a>" was flagged by '.htmlentities($_SESSION["AUTH"]->getCurrentUserName()).' from '.htmlentities(getRealIpAddr()).' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
 
 - The GO application';
 } else {
 	$text = 'The GO code (aka. link) "'.$_POST["code"].'" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the admin interface ('.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php).
 
 - The GO application';
-	$html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.$_POST["code"].'">'.$_POST["code"].'</a>" was flagged by Anon from '.getRealIpAddr().' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
+	$html = 'The GO code (aka. link) "<a href="'.$institutions[$_POST["institution"]]['base_uri'].'info.php?code='.urlencode($_POST["code"]).'">'.htmlentities($_POST["code"]).'</a>" was flagged by Anon from '.htmlentities(getRealIpAddr()).' as linking to inappropriate content. Please administer this flag via the <a href="'.$institutions[$_POST["institution"]]['base_uri'].'flag_admin.php">admin interface</a>.<br /><br />
 
 - The GO application';
 	}

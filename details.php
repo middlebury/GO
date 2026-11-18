@@ -43,14 +43,14 @@ try {
   		$select->execute();
   		foreach ($select->fetchAll() as $row) {
   			print "\n<tr>";
-  			print "\n<td>".$row['code']."</td>";
+  			print "\n<td>".htmlentities($row['code'])."</td>";
   			if ($row['user']) {
-  				print "\n<td>".GoAuthCas::getNameByUserId($row['user'])."</td>";
+  				print "\n<td>".htmlentities(GoAuthCas::getNameByUserId($row['user']))."</td>";
   			} else {
   				print "\n<td></td>";
   			}
-  			print "\n<td>".$row['comment']."</td>";
-  			print "\n<td>".$row['ipaddress']."</td>";
+  			print "\n<td>".htmlentities($row['comment'])."</td>";
+  			print "\n<td>".htmlentities($row['ipaddress'])."</td>";
   			print "\n<td>".$row['timestamp']."</td>";
   			print "\n</tr>";
   		} //end foreach ($select->fetchAll() as $row) {
@@ -84,9 +84,9 @@ try {
   			foreach ($results as $row) {
   				print "\n<tr>";
   				print "\n<td>".$row['tstamp']."</td>";
-  				print "\n<td>".$row['alias']."</td>";
+  			print "\n<td>".htmlentities($row['alias'])."</td>";
   				print "\n<td>".htmlentities($row['description'])."</td>";
-  				print "\n<td>".$row['user_display_name']."</td>";
+  			print "\n<td>".htmlentities($row['user_display_name'])."</td>";
   				print "\n</tr>";
   			}
   		} else {

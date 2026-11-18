@@ -129,14 +129,14 @@ try {
   	foreach ($results as $row) {?>
   	<tr>
   		<!-- the code -->
-  		<td><?php print"<a href='info.php?code=".$row['code']."'>".$row['code']."</a>";?></td>
+  			<td><?php if (Code::isUrlValid($row['url'])) { print "<a href='".htmlentities($row['url'])."'>".htmlentities($row['url'])."</a>"; } else { print htmlentities($row['url']); } ?></td>
   		<!-- the # of flags -->
   		<td><?php print $row['num_flags'];?></td>
   		<!-- the URL -->
   		<td><?php print "<a href='".$row['url']."'>".$row['url']."</a>";?></td>
   		<!-- the aliases -->
-  		<td><?php print $row['aliases'];?></td>
-  		<td><?php print $row['comment'];?></td>
+  		<td><?php print htmlentities($row['aliases']);?></td>
+  		<td><?php print htmlentities($row['comment']);?></td>
   		<!-- we want to be able to get additional info
   		or delete all flags for each code in the table -->
   		<td class='action_cells'>
