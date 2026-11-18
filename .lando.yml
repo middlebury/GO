@@ -1,0 +1,45 @@
+name: go
+recipe: lamp
+config:
+  webroot: .
+  php: 8.5
+  database: mariadb:10.11
+services:
+  appserver:
+    overrides:
+      environment:
+        MAILER_DSN: smtp://mailpit:1025
+  database:
+    type: mariadb
+    creds:
+      user: testuser
+      password: testpassword
+      database: go
+  phpmyadmin:
+    type: phpmyadmin
+    hosts:
+      - database
+  mailpit:
+    scanner: false
+    api: 3
+    type: lando
+    services:
+      image: axllent/mailpit
+      volumes:
+        - mailpit:/data
+      ports:
+        - 8025 # Web UI.
+        - 1025 # SMTP.
+      environment:
+        MP_MAX_MESSAGES: 5000
+        MP_DATA_FILE: /data/mailpit.db
+        MP_SMTP_AUTH_ACCEPT_ANY: 1
+        MP_SMTP_AUTH_ALLOW_INSECURE: 1
+      command: '/mailpit'
+    volumes:
+      mailpit:
+proxy:
+    mailpit:
+        - mail.go.lndo.site:8025
+    phpmyadmin:
+        - phpmyadmin.go.lndo.site

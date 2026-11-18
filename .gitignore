@@ -2,3 +2,4 @@ config.php
 go_prod.sql
 
 /vendor/
+/var/
