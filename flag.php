@@ -10,6 +10,12 @@ if ($_POST['xsrfkey'] != $_SESSION['xsrfkey']) {
 	die("Session variables do not match");
 }
 
+// make sure the code being flagged exists
+if (!isset($institutions[$_POST['institution']]) || !Code::exists($_POST['code'], $_POST['institution'])) {
+	die("Unknown shortcut.");
+}
+$code = new Code($_POST['code'], $_POST['institution']);
+
 // Add the results of $_POST to $_SESSION. We'll use
 		// this to repopulate values in the form if it fails
 		// validation
@@ -78,7 +84,7 @@ try {
   $insert->bindValue(4, $_POST["institution"]);
 
   //bind the url
-  $insert->bindValue(5, $_POST["url"]);
+  $insert->bindValue(5, $code->getUrl());
 
   //bind the comment
   $insert->bindValue(6, $_POST["flag_comment"]);
